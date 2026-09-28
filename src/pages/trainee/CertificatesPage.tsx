@@ -1,0 +1,11 @@
+import { Award, Printer, QrCode } from "lucide-react";
+import { EmptyState, PageHeader } from "../../components/UI";
+import { useApp } from "../../context/AppContext";
+
+export default function CertificatesPage(){
+  const {db,currentUser}=useApp();const trainee=db.trainees.find(t=>t.userId===currentUser?.id);const certs=db.certificates.filter(c=>c.traineeId===trainee?.id);
+  return <><PageHeader title="Certificates & Competency Record" subtitle="Certificates are issued only after lesson completion, post-test pass, trainer-verified operational evidence and competency verification." actions={<button className="btn btn-secondary" onClick={()=>window.print()}><Printer size={16}/> Print records</button>}/>
+    <div className="certificate-grid">{certs.map(c=>{const course=db.courses.find(x=>x.id===c.courseId);const trainer=db.trainers.find(x=>x.id===c.trainerId);return <article className="certificate" key={c.id}><div className="certificate-head"><div><Award/><strong>CAPACITY CONNECT</strong></div><span>VERIFIED COMPETENCY CERTIFICATE</span></div><div className="certificate-body"><p>This certifies that</p><h2>{trainee?.name}</h2><p>has successfully completed</p><h3>{course?.title}</h3><div className="verified-competency"><span>Verified Competency</span><strong>{c.competency}</strong></div><div className="certificate-meta"><div><span>Trainer</span><strong>{trainer?.name}</strong></div><div><span>Completion date</span><strong>{c.issuedAt}</strong></div><div><span>Certificate ID</span><strong>{c.certificateCode}</strong></div>{c.validUntil&&<div><span>Valid until</span><strong>{c.validUntil}</strong></div>}<div className="qr"><QrCode/><span>QR verification<br/>placeholder</span></div></div></div></article>})}{!certs.length&&<EmptyState title="No verified certificates yet" body="Complete the learning path, pass the post-test, submit operational evidence and get competency verified by your Trainer."/ >}</div>
+    {certs.length>0&&<section className="panel"><div className="panel-head"><div><h3>Competency record</h3><p>Latest verified profile updates</p></div></div>{db.competencyResults.filter(r=>r.traineeId===trainee?.id).map(r=><div className="record-row" key={r.id}><div><strong>{r.subject}</strong><span>{r.updatedAt}</span></div><div><b>{r.currentLevel}</b><span>{r.gapText}</span></div></div>)}</section>}
+  </>
+}

@@ -1,0 +1,12 @@
+import { BrainCircuit } from "lucide-react";
+import { Badge, PageHeader, StatCard } from "../../components/UI";
+import { useApp } from "../../context/AppContext";
+
+export default function AdminCompetencies(){
+  const {db}=useApp();
+  return <><PageHeader title="Competency Management" subtitle="Role requirements, current levels and organization-wide development gaps."/>
+    <div className="stats-grid compact"><StatCard label="Role mappings" value={db.competencyRequirements.length} icon={<BrainCircuit/>}/><StatCard label="Recorded checks" value={db.competencyResults.length} icon={<BrainCircuit/>}/><StatCard label="Advanced targets" value={db.competencyRequirements.filter(x=>x.requiredLevel==="Advanced").length} icon={<BrainCircuit/>}/></div>
+    <section className="panel table-panel"><div className="panel-head"><div><h3>Required competency framework</h3><p>Prototype role-to-competency matrix</p></div><button className="btn btn-primary" onClick={()=>alert("Prototype: framework editor modal would open here.")}>+ Add competency category</button></div><div className="table-scroll"><table><thead><tr><th>Job role</th><th>Subject</th><th>Required level</th><th>Competencies</th></tr></thead><tbody>{db.competencyRequirements.map((r,i)=><tr key={`${r.role}-${i}`}><td><strong>{r.role}</strong></td><td>{r.subject}</td><td><Badge tone={r.requiredLevel==="Advanced"?"blue":"green"}>{r.requiredLevel}</Badge></td><td><div className="chip-row">{r.competencies.map(c=><span className="chip" key={c}>{c}</span>)}</div></td></tr>)}</tbody></table></div></section>
+    <section className="panel table-panel"><div className="panel-head"><div><h3>Recent competency gap results</h3><p>Latest trainee evaluations</p></div></div><div className="table-scroll"><table><thead><tr><th>Trainee</th><th>Subject</th><th>Current</th><th>Required</th><th>Score</th><th>Missing competencies</th></tr></thead><tbody>{db.competencyResults.map(r=><tr key={r.id}><td>{db.trainees.find(t=>t.id===r.traineeId)?.name}</td><td>{r.subject}</td><td><Badge tone="amber">{r.currentLevel}</Badge></td><td><Badge tone="blue">{r.requiredLevel}</Badge></td><td>{r.score}%</td><td>{r.missingCompetencies.join(", ")||"None"}</td></tr>)}</tbody></table></div></section>
+  </>
+}

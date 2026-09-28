@@ -1,0 +1,14 @@
+import { useState } from "react";
+import { Badge, ConfirmButton, Drawer, PageHeader, SearchBox } from "../../components/UI";
+import { useApp } from "../../context/AppContext";
+import { Trainer } from "../../types";
+
+export default function AdminTrainers(){
+  const {db,verifyTrainer}=useApp();const [q,setQ]=useState("");const [selected,setSelected]=useState<Trainer|null>(null);
+  const trainers=db.trainers.filter(t=>`${t.name} ${t.department} ${t.subjects.join(" ")}`.toLowerCase().includes(q.toLowerCase()));
+  return <><PageHeader title="Trainer Management" subtitle="Verify expertise, review performance and manage trainer readiness."/>
+    <div className="toolbar"><SearchBox value={q} onChange={setQ} placeholder="Search trainer or subject"/></div>
+    <div className="card-grid">{trainers.map(t=><article className="trainer-card" key={t.id}><div className="trainer-card-head"><div className="avatar large">{t.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div><div><h3>{t.name}</h3><p>{t.department}</p></div>{t.verified?<Badge tone="green">Admin Verified</Badge>:<Badge tone="amber">Review needed</Badge>}</div><div className="trainer-metrics"><span><b>{t.rating||"—"}</b> Rating</span><span><b>{t.experienceYears}</b> Years</span><span><b>{t.level}</b> Level</span></div><p className="clamp">{t.bio}</p><div className="chip-row">{t.subjects.slice(0,3).map(s=><span className="chip" key={s}>{s}</span>)}</div><div className="card-actions"><button className="btn btn-secondary" onClick={()=>setSelected(t)}>Review profile</button>{!t.verified?<ConfirmButton label="Verify" confirmText={`Verify ${t.name}'s expertise and trainer profile?`} onConfirm={()=>verifyTrainer(t.id,true)}/>:<ConfirmButton label="Remove verification" className="btn btn-danger-soft" confirmText={`Remove verification badge from ${t.name}?`} onConfirm={()=>verifyTrainer(t.id,false)}/>}</div></article>)}</div>
+    {selected&&<Drawer title="Trainer verification profile" onClose={()=>setSelected(null)}><div className="profile-review"><h2>{selected.name}</h2><Badge tone={selected.verified?"green":"amber"}>{selected.verified?"Admin Verified":"Pending verification"}</Badge><dl><dt>Qualification</dt><dd>{selected.qualification}</dd><dt>Experience</dt><dd>{selected.experienceYears} years</dd><dt>Subjects</dt><dd>{selected.subjects.join(", ")||"Not submitted"}</dd><dt>Skills</dt><dd>{selected.skills.join(", ")||"Not submitted"}</dd><dt>Certifications</dt><dd>{selected.certifications.join(", ")||"Not submitted"}</dd><dt>Availability</dt><dd>{selected.availability}</dd><dt>Rating</dt><dd>{selected.rating||"No rating yet"}</dd></dl></div></Drawer>}
+  </>
+}

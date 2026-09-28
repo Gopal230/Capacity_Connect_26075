@@ -1,0 +1,9 @@
+{
+  "name": "CAPACITY CONNECT",
+  "short_name": "Capacity Connect",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0b5cab",
+  "description": "Digital Capacity Building and Learning Management Portal prototype"
+}

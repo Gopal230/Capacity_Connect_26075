@@ -1,0 +1,15 @@
+import { FormEvent, useState } from "react";
+import { Badge, EmptyState, PageHeader } from "../../components/UI";
+import { useApp } from "../../context/AppContext";
+import { Assessment } from "../../types";
+
+export default function AssessmentPage(){
+  const {db,currentUser,submitAssessment}=useApp();const trainee=db.trainees.find(t=>t.userId===currentUser?.id);const enrolled=db.enrollments.filter(e=>e.traineeId===trainee?.id&&["approved","completed"].includes(e.status));const assessments=db.assessments.filter(a=>a.type!=="competency"&&enrolled.some(e=>e.courseId===a.courseId));
+  const [active,setActive]=useState<Assessment|null>(null);const [answers,setAnswers]=useState<number[]>([]);const [last,setLast]=useState<any>(null);
+  const submit=(e:FormEvent)=>{e.preventDefault();if(!active)return;const r=submitAssessment(active.id,answers);setLast(r);setActive(null);setAnswers([])};
+  return <><PageHeader title="Assessments" subtitle="Attempt course MCQs, compare pre- and post-training performance and verify learning."/>
+    {last&&<div className={last.passed?"success-banner":"warning-banner"}><strong>Latest result: {last.score}% — {last.passed?"PASS":"NOT PASSED"}</strong><span>{last.passed?"Result saved successfully.":"Review the course and retake when permitted."}</span></div>}
+    <div className="assessment-list">{assessments.map(a=>{const attempts=db.attempts.filter(x=>x.assessmentId===a.id&&x.traineeId===trainee?.id);const best=attempts.length?Math.max(...attempts.map(x=>x.score)):null;return <article key={a.id}><div><Badge tone={a.type==="post"?"blue":"gray"}>{a.type==="pre"?"Pre-test":"Post-test"}</Badge><h3>{a.title}</h3><p>{a.subject} · {a.questions.length} questions · {a.durationMin} minutes · Pass {a.passingPercentage}%{a.deadline?` · Due ${a.deadline}`:""}</p></div><div>{best!==null&&<Badge tone={best>=a.passingPercentage?"green":"red"}>Best {best}%</Badge>}<button className="btn btn-primary" onClick={()=>{setActive(a);setAnswers([])}}>{attempts.length?"Retake":"Attempt"}</button></div></article>})}{!assessments.length&&<EmptyState title="No assessments available" body="Approved course assessments will appear here."/ >}</div>
+    {active&&<div className="modal-backdrop"><form className="modal-card assessment-modal" onSubmit={submit}><div className="panel-head"><div><h3>{active.title}</h3><p>{active.durationMin} min · Pass {active.passingPercentage}%</p></div></div>{active.questions.map((q,i)=><fieldset className="question-card compact-q" key={q.id}><legend>{i+1}. {q.text}</legend>{q.options.map((o,j)=><label className={answers[i]===j?"selected":""} key={o}><input type="radio" name={q.id} checked={answers[i]===j} onChange={()=>{const a=[...answers];a[i]=j;setAnswers(a)}} required/>{o}</label>)}</fieldset>)}<div className="modal-actions"><button type="button" className="btn btn-secondary" onClick={()=>setActive(null)}>Cancel</button><button className="btn btn-primary">Submit answers</button></div></form></div>}
+  </>
+}

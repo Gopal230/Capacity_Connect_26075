@@ -1,0 +1,13 @@
+import { FormEvent, useState } from "react";
+import { PageHeader } from "../../components/UI";
+import { useApp } from "../../context/AppContext";
+
+export default function TraineeProfile(){
+  const {db,currentUser,updateTraineeProfile}=useApp();const t=db.trainees.find(x=>x.userId===currentUser?.id);
+  const [form,setForm]=useState(()=>({qualification:t?.qualification||"",department:t?.department||"",designation:t?.designation||"",experienceYears:t?.experienceYears||0,interests:t?.interests.join(", ")||"",skills:t?Object.entries(t.skills).map(([k,v])=>`${k}: ${v}`).join(", "):"",goals:t?.goals||""}));
+  if(!t)return <div className="panel">Trainee profile not found.</div>;
+  const submit=(e:FormEvent)=>{e.preventDefault();const skillObj:Record<string,any>={};form.skills.split(",").forEach(x=>{const [k,v]=x.split(":").map(s=>s.trim());if(k&&["Beginner","Intermediate","Advanced"].includes(v))skillObj[k]=v});updateTraineeProfile({qualification:form.qualification,department:form.department,designation:form.designation,experienceYears:Number(form.experienceYears),interests:form.interests.split(",").map(x=>x.trim()).filter(Boolean),skills:skillObj,goals:form.goals})};
+  return <><PageHeader title="Professional Profile" subtitle="Your role and existing experience help personalize competency recommendations."/>
+    <section className="panel profile-panel"><form className="stack-form" onSubmit={submit}><div className="form-grid two"><label>Qualification<input value={form.qualification} onChange={e=>setForm({...form,qualification:e.target.value})}/></label><label>Experience (years)<input type="number" value={form.experienceYears} onChange={e=>setForm({...form,experienceYears:Number(e.target.value)})}/></label><label>Department<input value={form.department} onChange={e=>setForm({...form,department:e.target.value})}/></label><label>Designation / Job role<input value={form.designation} onChange={e=>setForm({...form,designation:e.target.value})}/></label><label>Interests<input value={form.interests} onChange={e=>setForm({...form,interests:e.target.value})} placeholder="Forecasting, Radar"/></label><label>Existing skills<input value={form.skills} onChange={e=>setForm({...form,skills:e.target.value})} placeholder="NWP: Beginner, Radar: Intermediate"/></label></div><label>Career / learning goals<textarea rows={4} value={form.goals} onChange={e=>setForm({...form,goals:e.target.value})}/></label><button className="btn btn-primary">Save profile</button></form></section>
+  </>
+}
