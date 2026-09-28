@@ -41,10 +41,12 @@ function Protected({role,children}:{role:Role;children:React.ReactNode}){
 }
 
 export default function App(){
+  const {currentUser}=useApp();
   return <Routes>
-    <Route path="/" element={<HomePage/>}/>
-    <Route path="/login" element={<LoginPage/>}/>
-    <Route path="/register" element={<RegisterPage/>}/>
+    <Route path="/" element={currentUser ? <Navigate to={`/${currentUser.role}`} replace/> : <LoginPage initialTab="login"/>}/>
+    <Route path="/login" element={currentUser ? <Navigate to={`/${currentUser.role}`} replace/> : <LoginPage initialTab="login"/>}/>
+    <Route path="/register" element={currentUser ? <Navigate to={`/${currentUser.role}`} replace/> : <LoginPage initialTab="register"/>}/>
+    <Route path="/explore" element={<HomePage/>}/>
 
     <Route path="/admin" element={<Protected role="admin"><AdminDashboard/></Protected>}/>
     <Route path="/admin/users" element={<Protected role="admin"><AdminUsers/></Protected>}/>
