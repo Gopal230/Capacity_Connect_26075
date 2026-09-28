@@ -77,5 +77,5 @@ export default function App(){
     <Route path="/trainee/scenarios" element={<Protected role="trainee"><ScenarioLab/></Protected>}/>
     <Route path="/trainee/passport" element={<Protected role="trainee"><CapabilityPassport/></Protected>}/>
     <Route path="*" element={<Navigate to="/" replace/>}/>
-  </Routes>;
+  </Routes>
 }
