@@ -37,9 +37,9 @@ export default function HomePage() {
 
         <nav className={menu ? "show" : ""}>
           <Link to="/courses" onClick={() => setMenu(false)}>Course Catalog</Link>
-          <Link to="/login?role=trainee" onClick={() => setMenu(false)}>Trainee Sign In</Link>
-          <Link to="/login?role=trainer" onClick={() => setMenu(false)}>Trainer Sign In</Link>
-          <Link to="/login?role=admin" onClick={() => setMenu(false)}>Admin Sign In</Link>
+          <Link to="/login" className="btn btn-secondary btn-sm" onClick={() => setMenu(false)}>
+            Sign In
+          </Link>
           <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setMenu(false)}>
             Register
           </Link>
@@ -58,11 +58,11 @@ export default function HomePage() {
           </h1>
           <p className="gateway-desc">
             The unified continuous learning and capability governance system for the India Meteorological Department.
-            Select your professional role below to access your dedicated workspace or explore immediately using instant demo credentials.
+            Select your professional role below to access your dedicated workspace or test immediately with instant demo credentials.
           </p>
         </section>
 
-        {/* 3-PART ROLE DIVISION - CLEAN ENTERPRISE ARCHITECTURE */}
+        {/* 3-PART ROLE DIVISION - DISTINCT, NON-REPETITIVE ACTIONS */}
         <section className="three-part-container">
           {/* =========================================
               PART 1: OPERATIONAL TRAINEE
@@ -105,14 +105,14 @@ export default function HomePage() {
 
             <div className="part-actions">
               <Link to="/login?role=trainee" className="btn btn-role-primary">
-                Sign In as Trainee <ArrowRight size={15} />
+                Enter Trainee Workspace <ArrowRight size={15} />
               </Link>
               <button
                 type="button"
                 className="btn btn-role-demo"
                 onClick={() => quickLogin("trainee")}
               >
-                ⚡ 1-Click Trainee Demo
+                Explore Demo Forecaster Account
               </button>
               <Link to="/register?role=trainee" className="part-register-link">
                 New Trainee? Register for Clearance →
@@ -161,14 +161,14 @@ export default function HomePage() {
 
             <div className="part-actions">
               <Link to="/login?role=trainer" className="btn btn-role-primary">
-                Sign In as Trainer <ArrowRight size={15} />
+                Access Faculty Portal <ArrowRight size={15} />
               </Link>
               <button
                 type="button"
                 className="btn btn-role-demo"
                 onClick={() => quickLogin("trainer")}
               >
-                ⚡ 1-Click Trainer Demo
+                Explore Demo Faculty Account
               </button>
               <Link to="/register?role=trainer" className="part-register-link">
                 Faculty Accreditation Registration →
@@ -217,14 +217,14 @@ export default function HomePage() {
 
             <div className="part-actions">
               <Link to="/login?role=admin" className="btn btn-role-primary">
-                Sign In as Admin <ArrowRight size={15} />
+                Open Admin Console <ArrowRight size={15} />
               </Link>
               <button
                 type="button"
                 className="btn btn-role-demo"
                 onClick={() => quickLogin("admin")}
               >
-                ⚡ 1-Click Admin Demo
+                Explore Demo Admin Account
               </button>
               <span className="part-admin-notice">
                 Access restricted to authorized IMD personnel
@@ -243,9 +243,10 @@ export default function HomePage() {
         </div>
         <div className="footer-links">
           <Link to="/courses">Course Catalog</Link>
-          <Link to="/login?role=trainee">Trainee Sign In</Link>
-          <Link to="/login?role=trainer">Trainer Sign In</Link>
-          <Link to="/login?role=admin">Admin Sign In</Link>
+          <Link to="/login?role=trainee">Trainee Workspace</Link>
+          <Link to="/login?role=trainer">Faculty Portal</Link>
+          <Link to="/login?role=admin">Admin Console</Link>
+          <Link to="/register">Account Clearance</Link>
         </div>
       </footer>
     </div>
