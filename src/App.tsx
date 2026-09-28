@@ -40,9 +40,12 @@ function Protected({role,children}:{role:Role;children:React.ReactNode}){
   return <AppShell role={role}>{children}</AppShell>;
 }
 
+import CoursesPage from "./pages/public/CoursesPage";
+
 export default function App(){
   return <Routes>
     <Route path="/" element={<HomePage/>}/>
+    <Route path="/courses" element={<CoursesPage/>}/>
     <Route path="/login" element={<LoginPage/>}/>
     <Route path="/register" element={<RegisterPage/>}/>
 
