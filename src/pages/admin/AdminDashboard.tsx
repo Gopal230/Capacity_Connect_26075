@@ -18,9 +18,9 @@ export default function AdminDashboard(){
         subtitle="Organization-wide training, competency and governance overview."
         actions={
           <ConfirmButton
-            label="Reset demo data"
+            label="Reset baseline data"
             className="btn btn-secondary"
-            confirmText="Restore the original SIH demo dataset and sign out?"
+            confirmText="Restore default organizational dataset and sign out?"
             onConfirm={resetDemo}
           />
         }
@@ -35,7 +35,7 @@ export default function AdminDashboard(){
       <StatCard label="Enrollments" value={db.enrollments.length} icon={<CheckCircle2/>}/>
       <StatCard label="Assessments" value={db.attempts.length} icon={<ClipboardCheck/>}/>
       <StatCard label="Certificates" value={db.certificates.length} icon={<Award/>}/>
-      <StatCard label="Completion Rate" value={`${completion}%`} icon={<CheckCircle2/>} caption="Prototype sample"/>
+      <StatCard label="Completion Rate" value={`${completion}%`} icon={<CheckCircle2/>} caption="Organization active"/>
       <StatCard label="Operational Readiness" value={`${readiness}/100`} icon={<Gauge/>} caption={`${impact.readinessRate}% personnel ready`}/>
       <StatCard label="Verified Evidence" value={impact.verified} icon={<ShieldCheck/>} caption={`${impact.evidenceRate}% evidence verified`}/>
       <StatCard label="Knowledge Assets" value={db.knowledgeAssets.length} icon={<Archive/>} caption="Institutional memory"/>

@@ -244,7 +244,7 @@ CREATE INDEX idx_enrollments_trainee ON enrollments(trainee_id);
 CREATE INDEX idx_attempts_trainee_assessment ON assessment_attempts(trainee_id, assessment_id);
 CREATE INDEX idx_competency_results_trainee_subject ON competency_results(trainee_id, subject);
 
--- SIH differentiation layer: evidence-backed capability, operational scenarios and knowledge continuity
+-- Operational capability layer: evidence-backed capability, operational scenarios and knowledge continuity
 ALTER TABLE certificates ADD COLUMN IF NOT EXISTS valid_until DATE;
 
 CREATE TYPE evidence_status AS ENUM ('submitted','verified','revision');

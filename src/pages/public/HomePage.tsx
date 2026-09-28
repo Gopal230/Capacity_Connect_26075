@@ -16,10 +16,10 @@ export default function HomePage(){
 
     <section className="hero">
       <div className="hero-copy">
-        <span className="eyebrow">SMART INDIA HACKATHON · DIGITAL CAPACITY BUILDING</span>
+        <span className="eyebrow">MINISTRY OF EARTH SCIENCES · INDIA METEOROLOGICAL DEPARTMENT</span>
         <h1>Build an IMD workforce ready for <em>operational decisions.</em></h1>
         <p>An IMD-focused capacity building, operational-readiness and knowledge-continuity platform connecting people, meteorological competencies, verified trainers, learning media and evidence of capability.</p>
-        <div className="hero-actions"><Link className="btn btn-primary btn-lg" to="/judge-demo">SIH Judge Demo <ArrowRight size={18}/></Link><Link className="btn btn-ghost btn-lg" to="/login">Open full portal</Link></div>
+        <div className="hero-actions"><Link className="btn btn-primary btn-lg" to="/login">Access Portal <ArrowRight size={18}/></Link><Link className="btn btn-secondary btn-lg" to="/register">Register Account</Link></div>
         <div className="hero-trust"><span><CheckCircle2/> Role-based access</span><span><CheckCircle2/> Transparent matching</span><span><CheckCircle2/> Verified outcomes</span></div>
       </div>
       <div className="hero-panel">
@@ -33,7 +33,7 @@ export default function HomePage(){
     </section>
 
     <section className="metric-strip">
-      <div><strong>{db.trainees.length}+</strong><span>Demo trainees</span></div>
+      <div><strong>{db.trainees.length}+</strong><span>Active Personnel</span></div>
       <div><strong>{db.trainers.length}</strong><span>Verified trainers</span></div>
       <div><strong>{db.courses.filter(c=>c.status==="published").length}</strong><span>Active courses</span></div>
       <div><strong>5-signal</strong><span>Readiness index</span></div>
@@ -94,6 +94,6 @@ export default function HomePage(){
       <aside className="achievement-box"><Award/><span>Capability achievement</span><h3>Competency records update only after successful training verification.</h3><p>This keeps course completion separate from proven capability—one of the core design principles of CAPACITY CONNECT.</p></aside>
     </section>
 
-    <footer className="public-footer"><div><strong>CAPACITY CONNECT</strong><p>Digital Capacity Building & Learning Management Prototype</p></div><div><span>Smart India Hackathon Prototype</span><span>React · TypeScript · Local Mock Database</span></div></footer>
+    <footer className="public-footer"><div><strong>CAPACITY CONNECT</strong><p>Digital Capacity Building & Operational Learning Management Portal</p></div><div><span>India Meteorological Department · Ministry of Earth Sciences</span><span>Enterprise Operational Readiness Platform</span></div></footer>
   </div>
 }

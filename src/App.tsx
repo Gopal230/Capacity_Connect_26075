@@ -5,7 +5,6 @@ import AppShell from "./layouts/AppShell";
 import HomePage from "./pages/public/HomePage";
 import LoginPage from "./pages/public/LoginPage";
 import RegisterPage from "./pages/public/RegisterPage";
-import JudgeDemo from "./pages/public/JudgeDemo";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminTrainers from "./pages/admin/AdminTrainers";
@@ -46,7 +45,6 @@ export default function App(){
     <Route path="/" element={<HomePage/>}/>
     <Route path="/login" element={<LoginPage/>}/>
     <Route path="/register" element={<RegisterPage/>}/>
-    <Route path="/judge-demo" element={<JudgeDemo/>}/>
 
     <Route path="/admin" element={<Protected role="admin"><AdminDashboard/></Protected>}/>
     <Route path="/admin/users" element={<Protected role="admin"><AdminUsers/></Protected>}/>
