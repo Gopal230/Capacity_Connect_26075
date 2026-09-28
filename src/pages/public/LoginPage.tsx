@@ -1,4 +1,4 @@
-import { ArrowLeft, Eye, EyeOff, LockKeyhole } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LockKeyhole, ShieldCheck } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
@@ -6,11 +6,13 @@ import { useApp } from "../../context/AppContext";
 export default function LoginPage() {
   const { login } = useApp();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@capacityconnect.in");
-  const [password, setPassword] = useState("Demo@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const submit = (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -22,47 +24,52 @@ export default function LoginPage() {
       navigate(`/${r.role}`);
     }, 350);
   };
-  const useDemo = (role: "admin" | "trainer" | "trainee") => {
-    setEmail(`${role}@capacityconnect.in`);
-    setPassword("Demo@123");
-    setError("");
-  };
+
   return (
     <div className="auth-page">
       <div className="auth-side">
         <Link to="/" className="back-link">
-          <ArrowLeft /> Back to homepage
+          <ArrowLeft size={16} /> Back to homepage
         </Link>
         <div>
-          <span className="eyebrow light">CAPACITY CONNECT</span>
-          <h1>Secure role-based access for capacity building.</h1>
+          <span className="eyebrow light">IDENTITY & ACCESS MANAGEMENT</span>
+          <h1>Authorized Portal Access for IMD Personnel</h1>
           <p>
-            Sign in with your organizational credentials to access your
-            designated workspace.
+            Sign in with your official departmental credentials to access your designated
+            operational training workspace, specialized curricula, and capability records.
           </p>
           <div className="auth-points">
-            <span>✓ Pending registrations cannot log in</span>
-            <span>✓ Each role has protected routes</span>
-            <span>✓ Sessions persist securely</span>
+            <span>
+              <ShieldCheck size={16} /> Centralized MoES & IMD authorization
+            </span>
+            <span>
+              <ShieldCheck size={16} /> Role-governed workspace clearance
+            </span>
+            <span>
+              <ShieldCheck size={16} /> Audit-logged secure session protocol
+            </span>
           </div>
         </div>
       </div>
       <div className="auth-card-wrap">
         <form className="auth-card" onSubmit={submit}>
           <div className="auth-logo">
-            <LockKeyhole />
+            <LockKeyhole size={24} />
           </div>
           <h2>Sign in</h2>
-          <p>Access your CAPACITY CONNECT workspace.</p>
+          <p>Access your CAPACITY CONNECT operational workspace.</p>
+
           <label>
-            Email address
+            Official Email Address
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="e.g. admin@capacityconnect.in or trainee@capacityconnect.in"
               required
             />
           </label>
+
           <label>
             Password
             <div className="password-field">
@@ -70,38 +77,52 @@ export default function LoginPage() {
                 type={show ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter account password"
                 required
               />
-              <button type="button" onClick={() => setShow(!show)}>
-                {show ? <EyeOff /> : <Eye />}
+              <button
+                type="button"
+                onClick={() => setShow(!show)}
+                aria-label="Toggle password visibility"
+              >
+                {show ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </label>
+
+          <div className="auth-remember-row">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span>Remember this device</span>
+            </label>
+            <a
+              href="#forgot"
+              onClick={(e) => {
+                e.preventDefault();
+                alert("Please contact the IMD System Administrator or your Divisional Head for credential recovery.");
+              }}
+              className="text-link"
+            >
+              Forgot password?
+            </a>
+          </div>
+
           {error && <div className="form-error">{error}</div>}
+
           <button
             className="btn btn-primary btn-block"
             type="submit"
             disabled={loading}
           >
-            {loading ? "Authenticating..." : "Sign in"}
+            {loading ? "Verifying clearance..." : "Sign In to Workspace"}
           </button>
-          <div className="demo-box">
-            <strong>Quick role selection</strong>
-            <div>
-              <button type="button" onClick={() => useDemo("admin")}>
-                Admin
-              </button>
-              <button type="button" onClick={() => useDemo("trainer")}>
-                Trainer
-              </button>
-              <button type="button" onClick={() => useDemo("trainee")}>
-                Trainee
-              </button>
-            </div>
-            <small>Pre-configured organizational profiles</small>
-          </div>
+
           <p className="auth-switch">
-            New user? <Link to="/register">Register for approval</Link>
+            New personnel or researcher? <Link to="/register">Submit registration for clearance</Link>
           </p>
         </form>
       </div>
