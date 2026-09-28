@@ -33,16 +33,51 @@ export interface Trainer {
   bio: string;
 }
 
+export type CompetencyLevel = "L1" | "L2" | "L3" | "L4";
+
+export interface TraineeCompetency {
+  name: string;
+  currentLevel: CompetencyLevel;
+  targetLevel: CompetencyLevel;
+  lastAssessmentScore?: number;
+  updatedAt?: string;
+}
+
+export interface RoleCompetencyRequirement {
+  competency: string;
+  requiredLevel: CompetencyLevel;
+}
+
+export interface LevelRecommendation {
+  competency: string;
+  currentLevel: CompetencyLevel;
+  targetLevel: CompetencyLevel;
+  gap: number;
+  status: "recommended" | "target-achieved" | "no-course-found";
+  recommendedCourse?: Course;
+  message?: string;
+}
+
+export interface CourseAccessCheck {
+  canEnroll: boolean;
+  status: "available" | "locked";
+  message: string;
+  recommendedCourse: Course | null;
+}
+
 export interface Trainee {
   id: string;
   userId: string;
   name: string;
+  role?: string;
+  centre?: string;
   department: string;
   designation: string;
   qualification: string;
   experienceYears: number;
   interests: string[];
   skills: Record<string, Level>;
+  competencies?: TraineeCompetency[];
   goals: string;
 }
 
@@ -50,6 +85,11 @@ export interface Course {
   id: string;
   title: string;
   code: string;
+  competency?: string;
+  entryLevel?: CompetencyLevel;
+  targetLevel?: CompetencyLevel;
+  prerequisiteCourseId?: string | null;
+  duration?: string;
   department: string;
   subject: string;
   level: Level;
@@ -223,7 +263,7 @@ export interface ScenarioAttempt {
   scenarioId: string;
   score: number;
   passed: boolean;
-  readinessBand: "Needs Development" | "Operationally Ready" | "High Readiness";
+  readinessBand: "Needs Development" | "Developing" | "Operationally Ready" | "High Readiness";
   attemptedAt: string;
 }
 

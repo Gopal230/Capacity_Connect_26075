@@ -1,4 +1,4 @@
-import { Course, DB, Level, Trainer } from "../types";
+import { CompetencyLevel, Course, CourseAccessCheck, DB, Level, LevelRecommendation, RoleCompetencyRequirement, Trainee, TraineeCompetency, Trainer } from "../types";
 
 export const levelRank: Record<Level, number> = { Beginner: 1, Intermediate: 2, Advanced: 3 };
 
@@ -119,3 +119,165 @@ export function trainingImpact(db:DB){
   const readinessRate=db.trainees.length?Math.round(ready/db.trainees.length*100):0;
   return {avgDelta,evidenceRate,readinessRate,verified};
 }
+
+/* =========================================================
+   TRAINEE LEVEL-BASED COURSE RECOMMENDATION SYSTEM
+   ========================================================= */
+
+export const roleRequirements: Record<string, RoleCompetencyRequirement[]> = {
+  "Weather Forecaster": [
+    { competency: "Radar Interpretation", requiredLevel: "L3" },
+    { competency: "Synoptic Forecasting", requiredLevel: "L3" },
+    { competency: "Satellite Meteorology", requiredLevel: "L2" }
+  ],
+  "Aviation Forecaster": [
+    { competency: "Aviation Meteorology", requiredLevel: "L3" },
+    { competency: "METAR/TAF Interpretation", requiredLevel: "L3" },
+    { competency: "Radar Interpretation", requiredLevel: "L2" }
+  ],
+  "Radar Operator": [
+    { competency: "Radar Interpretation", requiredLevel: "L3" },
+    { competency: "Doppler Radar Analysis", requiredLevel: "L3" }
+  ]
+};
+
+export function getLevelNumber(level: string | undefined): number {
+  if (!level) return 1;
+  const num = Number(level.replace(/[^0-9]/g, ""));
+  return isNaN(num) || num <= 0 ? 1 : num;
+}
+
+export function getLevelBasedRecommendations(trainee: Trainee, courses: Course[]): LevelRecommendation[] {
+  const recommendations: LevelRecommendation[] = [];
+  const competencies = trainee.competencies && trainee.competencies.length > 0 
+    ? trainee.competencies 
+    : [
+        { name: "Radar Interpretation", currentLevel: "L1" as CompetencyLevel, targetLevel: "L3" as CompetencyLevel, lastAssessmentScore: 45 },
+        { name: "Synoptic Forecasting", currentLevel: "L2" as CompetencyLevel, targetLevel: "L3" as CompetencyLevel, lastAssessmentScore: 68 },
+        { name: "Satellite Meteorology", currentLevel: "L2" as CompetencyLevel, targetLevel: "L2" as CompetencyLevel, lastAssessmentScore: 75 }
+      ];
+
+  competencies.forEach((skill) => {
+    const currentLevel = getLevelNumber(skill.currentLevel);
+    const targetLevel = getLevelNumber(skill.targetLevel);
+
+    // If trainee already reached the required level, do not force another course
+    if (currentLevel >= targetLevel) {
+      recommendations.push({
+        competency: skill.name,
+        currentLevel: skill.currentLevel,
+        targetLevel: skill.targetLevel,
+        gap: 0,
+        status: "target-achieved",
+        message: "You have reached the required level for your role."
+      });
+      return;
+    }
+
+    // Find only the immediate next course, not an advanced course
+    const nextCourse = courses.find((course) => {
+      const courseEntryLevel = getLevelNumber(course.entryLevel || "L1");
+      const courseTargetLevel = getLevelNumber(course.targetLevel || "L2");
+
+      return (
+        (course.competency === skill.name || course.subject === skill.name) &&
+        courseEntryLevel === currentLevel &&
+        courseTargetLevel === currentLevel + 1 &&
+        course.status === "published"
+      );
+    });
+
+    if (nextCourse) {
+      recommendations.push({
+        competency: skill.name,
+        currentLevel: skill.currentLevel,
+        targetLevel: skill.targetLevel,
+        gap: targetLevel - currentLevel,
+        status: "recommended",
+        recommendedCourse: nextCourse
+      });
+    } else {
+      recommendations.push({
+        competency: skill.name,
+        currentLevel: skill.currentLevel,
+        targetLevel: skill.targetLevel,
+        gap: targetLevel - currentLevel,
+        status: "no-course-found",
+        message: "No suitable next-level course is available yet."
+      });
+    }
+  });
+
+  return recommendations;
+}
+
+export function checkCourseAccess(
+  traineeCompetency: TraineeCompetency | undefined,
+  selectedCourse: Course,
+  courses: Course[]
+): CourseAccessCheck {
+  const currentLevelStr = traineeCompetency?.currentLevel || "L1";
+  const traineeLevel = getLevelNumber(currentLevelStr);
+  const requiredLevelStr = selectedCourse.entryLevel || "L1";
+  const requiredLevel = getLevelNumber(requiredLevelStr);
+
+  // Trainee can enroll if current level matches or is above entry level
+  if (traineeLevel >= requiredLevel) {
+    return {
+      canEnroll: true,
+      status: "available",
+      message: "You are eligible for this course.",
+      recommendedCourse: null
+    };
+  }
+
+  // Find the exact course trainee should complete first
+  const foundationCourse = courses.find((course) => {
+    const courseEntryLevel = getLevelNumber(course.entryLevel || "L1");
+    const courseTargetLevel = getLevelNumber(course.targetLevel || "L2");
+
+    return (
+      (course.competency === selectedCourse.competency || course.subject === selectedCourse.subject) &&
+      courseEntryLevel === traineeLevel &&
+      courseTargetLevel === traineeLevel + 1 &&
+      course.status === "published"
+    );
+  });
+
+  return {
+    canEnroll: false,
+    status: "locked",
+    message: `${selectedCourse.title} requires Level ${selectedCourse.entryLevel || "L1"}. Your current level is ${currentLevelStr}.`,
+    recommendedCourse: foundationCourse || null
+  };
+}
+
+export function updateLevelAfterAssessment(
+  traineeCompetency: TraineeCompetency,
+  completedCourse: Course,
+  assessmentScore: number
+) {
+  const passMark = 60;
+
+  // Do not update level if trainee fails
+  if (assessmentScore < passMark) {
+    return {
+      updated: false,
+      newLevel: traineeCompetency.currentLevel,
+      message: "You did not pass the assessment. Please revise the material and try again."
+    };
+  }
+
+  // Update only to the completed course's target level (L1 -> L2, even if 95%)
+  const newLevel = completedCourse.targetLevel || "L2";
+  traineeCompetency.currentLevel = newLevel;
+  traineeCompetency.lastAssessmentScore = assessmentScore;
+  traineeCompetency.updatedAt = new Date().toISOString().slice(0, 10);
+
+  return {
+    updated: true,
+    newLevel,
+    message: `Congratulations! You achieved ${newLevel}. The next-level course is now unlocked.`
+  };
+}
+
