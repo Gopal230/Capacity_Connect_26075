@@ -414,6 +414,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const traineeId = currentTraineeId();
     if (!traineeId) return notify("Trainee profile not found", "error");
     if (db.enrollments.some(e => e.traineeId === traineeId && e.courseId === courseId && e.status !== "rejected")) return notify("Enrollment already exists", "info");
+
+    // Phase 5: Level prerequisite guard — block enrollment if entry level > current level
+    const course = db.courses.find(c => c.id === courseId);
+    if (course && course.competency && course.entryLevel) {
+      const currentLvl = getTraineeLevel(traineeId, course.competency);
+      const currentRank = getLevelNumber(currentLvl);
+      const entryRank = getLevelNumber(course.entryLevel);
+      if (entryRank > currentRank) {
+        return notify(`Cannot enroll: your level in ${course.competency} is ${currentLvl}, but this course requires ${course.entryLevel}`, "error");
+      }
+    }
+
     setDb(prev => ({ ...prev, enrollments: [{ id: `e-${Date.now()}`, traineeId, courseId, status: "approved", progress: 0, completedLessonIds: [], requestedAt: new Date().toISOString().slice(0, 10) }, ...prev.enrollments] }));
     notify("Enrollment successful");
   };
