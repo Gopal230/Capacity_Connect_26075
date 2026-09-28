@@ -21,7 +21,7 @@ export default function AdminReadiness(){
 
   return <>
     <PageHeader title="Operational Readiness Command Center" subtitle="Convert training records into a decision-ready view of who is actually prepared for operational responsibilities."/>
-    <div className="innovation-banner"><div><span className="innovation-kicker">CAPABILITY FRAMEWORK</span><h2>Operational Readiness Index (ORI)</h2><p>Readiness combines competency assessment, learning completion, post-test performance, trainer-verified evidence and scenario performance. No single course-completion metric can mark a learner ready.</p></div><div className="innovation-score"><strong>{org}</strong><span>Organization ORI</span></div></div>
+    <div className="innovation-banner"><div><span className="innovation-kicker">SIH DIFFERENTIATOR</span><h2>Operational Readiness Index (ORI)</h2><p>Readiness combines competency assessment, learning completion, post-test performance, trainer-verified evidence and scenario performance. No single course-completion metric can mark a learner ready.</p></div><div className="innovation-score"><strong>{org}</strong><span>Organization ORI</span></div></div>
     <div className="stats-grid compact">
       <StatCard label="Operationally Ready" value={`${impact.readinessRate}%`} icon={<Gauge/>} caption="ORI ≥ 70"/>
       <StatCard label="High-Risk Learners" value={highRisk} icon={<AlertTriangle/>} caption="ORI below 45"/>

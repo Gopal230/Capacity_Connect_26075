@@ -1,12 +1,12 @@
 # CAPACITY CONNECT — Application Structure
 
-## Architecture
+## Prototype architecture
 
-CAPACITY CONNECT is an enterprise-grade React + TypeScript single-page application utilizing a robust service layer and local storage engine for instant offline evaluation and testing, paired with a complete PostgreSQL relational database blueprint and REST API contract ready for containerized production deployment.
+The SIH demo is a React + TypeScript single-page application using a localStorage-backed mock database. It runs without a backend during judging, while the data model and actions are structured for later Node.js + PostgreSQL migration.
 
 ### Layers
 
-- `src/pages/public` — homepage, authentication, registration.
+- `src/pages/public` — homepage, authentication, SIH Judge Demo Mode.
 - `src/pages/admin` — governance, trainer verification, course approval, competency framework, analytics, Readiness Command Center, Knowledge Continuity Vault.
 - `src/pages/trainer` — professional profile, course/content creation, Trainer Library, assessments, trainee monitoring, Capability Evidence Review, Expert Knowledge Capture.
 - `src/pages/trainee` — profile, competency check, explainable recommendations, learning, assessments, Operational Scenario Lab, Capability Passport, certificates.
@@ -21,6 +21,7 @@ CAPACITY CONNECT is an enterprise-grade React + TypeScript single-page applicati
 - `/`
 - `/login`
 - `/register`
+- `/judge-demo`
 
 ### Admin
 - `/admin`
