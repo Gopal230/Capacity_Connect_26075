@@ -195,6 +195,7 @@ export interface AssessmentAttempt {
     roleRequirementMet: boolean;
     roleRequiredLevel?: CompetencyLevel;
     message: string;
+    certificate?: Certificate;
   };
 }
 

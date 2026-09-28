@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
-import { ArrowUpCircle, AlertTriangle, BookOpen, CheckCircle2, XCircle } from "lucide-react";
+import { ArrowUpCircle, AlertTriangle, Award, BookOpen, CheckCircle2, Printer, XCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Badge, EmptyState, PageHeader } from "../../components/UI";
 import { useApp } from "../../context/AppContext";
 import { Assessment, AssessmentAttempt } from "../../types";
@@ -85,6 +86,78 @@ export default function AssessmentPage() {
                       ✓ Role requirement met for {last.levelUpInfo.competency}
                       {last.levelUpInfo.roleRequiredLevel && ` (required: ${last.levelUpInfo.roleRequiredLevel})`}
                     </p>
+                  )}
+
+                  {/* Phase 7: Printable-looking certificate block */}
+                  {last.levelUpInfo.certificate && (
+                    <div
+                      className="printable-certificate-block"
+                      style={{
+                        marginTop: "16px",
+                        background: "#FFFFFF",
+                        border: "2.5px double #0056D2",
+                        borderRadius: "8px",
+                        padding: "20px 24px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div style={{ borderBottom: "1px solid #E2E8F0", paddingBottom: "12px", marginBottom: "14px" }}>
+                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                          <Award size={24} color="#0056D2" />
+                          <strong style={{ fontSize: "15px", letterSpacing: "1px", color: "#0F172A" }}>
+                            INDIA METEOROLOGICAL DEPARTMENT
+                          </strong>
+                        </div>
+                        <small style={{ color: "#64748B", textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "10.5px" }}>
+                          Ministry of Earth Sciences · Government of India
+                        </small>
+                        <div style={{ marginTop: "6px" }}>
+                          <span style={{ background: "#EFF6FF", color: "#0056D2", border: "1px solid #BFDBFE", padding: "2px 10px", borderRadius: "10px", fontSize: "11px", fontWeight: 700, letterSpacing: "0.4px" }}>
+                            OFFICIAL CERTIFICATE OF OPERATIONAL COMPETENCY
+                          </span>
+                        </div>
+                      </div>
+
+                      <p style={{ margin: "0 0 4px", fontSize: "12.5px", color: "#64748B" }}>This certifies that</p>
+                      <h2 style={{ margin: "0 0 6px", fontSize: "20px", color: "#0F172A" }}>{trainee?.name || "Operational Trainee"}</h2>
+                      <p style={{ margin: "0 0 8px", fontSize: "12.5px", color: "#64748B" }}>
+                        has demonstrated operational capability and attained verified competency in
+                      </p>
+
+                      <div style={{ margin: "10px 0" }}>
+                        <h3 style={{ margin: "0 0 4px", fontSize: "16px", color: "#0056D2" }}>
+                          {last.levelUpInfo.competency}
+                        </h3>
+                        <Badge tone="green">
+                          Verified Level: {last.levelUpInfo.newLevel}
+                        </Badge>
+                      </div>
+
+                      <p style={{ fontSize: "12px", color: "#475569", margin: "6px 0 0" }}>
+                        Program: <strong>{last.levelUpInfo.courseTitle}</strong>
+                      </p>
+
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #E2E8F0", paddingTop: "12px", marginTop: "14px", flexWrap: "wrap", gap: "8px" }}>
+                        <div style={{ textAlign: "left", fontSize: "11px", color: "#64748B" }}>
+                          <div><strong>Certificate ID:</strong> {last.levelUpInfo.certificate.certificateCode}</div>
+                          <div><strong>Issued:</strong> {last.levelUpInfo.certificate.issuedAt}</div>
+                        </div>
+                        <div style={{ display: "flex", gap: "8px" }}>
+                          <button
+                            type="button"
+                            onClick={() => window.print()}
+                            className="btn btn-secondary btn-sm"
+                            style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}
+                          >
+                            <Printer size={13} /> Print Certificate
+                          </button>
+                          <Link to="/trainee/certificates" className="btn btn-primary btn-sm">
+                            View All Certificates
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
                   )}
                 </>
               ) : last.levelUpInfo.lessonsIncomplete ? (

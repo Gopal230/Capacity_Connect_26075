@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
-import { Assessment, AssessmentAttempt, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
+import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
 import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
 
 type Toast = { id: number; message: string; tone: "success" | "error" | "info" };
@@ -503,6 +503,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
         const roleRequirementMet = roleRequiredRank > 0 && targetRank >= roleRequiredRank && previousRank < roleRequiredRank;
 
+        // Phase 7: Create and issue certificate record upon level-up
+        const certCode = `CC-IMD-${course.targetLevel}-${Date.now().toString().slice(-6)}`;
+        const certificate: Certificate = {
+          id: `cert-${Date.now()}`,
+          traineeId,
+          courseId: course.id,
+          trainerId: course.trainerId,
+          competency: competencyName,
+          levelAchieved: course.targetLevel,
+          issuedAt: new Date().toISOString().slice(0, 10),
+          validUntil: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+          certificateCode: certCode,
+        };
+
         attempt.levelUpInfo = {
           levelled: true,
           previousLevel: formatLevel(previousRank),
@@ -513,7 +527,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
           roleRequirementMet,
           roleRequiredLevel,
           message: `Level updated: ${formatLevel(previousRank)} → ${newLevel} in ${competencyName}!`,
+          certificate,
         };
+
+        // Add certificate to db.certificates (preventing duplicate certificates if retaken)
+        setDb(prev => {
+          const alreadyHasCert = prev.certificates.some(
+            c => c.traineeId === traineeId && c.courseId === course.id && c.levelAchieved === course.targetLevel
+          );
+          return {
+            ...prev,
+            certificates: alreadyHasCert ? prev.certificates : [certificate, ...prev.certificates],
+            attempts: [attempt, ...prev.attempts],
+          };
+        });
+
+        notify(`Level Updated: ${newLevel}! Certificate issued.`, "success");
+        return attempt;
       } else {
         // Passed but already at or above target level (retake): no change
         attempt.levelUpInfo = {
