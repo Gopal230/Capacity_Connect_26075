@@ -49,12 +49,12 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
   const toggleLite=()=>{const next=!lite;setLite(next);localStorage.setItem("capacityConnectLite",next?"1":"0");document.body.classList.toggle("lite-mode",next)};
   return <div className="app-shell">
     <aside className={`sidebar ${open?"open":""}`}>
-      <div className="brand"><div className="brand-mark">CC</div><div><strong>CAPACITY CONNECT</strong><span>Operational Capacity & Learning Portal</span></div><button className="sidebar-close" onClick={()=>setOpen(false)}><X/></button></div>
+      <div className="brand"><div className="brand-mark imd-mark">IMD</div><div><strong>CAPACITY CONNECT</strong><span>Ministry of Earth Sciences · India Meteorological Department</span></div><button className="sidebar-close" onClick={()=>setOpen(false)}><X/></button></div>
       <nav>{nav[role].map(item=><NavLink end={item.to===`/${role}`} key={item.to} to={item.to} onClick={()=>setOpen(false)} className={({isActive})=>isActive?"active":""}>{item.icon}<span>{item.label}</span></NavLink>)}</nav>
       <div className="sidebar-footer"><div className="mini-user"><div className="avatar">{currentUser?.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div><div><strong>{currentUser?.name}</strong><span>{role.toUpperCase()}</span></div></div><button className="logout-btn" onClick={()=>{logout();navigate("/login")}}><LogOut size={18}/> Sign out</button></div>
     </aside>
     <div className="main-wrap">
-      <header className="topbar"><button className="menu-btn" onClick={()=>setOpen(true)}><Menu/></button><div><strong>Operational Capacity & Learning Center</strong><span>Ministry of Earth Sciences · India Meteorological Department</span></div><div className="top-actions"><button className={`lite-toggle ${lite?"active":""}`} onClick={toggleLite} title="Reduce visual load for low-bandwidth use"><WifiOff size={15}/><span>{lite?"Field Mode ON":"Field Mode"}</span></button><span className="system-status"><i/> Portal Online</span><div className="avatar small">{currentUser?.name.charAt(0)}</div></div></header>
+      <header className="topbar"><button className="menu-btn" onClick={()=>setOpen(true)}><Menu/></button><div><strong>IMD Meteorological Capacity & Readiness Centre</strong><span>Forecasting · Radar · Satellite · Climate · Warnings · Observations</span></div><div className="top-actions"><button className={`lite-toggle ${lite?"active":""}`} onClick={toggleLite} title="Reduce visual/data load for low-bandwidth use"><WifiOff size={15}/><span>{lite?"Low-bandwidth ON":"Field mode"}</span></button><span className="system-status"><i/> Prototype Online</span><div className="avatar small">{currentUser?.name.charAt(0)}</div></div></header>
       <main className="page-content">{children}</main>
     </div>
     {open&&<div className="sidebar-overlay" onClick={()=>setOpen(false)}/>}
