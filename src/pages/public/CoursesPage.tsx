@@ -1,11 +1,10 @@
-import { Clock, Lock, Menu, Search, Star, X } from "lucide-react";
+import { Clock, Menu, Search, Star, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
-import { getLevelNumber } from "../../utils/engine";
 
 export default function CoursesPage() {
-  const { db, currentUser, getTraineeLevel } = useApp();
+  const { db } = useApp();
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedDept, setSelectedDept] = useState("all");
@@ -21,11 +20,6 @@ export default function CoursesPage() {
       c.code.toLowerCase().includes(search.toLowerCase());
     return matchesDept && matchesSearch;
   });
-
-  // If logged in as trainee, find trainee record for level checking
-  const trainee = currentUser?.role === "trainee"
-    ? db.trainees.find((t) => t.userId === currentUser.id)
-    : null;
 
   return (
     <div className="public-site">
@@ -47,14 +41,8 @@ export default function CoursesPage() {
         <nav className={menu ? "show" : ""}>
           <Link to="/">Get Started / Roles</Link>
           <Link to="/courses" className="active">Courses</Link>
-          {currentUser ? (
-            <Link to={`/${currentUser.role}`} className="btn btn-primary btn-sm">Dashboard</Link>
-          ) : (
-            <>
-              <Link to="/login" className="btn btn-secondary btn-sm">Sign In</Link>
-              <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
-            </>
-          )}
+          <Link to="/login" className="btn btn-secondary btn-sm">Sign In</Link>
+          <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
         </nav>
       </header>
 
@@ -126,82 +114,34 @@ export default function CoursesPage() {
 
         {/* Course Cards Grid */}
         <div className="course-grid">
-          {filtered.map((c) => {
-            const hasLevels = Boolean(c.entryLevel && c.targetLevel);
-            const competencyName = c.competency || c.subject;
-
-            // Check if locked for logged-in trainee
-            let isLocked = false;
-            let lockMessage = "";
-            if (trainee && hasLevels && c.competency) {
-              const currentLvl = getTraineeLevel(trainee.id, c.competency);
-              const currentRank = getLevelNumber(currentLvl);
-              const entryRank = getLevelNumber(c.entryLevel);
-              if (entryRank > currentRank) {
-                isLocked = true;
-                lockMessage = `Requires ${c.entryLevel} in ${c.competency}. Your level: ${currentLvl}.`;
-              }
-            }
-
-            return (
-              <article className={`course-card ${isLocked ? "locked" : ""}`} key={c.id} style={isLocked ? { background: "#F8FAFC", borderColor: "#E2E8F0" } : {}}>
-                <div className="course-top">
-                  <span className="course-category-pill">{competencyName}</span>
-                  {hasLevels ? (
-                    <span className="badge badge-blue">{c.entryLevel} → {c.targetLevel}</span>
-                  ) : (
-                    <span className="badge badge-blue">{c.level}</span>
-                  )}
-                </div>
-                <h3 style={isLocked ? { color: "#64748B" } : {}}>{c.title}</h3>
-                <p>{c.description}</p>
-                <div className="course-meta">
-                  <span>
-                    <Clock size={13} /> {c.durationHours} hours
-                  </span>
-                  <span className="course-rating">
-                    <Star size={13} fill="#F59E0B" color="#F59E0B" /> {c.rating}
-                  </span>
-                  <span className="course-code">{c.code}</span>
-                </div>
-
-                {isLocked && (
-                  <p style={{ fontSize: "11.5px", color: "#92400E", background: "#FEF3C7", padding: "6px 8px", borderRadius: "4px", margin: "10px 0 0" }}>
-                    <Lock size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />
-                    {lockMessage}
-                  </p>
-                )}
-
-                <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid #E2E8F0" }}>
-                  {isLocked ? (
-                    <button
-                      disabled
-                      className="btn btn-disabled btn-block btn-sm"
-                    >
-                      <Lock size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />
-                      Locked (Requires {c.entryLevel})
-                    </button>
-                  ) : trainee ? (
-                    <Link
-                      to={`/trainee`}
-                      className="btn btn-primary btn-block btn-sm"
-                      style={{ textDecoration: "none" }}
-                    >
-                      Go to Dashboard to Enroll
-                    </Link>
-                  ) : (
-                    <Link
-                      to={`/login?role=trainee`}
-                      className="btn btn-primary btn-block btn-sm"
-                      style={{ textDecoration: "none" }}
-                    >
-                      Sign In to Enroll
-                    </Link>
-                  )}
-                </div>
-              </article>
-            );
-          })}
+          {filtered.map((c) => (
+            <article className="course-card" key={c.id}>
+              <div className="course-top">
+                <span className="course-category-pill">{c.department}</span>
+                <span className="badge badge-blue">{c.level}</span>
+              </div>
+              <h3>{c.title}</h3>
+              <p>{c.description}</p>
+              <div className="course-meta">
+                <span>
+                  <Clock size={13} /> {c.durationHours} hours
+                </span>
+                <span className="course-rating">
+                  <Star size={13} fill="#F59E0B" color="#F59E0B" /> {c.rating}
+                </span>
+                <span className="course-code">{c.code}</span>
+              </div>
+              <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid #E2E8F0" }}>
+                <Link
+                  to={`/login?role=trainee`}
+                  className="btn btn-primary btn-block btn-sm"
+                  style={{ textDecoration: "none" }}
+                >
+                  Enroll via Trainee Portal
+                </Link>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
 

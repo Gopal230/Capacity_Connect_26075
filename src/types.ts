@@ -184,6 +184,18 @@ export interface AssessmentAttempt {
   score: number;
   passed: boolean;
   attemptedAt: string;
+  /** Phase 6: Level-up result info, only present when a level-course assessment is submitted */
+  levelUpInfo?: {
+    levelled: boolean;
+    previousLevel: CompetencyLevel;
+    newLevel: CompetencyLevel;
+    competency: string;
+    courseTitle: string;
+    lessonsIncomplete: boolean;
+    roleRequirementMet: boolean;
+    roleRequiredLevel?: CompetencyLevel;
+    message: string;
+  };
 }
 
 export interface CompetencyRequirement {

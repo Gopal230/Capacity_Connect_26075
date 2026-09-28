@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
 import { Assessment, AssessmentAttempt, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
-import { gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
+import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
 
 type Toast = { id: number; message: string; tone: "success" | "error" | "info" };
 
@@ -414,18 +414,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const traineeId = currentTraineeId();
     if (!traineeId) return notify("Trainee profile not found", "error");
     if (db.enrollments.some(e => e.traineeId === traineeId && e.courseId === courseId && e.status !== "rejected")) return notify("Enrollment already exists", "info");
-
-    // Phase 5: Level prerequisite guard — block enrollment if entry level > current level
-    const course = db.courses.find(c => c.id === courseId);
-    if (course && course.competency && course.entryLevel) {
-      const currentLvl = getTraineeLevel(traineeId, course.competency);
-      const currentRank = getLevelNumber(currentLvl);
-      const entryRank = getLevelNumber(course.entryLevel);
-      if (entryRank > currentRank) {
-        return notify(`Cannot enroll: your level in ${course.competency} is ${currentLvl}, but this course requires ${course.entryLevel}`, "error");
-      }
-    }
-
     setDb(prev => ({ ...prev, enrollments: [{ id: `e-${Date.now()}`, traineeId, courseId, status: "approved", progress: 0, completedLessonIds: [], requestedAt: new Date().toISOString().slice(0, 10) }, ...prev.enrollments] }));
     notify("Enrollment successful");
   };
@@ -463,6 +451,84 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const score = Math.round((correct / assessment.questions.length) * 100);
     const passed = score >= assessment.passingPercentage;
     const attempt: AssessmentAttempt = { id: `att-${Date.now()}`, assessmentId, traineeId, score, passed, attemptedAt: new Date().toISOString().slice(0, 10) };
+
+    // Phase 6: Level-up logic for level-course assessments
+    const course = db.courses.find(c => c.id === assessment.courseId);
+    if (course && course.competency && course.entryLevel && course.targetLevel) {
+      const competencyName = course.competency;
+      const previousLevel = getTraineeLevel(traineeId, competencyName);
+      const previousRank = getLevelNumber(previousLevel);
+      const targetRank = getLevelNumber(course.targetLevel);
+
+      // Check if all lessons are complete
+      const enrollment = db.enrollments.find(e => e.traineeId === traineeId && e.courseId === course.id && e.status !== "rejected");
+      const totalLessons = course.modules.reduce((sum, m) => sum + m.lessons.length, 0);
+      const completedLessons = enrollment?.completedLessonIds.length || 0;
+      const lessonsIncomplete = completedLessons < totalLessons;
+
+      // Check role requirement
+      const trainee = db.trainees.find(t => t.id === traineeId || t.userId === traineeId);
+      const roleReqs = roleRequirements[trainee?.jobRole || trainee?.role || ""] || {};
+      const roleRequiredLevel = roleReqs[competencyName] as CompetencyLevel | undefined;
+      const roleRequiredRank = roleRequiredLevel ? getLevelNumber(roleRequiredLevel) : 0;
+
+      if (!passed) {
+        // Failed: level unchanged
+        attempt.levelUpInfo = {
+          levelled: false,
+          previousLevel: formatLevel(previousRank),
+          newLevel: formatLevel(previousRank),
+          competency: competencyName,
+          courseTitle: course.title,
+          lessonsIncomplete: false,
+          roleRequirementMet: false,
+          message: `Your level is unchanged. Score ${score}% did not meet the ${assessment.passingPercentage}% pass mark.`,
+        };
+      } else if (lessonsIncomplete) {
+        // Passed but lessons incomplete: level unchanged
+        attempt.levelUpInfo = {
+          levelled: false,
+          previousLevel: formatLevel(previousRank),
+          newLevel: formatLevel(previousRank),
+          competency: competencyName,
+          courseTitle: course.title,
+          lessonsIncomplete: true,
+          roleRequirementMet: false,
+          message: `Complete all lessons (${completedLessons}/${totalLessons}) to receive the level upgrade.`,
+        };
+      } else if (targetRank > previousRank) {
+        // Passed + all lessons done + target is higher: LEVEL UP!
+        const newLevel = formatLevel(targetRank);
+        setTraineeLevel(traineeId, competencyName, course.targetLevel!);
+
+        const roleRequirementMet = roleRequiredRank > 0 && targetRank >= roleRequiredRank && previousRank < roleRequiredRank;
+
+        attempt.levelUpInfo = {
+          levelled: true,
+          previousLevel: formatLevel(previousRank),
+          newLevel,
+          competency: competencyName,
+          courseTitle: course.title,
+          lessonsIncomplete: false,
+          roleRequirementMet,
+          roleRequiredLevel,
+          message: `Level updated: ${formatLevel(previousRank)} → ${newLevel} in ${competencyName}!`,
+        };
+      } else {
+        // Passed but already at or above target level (retake): no change
+        attempt.levelUpInfo = {
+          levelled: false,
+          previousLevel: formatLevel(previousRank),
+          newLevel: formatLevel(previousRank),
+          competency: competencyName,
+          courseTitle: course.title,
+          lessonsIncomplete: false,
+          roleRequirementMet: false,
+          message: `Assessment passed! Your level in ${competencyName} is already ${formatLevel(previousRank)} (at or above ${course.targetLevel}).`,
+        };
+      }
+    }
+
     setDb(prev => ({ ...prev, attempts: [attempt, ...prev.attempts] }));
     notify(`Assessment submitted: ${score}%`, attempt.passed ? "success" : "info");
     return attempt;
