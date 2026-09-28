@@ -34,7 +34,7 @@ const nav: Record<Role,{to:string;label:string;icon:ReactNode}[]> = {
     {to:"/trainee/recommendations",label:"Recommendations",icon:<Settings2/>},
     {to:"/trainee/learning",label:"My Learning",icon:<GraduationCap/>},
     {to:"/trainee/assessments",label:"Assessments",icon:<ClipboardCheck/>},
-    {to:"/trainee/scenarios",label:"Scenario Lab",icon:<Radar/>},
+    {to:"/trainee/scenarios",label:"Practical Lab Assessment",icon:<Radar/>},
     {to:"/trainee/passport",label:"Capability Passport",icon:<ShieldCheck/>},
     {to:"/trainee/certificates",label:"Certificates",icon:<Award/>}
   ]
