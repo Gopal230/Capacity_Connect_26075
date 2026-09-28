@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, GraduationCap, Menu, ShieldCheck, Sparkles, Users, X } from "lucide-react";
+import { ArrowRight, CheckCircle2, GraduationCap, Menu, ShieldCheck, Users, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
@@ -36,11 +36,11 @@ export default function HomePage() {
         </button>
 
         <nav className={menu ? "show" : ""}>
-          <Link to="/courses">Courses Catalog</Link>
-          <Link to="/login?role=trainee">Trainee Sign In</Link>
-          <Link to="/login?role=trainer">Trainer Sign In</Link>
-          <Link to="/login?role=admin">Admin Sign In</Link>
-          <Link to="/register" className="btn btn-primary btn-sm">
+          <Link to="/courses" onClick={() => setMenu(false)}>Course Catalog</Link>
+          <Link to="/login?role=trainee" onClick={() => setMenu(false)}>Trainee Sign In</Link>
+          <Link to="/login?role=trainer" onClick={() => setMenu(false)}>Trainer Sign In</Link>
+          <Link to="/login?role=admin" onClick={() => setMenu(false)}>Admin Sign In</Link>
+          <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setMenu(false)}>
             Register
           </Link>
         </nav>
@@ -50,63 +50,66 @@ export default function HomePage() {
       <main className="portal-gateway">
         {/* Gateway Hero */}
         <section className="gateway-hero">
-          <div className="gateway-badge">
-            <Sparkles size={14} />
-            <span>INDIA METEOROLOGICAL DEPARTMENT · MINISTRY OF EARTH SCIENCES</span>
+          <div className="gateway-kicker">
+            MINISTRY OF EARTH SCIENCES · GOVERNMENT OF INDIA
           </div>
-          <h1>Welcome to CAPACITY CONNECT</h1>
+          <h1 className="gateway-title">
+            Meteorological Capacity Building & Operational Readiness Portal
+          </h1>
           <p className="gateway-desc">
-            The national operational capacity building and continuous learning platform for meteorological personnel.
-            Choose your role below to access your dedicated workspace or explore immediately using instant demo access.
+            The unified continuous learning and capability governance system for the India Meteorological Department.
+            Select your professional role below to access your dedicated workspace or explore immediately using instant demo credentials.
           </p>
         </section>
 
-        {/* 3-PART ROLE DIVISION - ZERO OVERLAPPING, MAXIMUM CLARITY */}
+        {/* 3-PART ROLE DIVISION - CLEAN ENTERPRISE ARCHITECTURE */}
         <section className="three-part-container">
           {/* =========================================
               PART 1: OPERATIONAL TRAINEE
               ========================================= */}
-          <div className="role-part-column part-trainee">
+          <div className="role-part-column">
             <div className="part-header">
-              <span className="part-tag tag-trainee">ROLE 01 · OPERATIONAL PERSONNEL</span>
-              <div className="part-icon-box box-trainee">
-                <GraduationCap size={28} />
+              <div className="part-header-top">
+                <div className="part-icon-wrap">
+                  <GraduationCap size={22} />
+                </div>
+                <span className="role-category-label">OPERATIONAL PERSONNEL</span>
               </div>
               <h2>Operational Trainee</h2>
               <p className="part-audience">
-                Meteorological Officers · Observers · Scientific Assistants · Operational Forecasters
+                Meteorological Officers, Observers, Scientific Assistants & Forecasters
               </p>
             </div>
 
             <div className="part-body">
-              <span className="part-features-title">Workspace Capabilities</span>
+              <span className="part-features-title">Core Workspace Capabilities</span>
               <ul className="part-checklist">
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Role-specific diagnostic skill assessments</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Diagnostic competency checks & tailored study pathways</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Curricula in NWP, Doppler Radar, Satellite & Severe Weather</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Curricula in NWP modeling, Doppler Radar & Satellite meteorology</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Interactive synoptic forecasting simulations</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Severe weather decision labs & synoptic forecasting scenarios</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Verified digital Capability Passport & credentials</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Trainer-verified digital Capability Passport & certifications</span>
                 </li>
               </ul>
             </div>
 
             <div className="part-actions">
-              <Link to="/login?role=trainee" className="btn btn-trainee-login">
-                Sign In as Trainee <ArrowRight size={16} />
+              <Link to="/login?role=trainee" className="btn btn-role-primary">
+                Sign In as Trainee <ArrowRight size={15} />
               </Link>
               <button
                 type="button"
-                className="btn btn-demo-solid"
+                className="btn btn-role-demo"
                 onClick={() => quickLogin("trainee")}
               >
                 ⚡ 1-Click Trainee Demo
@@ -120,47 +123,49 @@ export default function HomePage() {
           {/* =========================================
               PART 2: ACCREDITED TRAINER
               ========================================= */}
-          <div className="role-part-column part-trainer">
+          <div className="role-part-column">
             <div className="part-header">
-              <span className="part-tag tag-trainer">ROLE 02 · FACULTY & INSTRUCTOR</span>
-              <div className="part-icon-box box-trainer">
-                <Users size={28} />
+              <div className="part-header-top">
+                <div className="part-icon-wrap">
+                  <Users size={22} />
+                </div>
+                <span className="role-category-label">FACULTY & INSTRUCTORS</span>
               </div>
               <h2>Accredited Trainer</h2>
               <p className="part-audience">
-                Senior Meteorologists · Faculty Scientists · Domain Experts · Research Mentors
+                Senior Meteorologists, Faculty Scientists & Specialized Domain Instructors
               </p>
             </div>
 
             <div className="part-body">
-              <span className="part-features-title">Workspace Capabilities</span>
+              <span className="part-features-title">Core Workspace Capabilities</span>
               <ul className="part-checklist">
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Curriculum authoring studio & module publication</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Curriculum authoring studio & interactive module publishing</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Radar loops, satellite imagery & media repository</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Doppler radar archives, satellite loops & instructional media</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Practical evidence review & forecaster sign-offs</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Practical evidence review & operational forecaster sign-offs</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Cohort performance monitoring & mentoring</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Cohort performance monitoring & longitudinal progress tracking</span>
                 </li>
               </ul>
             </div>
 
             <div className="part-actions">
-              <Link to="/login?role=trainer" className="btn btn-trainer-login">
-                Sign In as Trainer <ArrowRight size={16} />
+              <Link to="/login?role=trainer" className="btn btn-role-primary">
+                Sign In as Trainer <ArrowRight size={15} />
               </Link>
               <button
                 type="button"
-                className="btn btn-demo-solid"
+                className="btn btn-role-demo"
                 onClick={() => quickLogin("trainer")}
               >
                 ⚡ 1-Click Trainer Demo
@@ -174,53 +179,55 @@ export default function HomePage() {
           {/* =========================================
               PART 3: PORTAL ADMINISTRATOR
               ========================================= */}
-          <div className="role-part-column part-admin">
+          <div className="role-part-column">
             <div className="part-header">
-              <span className="part-tag tag-admin">ROLE 03 · GOVERNANCE & COMMAND</span>
-              <div className="part-icon-box box-admin">
-                <ShieldCheck size={28} />
+              <div className="part-header-top">
+                <div className="part-icon-wrap">
+                  <ShieldCheck size={22} />
+                </div>
+                <span className="role-category-label">SYSTEM GOVERNANCE</span>
               </div>
               <h2>Portal Administrator</h2>
               <p className="part-audience">
-                IMD Directorate · Training Heads · Governance & Compliance Officers
+                IMD Directorate, Training Division Heads & Governance Officers
               </p>
             </div>
 
             <div className="part-body">
-              <span className="part-features-title">Workspace Capabilities</span>
+              <span className="part-features-title">Core Workspace Capabilities</span>
               <ul className="part-checklist">
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Pending user clearance reviews & role authorization</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>User clearance reviews & role-based credential authorization</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>Faculty accreditation & standard compliance tracking</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>Faculty accreditation & institutional syllabus compliance</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>National Operational Readiness Index (ORI) dashboards</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>National Operational Readiness Index (ORI) analytics</span>
                 </li>
                 <li>
-                  <CheckCircle2 size={16} className="check-icon" />
-                  <span>System audit logs, data integrity & security control</span>
+                  <CheckCircle2 size={15} className="check-icon" />
+                  <span>System audit logs, data governance & security administration</span>
                 </li>
               </ul>
             </div>
 
             <div className="part-actions">
-              <Link to="/login?role=admin" className="btn btn-admin-login">
-                Sign In as Admin <ArrowRight size={16} />
+              <Link to="/login?role=admin" className="btn btn-role-primary">
+                Sign In as Admin <ArrowRight size={15} />
               </Link>
               <button
                 type="button"
-                className="btn btn-demo-solid"
+                className="btn btn-role-demo"
                 onClick={() => quickLogin("admin")}
               >
                 ⚡ 1-Click Admin Demo
               </button>
               <span className="part-admin-notice">
-                Admin access is strictly restricted to authorized IMD officials
+                Access restricted to authorized IMD personnel
               </span>
             </div>
           </div>
@@ -235,7 +242,7 @@ export default function HomePage() {
           <small>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences</small>
         </div>
         <div className="footer-links">
-          <Link to="/courses">Courses Catalog</Link>
+          <Link to="/courses">Course Catalog</Link>
           <Link to="/login?role=trainee">Trainee Sign In</Link>
           <Link to="/login?role=trainer">Trainer Sign In</Link>
           <Link to="/login?role=admin">Admin Sign In</Link>
