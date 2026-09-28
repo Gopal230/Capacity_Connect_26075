@@ -2,6 +2,22 @@ export type Role = "admin" | "trainer" | "trainee";
 export type UserStatus = "pending" | "active" | "inactive" | "rejected";
 export type Level = "Beginner" | "Intermediate" | "Advanced";
 
+export type CompetencyLevel = "L1" | "L2" | "L3" | "L4" | "L5";
+
+export interface LevelDefinition {
+  level: CompetencyLevel;
+  code: string;
+  name: string;
+  fullName: string;
+  rank: number;
+}
+
+export interface CompetencyItem {
+  id: string;
+  name: string;
+  description?: string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -11,6 +27,7 @@ export interface User {
   status: UserStatus;
   department: string;
   designation: string;
+  jobRole?: string;
   createdAt: string;
   profileComplete: boolean;
   employeeId?: string;
@@ -33,8 +50,6 @@ export interface Trainer {
   bio: string;
 }
 
-export type CompetencyLevel = "L1" | "L2" | "L3" | "L4";
-
 export interface TraineeCompetency {
   name: string;
   currentLevel: CompetencyLevel;
@@ -53,7 +68,7 @@ export interface LevelRecommendation {
   currentLevel: CompetencyLevel;
   targetLevel: CompetencyLevel;
   gap: number;
-  status: "recommended" | "target-achieved" | "no-course-found";
+  status: "recommended" | "target-achieved" | "no-course-found" | "Met" | "Gap";
   recommendedCourse?: Course;
   message?: string;
 }
@@ -70,6 +85,7 @@ export interface Trainee {
   userId: string;
   name: string;
   role?: string;
+  jobRole?: string;
   centre?: string;
   department: string;
   designation: string;
@@ -184,6 +200,7 @@ export interface Certificate {
   courseId: string;
   trainerId: string;
   competency: string;
+  levelAchieved?: CompetencyLevel;
   issuedAt: string;
   validUntil?: string;
   certificateCode: string;
@@ -280,7 +297,6 @@ export interface KnowledgeAsset {
   capturedAt: string;
 }
 
-
 export interface CourseFeedback {
   id: string;
   traineeId: string;
@@ -295,6 +311,9 @@ export interface Activity {
   text: string;
   at: string;
 }
+
+export type RoleRequirementsMap = Record<string, Record<string, CompetencyLevel>>;
+export type TraineeLevelsMap = Record<string, Record<string, CompetencyLevel>>;
 
 export interface DB {
   users: User[];
