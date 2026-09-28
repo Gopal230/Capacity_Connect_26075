@@ -1,0 +1,329 @@
+﻿/* =========================================================
+   CAPACITY CONNECT - 3-PART ROLE GATEWAY STYLING
+   ========================================================= */
+
+.portal-gateway {
+  min-height: calc(100vh - 140px);
+  background: #F8FAFC;
+  padding: 40px 24px 64px;
+}
+
+.gateway-hero {
+  max-width: 920px;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+
+.gateway-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  background: #EEF2FF;
+  border: 1.5px solid #C7D2FE;
+  color: #1E40AF;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.gateway-hero h1 {
+  font-size: 26px !important;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+
+.gateway-desc {
+  font-size: 15px;
+  line-height: 1.65;
+  color: #334155;
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   THREE-PART DIVISION: HIGH CLARITY, ZERO OVERLAP
+   ========================================================= */
+.three-part-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1240px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .three-part-container {
+    grid-template-columns: 1fr;
+    max-width: 580px;
+  }
+}
+
+.role-part-column {
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  border-radius: 16px;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.role-part-column:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+/* Part 1: Operational Trainee */
+.part-trainee {
+  border-top: 6px solid #1D4ED8;
+}
+.part-trainee:hover {
+  border-color: #1D4ED8;
+}
+.tag-trainee {
+  background: #DBEAFE;
+  color: #1E40AF;
+  border: 1px solid #93C5FD;
+}
+.box-trainee {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1.5px solid #BFDBFE;
+}
+.btn-trainee-login {
+  background: #1D4ED8 !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  border: none;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+.btn-trainee-login:hover {
+  background: #1E40AF !important;
+}
+
+/* Part 2: Accredited Trainer */
+.part-trainer {
+  border-top: 6px solid #6D28D9;
+}
+.part-trainer:hover {
+  border-color: #6D28D9;
+}
+.tag-trainer {
+  background: #EDE9FE;
+  color: #5B21B6;
+  border: 1px solid #C4B5FD;
+}
+.box-trainer {
+  background: #F5F3FF;
+  color: #6D28D9;
+  border: 1.5px solid #DDD6FE;
+}
+.btn-trainer-login {
+  background: #6D28D9 !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  border: none;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+.btn-trainer-login:hover {
+  background: #5B21B6 !important;
+}
+
+/* Part 3: Portal Administrator */
+.part-admin {
+  border-top: 6px solid #0F172A;
+}
+.part-admin:hover {
+  border-color: #0F172A;
+}
+.tag-admin {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FCD34D;
+}
+.box-admin {
+  background: #F1F5F9;
+  color: #0F172A;
+  border: 1.5px solid #CBD5E1;
+}
+.btn-admin-login {
+  background: #0F172A !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  padding: 12px 18px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  border: none;
+  font-size: 14px;
+  transition: background 0.15s ease;
+}
+.btn-admin-login:hover {
+  background: #1E293B !important;
+}
+
+/* Header & Tags */
+.part-header {
+  margin-bottom: 20px;
+}
+
+.part-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  margin-bottom: 16px;
+}
+
+.part-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.part-header h2 {
+  font-size: 21px;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 0 0 8px;
+}
+
+.part-audience {
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.5;
+  margin: 0;
+  min-height: 38px;
+  font-weight: 500;
+}
+
+/* Body & Checklist */
+.part-body {
+  border-top: 1.5px solid #E2E8F0;
+  padding-top: 18px;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.part-features-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0F172A;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.part-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.part-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #1E293B;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.part-checklist li .check-icon {
+  color: #16A34A;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Actions & Demo Button */
+.part-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1.5px solid #E2E8F0;
+  padding-top: 22px;
+}
+
+.btn-demo-solid {
+  background: #16A34A !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 12px 18px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.btn-demo-solid:hover {
+  background: #15803D !important;
+  transform: translateY(-1px);
+}
+
+.part-register-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1D4ED8;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.part-register-link:hover {
+  text-decoration: underline;
+}
+
+.part-admin-notice {
+  font-size: 11.5px;
+  color: #64748B;
+  text-align: center;
+  margin-top: 4px;
+  font-style: italic;
+  line-height: 1.4;
+}
