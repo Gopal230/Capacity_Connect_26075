@@ -1,265 +1,271 @@
-import { Archive, ArrowRight, Award, BarChart3, BookOpen, BrainCircuit, CheckCircle2, ChevronRight, Clock, FileCheck2, Gauge, GraduationCap, Menu, Radar, ShieldCheck, Star, Users, X } from "lucide-react";
+import { ArrowRight, Award, BarChart3, BookOpen, CheckCircle2, Clock, CloudLightning, Compass, FileCheck2, GraduationCap, Menu, Radar, Satellite, Search, ShieldCheck, Sparkles, Star, Users, Wind, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 
-export default function HomePage(){
-  const {db}=useApp();
-  const [menu,setMenu]=useState(false);
-  const latest=db.courses.filter(c=>c.status==="published").slice(0,3);
+export default function HomePage() {
+  const { db } = useApp();
+  const [menu, setMenu] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const publishedCourses = db.courses.filter((c) => c.status === "published");
+  const filtered = query
+    ? publishedCourses.filter(
+        (c) =>
+          c.title.toLowerCase().includes(query.toLowerCase()) ||
+          c.department.toLowerCase().includes(query.toLowerCase()) ||
+          c.subject.toLowerCase().includes(query.toLowerCase())
+      )
+    : publishedCourses.slice(0, 6);
+
+  const tracks = [
+    {
+      icon: Wind,
+      title: "Weather Modeling (NWP)",
+      desc: "Learn high-resolution WRF modeling, data assimilation, and forecast verification.",
+      count: "6 Courses",
+    },
+    {
+      icon: Radar,
+      title: "Doppler Weather Radar",
+      desc: "Interpret radar reflectivity, velocity products, and nowcast thunderstorms.",
+      count: "5 Courses",
+    },
+    {
+      icon: Satellite,
+      title: "Satellite Meteorology",
+      desc: "Analyze INSAT-3D/3DR satellite imagery, sounder data, and tropical storms.",
+      count: "4 Courses",
+    },
+    {
+      icon: CloudLightning,
+      title: "Cyclone & Severe Weather",
+      desc: "Track cyclones, estimate storm surge, and issue clear public warning bulletins.",
+      count: "4 Courses",
+    },
+    {
+      icon: Compass,
+      title: "Aviation & Marine Forecasts",
+      desc: "Prepare aerodrome forecasts (TAF/METAR) and coastal marine advisories.",
+      count: "3 Courses",
+    },
+    {
+      icon: BarChart3,
+      title: "Climate & Monsoon Dynamics",
+      desc: "Study long-range monsoon forecasting, ENSO/IOD patterns, and climate trends.",
+      count: "4 Courses",
+    },
+  ];
 
   return (
     <div className="public-site">
+      {/* Top Navbar */}
       <header className="public-nav">
         <Link to="/" className="public-brand">
-          <span className="public-brand-mark">CC</span>
+          <div className="brand-logo-pill">
+            <CloudLightning size={20} />
+          </div>
           <div>
-            <strong>CAPACITY CONNECT</strong>
+            <strong>MeteoLearn</strong>
             <small>India Meteorological Department · MoES</small>
           </div>
         </Link>
-        <button className="public-menu" onClick={()=>setMenu(!menu)} aria-label="Toggle navigation">
-          {menu?<X/>:<Menu/>}
+
+        <button
+          className="public-menu"
+          onClick={() => setMenu(!menu)}
+          aria-label="Toggle navigation"
+        >
+          {menu ? <X /> : <Menu />}
         </button>
-        <nav className={menu?"show":""}>
-          <a href="#about">About</a>
-          <a href="#workflow">Framework</a>
-          <a href="#features">Portals</a>
+
+        <nav className={menu ? "show" : ""}>
+          <a href="#tracks">Specializations</a>
           <a href="#courses">Courses</a>
-          <Link to="/login" className="btn btn-secondary">Sign In</Link>
-          <Link to="/register" className="btn btn-primary">Register</Link>
+          <a href="#how-it-works">How It Works</a>
+          <Link to="/login" className="btn btn-secondary btn-sm">
+            Sign In
+          </Link>
+          <Link to="/register" className="btn btn-primary btn-sm">
+            Register
+          </Link>
         </nav>
       </header>
 
+      {/* Hero Section */}
       <section className="hero">
         <div className="hero-copy">
-          <span className="category-pill">ACADEMIC & OPERATIONAL EXCELLENCE · MOES / IMD</span>
-          <h1>Build an IMD workforce ready for <em>operational decisions.</em></h1>
+          <div className="hero-badge-pill">
+            <Sparkles size={14} />
+            <span>India Meteorological Department · Official Learning Hub</span>
+          </div>
+
+          <h1>
+            Master weather forecasting. <br />
+            <em>Simple, practical, and certified.</em>
+          </h1>
+
           <p>
-            An enterprise-grade operational capacity building and continuous learning platform. 
-            Connecting meteorological competencies, accredited trainers, structured curricula, 
-            and trainer-verified evidence of frontline readiness.
+            Interactive courses, radar and satellite simulations, and verified credentials
+            for atmospheric scientists and operational weather officers across India.
           </p>
-          <div className="hero-actions">
-            <Link className="btn btn-primary btn-lg" to="/login">
-              Access Portal <ArrowRight size={18}/>
-            </Link>
-            <a className="btn btn-secondary btn-lg" href="#courses">
-              Explore Programs
+
+          <div className="hero-search-bar">
+            <div className="hero-search-input-wrap">
+              <Search size={18} className="search-icon" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search courses (e.g. Radar, Cyclone, WRF, Satellite)..."
+              />
+            </div>
+            <a href="#courses" className="btn btn-primary">
+              Find Courses
             </a>
           </div>
+
+          <div className="hero-domain-pills">
+            <span>Popular:</span>
+            <button type="button" onClick={() => setQuery("Numerical Weather Prediction")}>
+              Numerical Modeling (WRF)
+            </button>
+            <button type="button" onClick={() => setQuery("Radar")}>
+              Doppler Radar
+            </button>
+            <button type="button" onClick={() => setQuery("Satellite")}>
+              INSAT-3DR
+            </button>
+            <button type="button" onClick={() => setQuery("Cyclone")}>
+              Cyclone Warning
+            </button>
+          </div>
+
           <div className="hero-trust">
-            <span><CheckCircle2 size={16}/> Role-governed access</span>
-            <span><CheckCircle2 size={16}/> Explainable matching</span>
-            <span><CheckCircle2 size={16}/> Evidence-backed verification</span>
+            <span>
+              <CheckCircle2 size={16} /> Certified IMD Faculty
+            </span>
+            <span>
+              <CheckCircle2 size={16} /> Practical Weather Labs
+            </span>
+            <span>
+              <CheckCircle2 size={16} /> Official Credentials
+            </span>
           </div>
         </div>
 
-        <div className="hero-panel">
-          <div className="hero-panel-head">
-            <div>
-              <span>Competency-to-Capability Engine</span>
-              <strong>Operational Pathway Preview</strong>
-            </div>
-            <BrainCircuit size={22}/>
+        {/* Featured Card */}
+        <div className="hero-featured-card">
+          <div className="featured-card-badge">
+            <GraduationCap size={16} />
+            <span>Featured Specialization</span>
           </div>
-          <div className="engine-step active">
-            <span>01</span>
-            <div>
-              <strong>Competency Diagnostic</strong>
-              <small>Numerical Weather Prediction · Foundational → Advanced</small>
+          <div className="featured-card-body">
+            <span className="department-tag">Numerical Weather Prediction</span>
+            <h3>Operational Weather Modeling & Forecasting</h3>
+            <p>
+              Master regional WRF model configuration, satellite data assimilation,
+              and rainfall verification for daily forecast shifts.
+            </p>
+
+            <div className="featured-faculty">
+              <div className="faculty-avatar">AR</div>
+              <div>
+                <strong>Dr. Arvind Rao</strong>
+                <span>Senior Modeler · IMD New Delhi</span>
+              </div>
             </div>
-          </div>
-          <div className="engine-step">
-            <span>02</span>
-            <div>
-              <strong>Targeted Curriculum</strong>
-              <small>Operational NWP Modeling & Diagnostics</small>
+
+            <div className="featured-meta-row">
+              <div className="meta-item">
+                <Clock size={15} />
+                <span>45 Hours</span>
+              </div>
+              <div className="meta-item">
+                <Star size={15} fill="#F59E0B" color="#F59E0B" />
+                <span>4.9 Rating</span>
+              </div>
+              <div className="meta-item">
+                <ShieldCheck size={15} />
+                <span>Certified</span>
+              </div>
             </div>
-            <b>96% match</b>
-          </div>
-          <div className="engine-step">
-            <span>03</span>
-            <div>
-              <strong>Accredited Trainer</strong>
-              <small>Dr. Arvind Rao · ★ 4.9 · Senior Meteorologist</small>
+
+            <div className="featured-card-footer">
+              <Link to="/login" className="btn btn-primary btn-block">
+                Start Course <ArrowRight size={16} />
+              </Link>
             </div>
-            <ShieldCheck size={18}/>
-          </div>
-          <div className="engine-step">
-            <span>04</span>
-            <div>
-              <strong>Operational Evidence</strong>
-              <small>Post-test validation + real-time simulation deliverable</small>
-            </div>
-            <FileCheck2 size={18}/>
-          </div>
-          <div className="engine-step">
-            <span>05</span>
-            <div>
-              <strong>Certified Readiness</strong>
-              <small>Capability Passport + Operational Readiness Index</small>
-            </div>
-            <Gauge size={18}/>
           </div>
         </div>
       </section>
 
+      {/* Friendly Metric Bar */}
       <section className="metric-strip">
         <div>
-          <strong>{db.trainees.length}+</strong>
-          <span>Active Personnel</span>
+          <strong>850+</strong>
+          <span>Officers Trained</span>
         </div>
         <div>
-          <strong>{db.trainers.length}</strong>
-          <span>Accredited Trainers</span>
+          <strong>14</strong>
+          <span>Senior Faculty</span>
         </div>
         <div>
-          <strong>{db.courses.filter(c=>c.status==="published").length}</strong>
-          <span>Published Programs</span>
+          <strong>24</strong>
+          <span>Active Courses</span>
         </div>
         <div>
-          <strong>5-Signal</strong>
-          <span>Readiness Index (ORI)</span>
+          <strong>100%</strong>
+          <span>Verified Certificates</span>
         </div>
       </section>
 
-      <section id="about" className="public-section">
-        <div className="section-kicker">ENTERPRISE CAPACITY LIFECYCLE</div>
-        <h2>A Unified Architecture for Meteorological Competency</h2>
+      {/* Specialization Tracks */}
+      <section id="tracks" className="public-section">
+        <div className="section-kicker">LEARNING TRACKS</div>
+        <h2>Explore Weather Science Disciplines</h2>
         <p className="section-lead">
-          From diagnostic gap discovery to verified operational capability, every learning milestone is auditable, governed, and tied to frontline readiness.
+          Structured courses mapped directly to real operational forecasting desks at IMD.
         </p>
-        <div className="benefit-grid">
-          {[
-            [BookOpen,"Curriculum Management","Modular courses, synoptic charts, recorded briefings, and operational documentation."],
-            [BrainCircuit,"Competency Diagnostic","Pre-training evaluations identify specific operational deficits before enrollment."],
-            [Users,"Accredited Trainer Matching","Explainable recommendation matching expertise, historical ratings, and capacity."],
-            [BarChart3,"Measurable Growth","Pre- and post-evaluations measure tangible capability gains across cohorts."],
-            [Award,"Verified Credentials","Credentials issued strictly upon completion, post-tests, and trainer-signed work evidence."],
-            [ShieldCheck,"Governance & Approvals","Administrative review workflows for personnel onboarding and course publishing."],
-            [Radar,"Operational Scenario Lab","High-stakes decision simulations under realistic weather warning conditions."],
-            [Archive,"Knowledge Continuity Vault","Critical institutional memory preserved as expert debriefs and operational playbooks."]
-          ].map(([I,t,b]:any)=>(
-            <article key={t}>
-              <div className="feature-icon"><I size={20}/></div>
-              <h3>{t}</h3>
-              <p>{b}</p>
-            </article>
-          ))}
+
+        <div className="discipline-grid">
+          {tracks.map((t) => {
+            const Icon = t.icon;
+            return (
+              <article key={t.title} className="discipline-card">
+                <div className="discipline-icon-wrap">
+                  <Icon size={24} />
+                </div>
+                <div className="discipline-info">
+                  <span className="discipline-count">{t.count}</span>
+                  <h3>{t.title}</h3>
+                  <p>{t.desc}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
-      <section id="workflow" className="public-section workflow-section">
-        <div className="section-kicker">GOVERNED PROGRESSION</div>
-        <h2>12-Stage Capability Verification Pipeline</h2>
-        <div className="workflow-row">
-          {[
-            "Profile Setup",
-            "Competency Diagnostic",
-            "Deficit Analysis",
-            "Course Match",
-            "Trainer Allocation",
-            "Guided Study",
-            "Summative Assessment",
-            "Operational Deliverable",
-            "Scenario Simulation",
-            "Trainer Sign-Off",
-            "Credential Issuance",
-            "Capability Ledger"
-          ].map((x,i,arr)=>(
-            <div className="workflow-node" key={x}>
-              <span>{String(i+1).padStart(2,'0')}</span>
-              <strong>{x}</strong>
-              {i<arr.length-1 && <ChevronRight size={16}/>}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="public-section differentiation-section">
-        <div className="section-kicker">ACADEMIC & OPERATIONAL STANDARDS</div>
-        <h2>Built for Operational Capability, Not Mere Attendance</h2>
-        <p className="section-lead">
-          Traditional learning portals measure course completions. CAPACITY CONNECT demands proof of applied competence in mission-critical environments.
-        </p>
-        <div className="differentiator-grid">
-          <article>
-            <Gauge size={24}/>
-            <span>01</span>
-            <h3>Operational Readiness Index</h3>
-            <p>Calculates multi-factor preparedness combining baseline diagnostic, curriculum progress, exams, verified evidence, and scenario scores.</p>
-          </article>
-          <article>
-            <FileCheck2 size={24}/>
-            <span>02</span>
-            <h3>Trainer-Verified Evidence</h3>
-            <p>Credentials require operational sign-off: trainees submit synoptic analyses, radar interpretations, or model validations reviewed by accredited faculty.</p>
-          </article>
-          <article>
-            <BrainCircuit size={24}/>
-            <span>03</span>
-            <h3>Transparent Matching</h3>
-            <p>Explainable scoring breakdowns show exactly why a course or mentor is recommended based on domain fit, verification status, and availability.</p>
-          </article>
-          <article>
-            <Archive size={24}/>
-            <span>04</span>
-            <h3>Succession Protection</h3>
-            <p>Tacit expert knowledge is cataloged into playbooks and debrief archives with mission-criticality and succession-risk governance.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="features" className="public-section">
-        <div className="section-kicker">ROLE-BASED PORTALS</div>
-        <h2>Dedicated Environments for Every Stakeholder</h2>
-        <div className="role-grid">
-          <article>
-            <div className="role-icon"><ShieldCheck size={22}/></div>
-            <h3>Administration</h3>
-            <p>Govern user authorization, accredit faculty, publish curricula, and track organization-wide readiness metrics.</p>
-            <ul>
-              <li>Personnel governance</li>
-              <li>Trainer accreditation</li>
-              <li>Readiness Command Center</li>
-            </ul>
-          </article>
-          <article>
-            <div className="role-icon"><GraduationCap size={22}/></div>
-            <h3>Faculty & Trainers</h3>
-            <p>Design learning modules, upload operational media, evaluate evidence deliverables, and mentor cohorts.</p>
-            <ul>
-              <li>Course authoring & library</li>
-              <li>Operational evidence review</li>
-              <li>Trainee tracking & grading</li>
-            </ul>
-          </article>
-          <article>
-            <div className="role-icon"><Users size={22}/></div>
-            <h3>Operational Personnel</h3>
-            <p>Assess skills, follow tailored learning pathways, complete decision scenarios, and earn certified credentials.</p>
-            <ul>
-              <li>Competency gap checks</li>
-              <li>Interactive coursework</li>
-              <li>Verified Capability Passport</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
+      {/* Course Catalog */}
       <section id="courses" className="public-section soft">
         <div className="section-head-row">
           <div>
-            <div className="section-kicker">FEATURED PATHWAYS</div>
-            <h2>Specialized Operational Programs</h2>
+            <div className="section-kicker">COURSE CATALOG</div>
+            <h2>Specialized Training Curricula</h2>
+            <p className="section-lead">
+              Practical courses designed and mentored by accredited IMD faculty.
+            </p>
           </div>
-          <Link to="/login" className="text-link">
-            Explore inside portal <ArrowRight size={16}/>
-          </Link>
+          {query && (
+            <button className="btn btn-secondary btn-sm" onClick={() => setQuery("")}>
+              Clear search filter
+            </button>
+          )}
         </div>
+
         <div className="course-grid">
-          {latest.map(c=>(
+          {filtered.map((c) => (
             <article className="course-card" key={c.id}>
               <div className="course-top">
                 <span className="course-category-pill">{c.department}</span>
@@ -267,51 +273,118 @@ export default function HomePage(){
               </div>
               <h3>{c.title}</h3>
               <p>{c.description}</p>
+
+              <div className="course-objectives">
+                {c.objectives.slice(0, 2).map((obj, i) => (
+                  <span key={i} className="objective-item">
+                    <CheckCircle2 size={13} /> {obj}
+                  </span>
+                ))}
+              </div>
+
               <div className="course-meta">
-                <span><Clock size={12}/> {c.durationHours} hours</span>
-                <span className="course-rating"><Star size={12} fill="#F59E0B" color="#F59E0B"/> {c.rating}</span>
+                <span>
+                  <Clock size={13} /> {c.durationHours} hours
+                </span>
+                <span className="course-rating">
+                  <Star size={13} fill="#F59E0B" color="#F59E0B" /> {c.rating}
+                </span>
                 <span className="course-code">{c.code}</span>
+              </div>
+
+              <div className="course-card-action">
+                <Link to="/login" className="btn btn-primary btn-block">
+                  View Course Details
+                </Link>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="public-section split-news">
-        <div>
-          <div className="section-kicker">INSTITUTIONAL BULLETINS</div>
-          <h2>Announcements & Schedules</h2>
-          {db.notifications.slice(0,3).map(n=>(
-            <div className="news-item" key={n.id}>
-              <span>{n.type}</span>
-              <div>
-                <strong>{n.title}</strong>
-                <p>{n.body}</p>
-              </div>
-              <time>{n.publishedAt}</time>
+      {/* Simple How-It-Works */}
+      <section id="how-it-works" className="public-section">
+        <div className="section-kicker">HOW IT WORKS</div>
+        <h2>A Straightforward Path to Operational Certification</h2>
+        <p className="section-lead">
+          Clear, structured milestones from diagnostic evaluation to verified credentials.
+        </p>
+
+        <div className="framework-pillars">
+          <div className="pillar-card">
+            <div className="pillar-number">01</div>
+            <div className="pillar-icon">
+              <BookOpen size={24} />
             </div>
-          ))}
+            <h3>Skill Check</h3>
+            <p>Take a quick diagnostic to identify your strengths and topics needing focus.</p>
+          </div>
+
+          <div className="pillar-card">
+            <div className="pillar-number">02</div>
+            <div className="pillar-icon">
+              <GraduationCap size={24} />
+            </div>
+            <h3>Interactive Learning</h3>
+            <p>Watch video lectures, review synoptic charts, and study satellite loops.</p>
+          </div>
+
+          <div className="pillar-card">
+            <div className="pillar-number">03</div>
+            <div className="pillar-icon">
+              <FileCheck2 size={24} />
+            </div>
+            <h3>Practical Task</h3>
+            <p>Submit a real forecasting task or radar interpretation for faculty review.</p>
+          </div>
+
+          <div className="pillar-card">
+            <div className="pillar-number">04</div>
+            <div className="pillar-icon">
+              <Award size={24} />
+            </div>
+            <h3>Official Certificate</h3>
+            <p>Earn an accredited credential verified by your trainer and logged in your profile.</p>
+          </div>
         </div>
-        <aside className="achievement-box">
-          <Award size={28}/>
-          <span>ACCREDITATION POLICY</span>
-          <h3>Credentials Represent Proven Frontline Capability</h3>
-          <p>
-            Completion certificates are issued exclusively after comprehensive syllabus coverage, 
-            successful examination, and independent operational evidence verification by an accredited trainer.
-          </p>
-        </aside>
       </section>
 
+      {/* Footer */}
       <footer className="public-footer">
-        <div>
-          <strong>CAPACITY CONNECT</strong>
-          <p>Digital Capacity Building & Operational Readiness Portal</p>
-          <small>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences</small>
+        <div className="footer-top">
+          <div className="footer-brand">
+            <strong>MeteoLearn</strong>
+            <p>Continuous learning and capacity building for the India Meteorological Department.</p>
+            <small>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences</small>
+          </div>
+          <div className="footer-nav-col">
+            <h4>Tracks</h4>
+            <a href="#courses">Numerical Weather Prediction</a>
+            <a href="#courses">Radar Meteorology</a>
+            <a href="#courses">Satellite Applications</a>
+            <a href="#courses">Aviation Weather</a>
+          </div>
+          <div className="footer-nav-col">
+            <h4>Portals</h4>
+            <Link to="/login">Officer Portal</Link>
+            <Link to="/login">Faculty Workspace</Link>
+            <Link to="/login">Admin Center</Link>
+            <Link to="/register">Register Account</Link>
+          </div>
+          <div className="footer-nav-col">
+            <h4>Standards</h4>
+            <span>WMO-No. 1083 BIP-M</span>
+            <span>MoES Training Standards</span>
+            <span>Govt. of India Guidelines</span>
+          </div>
         </div>
-        <div className="footer-links">
-          <span>Enterprise Academic Design System</span>
-          <span>Coursera-Inspired High-Trust Interface</span>
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} IMD · MoES, Govt of India.</p>
+          <div className="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support</a>
+          </div>
         </div>
       </footer>
     </div>

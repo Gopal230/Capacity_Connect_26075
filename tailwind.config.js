@@ -5,70 +5,68 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: "#0056D2", // Coursera Signature Royal Blue
-          hover: "#00419E",   // Deep Royal Navy
-          accent: "#2563EB",  // Electric Blue
-          dark: "#002F72",
-          soft: "#EFF6FF",    // Soft Ice Blue
-          border: "#BFDBFE",  // Border for soft pills
+          DEFAULT: "#4F46E5", // Modern Vibrant Indigo
+          hover: "#4338CA",   // Deep Indigo
+          accent: "#6366F1",  // Violet Indigo Accent
+          dark: "#1E1B4B",    // Midnight Indigo
+          soft: "#EEF2FF",    // Soft Indigo Ice
+          border: "#C7D2FE",  // Indigo Pill Border
         },
         surface: {
-          DEFAULT: "#FFFFFF", // Crisp White
-          base: "#F8FAFC",    // Clean Off-White / Soft Slate
+          DEFAULT: "#FFFFFF",
+          base: "#F9FAFB",    // Clean, warm soft gray (super friendly on the eyes)
           card: "#FFFFFF",
-          tint: "#F0F5FF",
-          alt: "#F1F5F9",
+          tint: "#F5F3FF",
+          alt: "#F3F4F6",
         },
         border: {
-          DEFAULT: "#E2E8F0", // Clean Slate Gray
+          DEFAULT: "#E5E7EB", // Soft warm gray border
           hover: "#CBD5E1",
-          subtle: "#F1F5F9",
+          subtle: "#F3F4F6",
         },
         navy: {
-          900: "#0A192F",     // Deep Academic Navy
-          800: "#0F172A",     // Charcoal Navy
-          700: "#1E293B",
+          900: "#0F172A",
+          800: "#1E293B",
+          700: "#334155",
         },
         slate: {
-          heading: "#0F172A", // Deep Academic Navy / Charcoal
-          body: "#334155",    // Neutral Slate
-          muted: "#64748B",   // Subtle Cool Gray
+          heading: "#0F172A",
+          body: "#334155",
+          muted: "#64748B",
         },
         accent: {
-          gold: "#F59E0B",    // Warm Amber Gold
-          emerald: "#10B981", // Emerald Green
-          red: "#EF4444",     // Clean Error Red
+          gold: "#F59E0B",
+          emerald: "#10B981",
+          teal: "#0D9488",
+          red: "#EF4444",
         }
       },
       fontFamily: {
         sans: [
+          "'Plus Jakarta Sans'",
+          "'Inter'",
           "-apple-system",
           "BlinkMacSystemFont",
           "'Segoe UI'",
           "Roboto",
-          "Inter",
-          "system-ui",
           "sans-serif"
         ]
       },
-      letterSpacing: {
-        academic: "-0.01em",
-        tight: "-0.02em",
-      },
       borderRadius: {
-        sm: "4px",
-        DEFAULT: "6px",
-        md: "8px",
-        lg: "8px",
-        xl: "12px",
-        "2xl": "16px",
+        sm: "6px",
+        DEFAULT: "10px",
+        md: "12px",
+        lg: "14px",
+        xl: "16px",
+        "2xl": "20px",
         pill: "9999px"
       },
       boxShadow: {
-        card: "0 2px 4px rgba(0, 0, 0, 0.06)",
-        "card-hover": "0 6px 16px rgba(0, 0, 0, 0.08)",
-        dropdown: "0 4px 14px rgba(0, 0, 0, 0.1)",
-        subtle: "0 1px 3px rgba(0, 0, 0, 0.04)",
+        card: "0 2px 8px -1px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.04)",
+        "card-hover": "0 8px 24px -4px rgba(79, 70, 229, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.04)",
+        dropdown: "0 10px 25px -5px rgba(0, 0, 0, 0.1)",
+        subtle: "0 1px 3px rgba(0, 0, 0, 0.05)",
+        btn: "0 4px 14px rgba(79, 70, 229, 0.25)"
       }
     }
   },

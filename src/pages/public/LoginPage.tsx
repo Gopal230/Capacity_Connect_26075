@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, Eye, EyeOff, GraduationCap, LockKeyhole, ShieldCheck, Sparkles, UserPlus, Users } from "lucide-react";
+import { ArrowRight, CloudLightning, Eye, EyeOff, LockKeyhole, ShieldCheck, Sparkles, UserCheck, UserPlus, Users } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
@@ -14,35 +14,35 @@ export default function LoginPage({ initialTab = "login" }: LoginPageProps) {
 
   const [tab, setTab] = useState<"login" | "register">(initialTab);
 
-  // Login state
-  const [email, setEmail] = useState("admin@capacityconnect.in");
+  // Login form state
+  const [email, setEmail] = useState("trainee@capacityconnect.in");
   const [password, setPassword] = useState("Demo@123");
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
-  // Register state
+  // Register form state
   const [regForm, setRegForm] = useState({
     name: "",
     email: "",
     password: "",
     role: "trainee" as "trainer" | "trainee",
-    department: "Numerical Weather Prediction",
+    department: "Weather Forecasting",
     designation: "Operational Forecaster",
   });
   const [regStatus, setRegStatus] = useState<{ ok: boolean; text: string } | null>(null);
   const [regLoading, setRegLoading] = useState(false);
 
   const departments = [
-    "Numerical Weather Prediction (NWP)",
+    "Weather Forecasting",
     "Doppler Weather Radar (DWR)",
-    "Satellite Meteorology (INSAT-3DR)",
+    "Satellite Meteorology",
     "Cyclone Warning & Severe Weather",
-    "Aviation & Marine Forecasting",
-    "Climate Research & Services",
+    "Aviation & Marine Services",
+    "Numerical Weather Prediction (NWP)",
     "Agricultural Meteorology",
-    "Hydrometeorological Observation",
+    "Climate Research & Services",
   ];
 
   const handleLoginSubmit = (e: FormEvent) => {
@@ -58,7 +58,7 @@ export default function LoginPage({ initialTab = "login" }: LoginPageProps) {
         return;
       }
       navigate(`/${result.role}`);
-    }, 300);
+    }, 250);
   };
 
   const handleRegisterSubmit = (e: FormEvent) => {
@@ -76,367 +76,303 @@ export default function LoginPage({ initialTab = "login" }: LoginPageProps) {
           email: "",
           password: "",
           role: "trainee",
-          department: "Numerical Weather Prediction",
+          department: "Weather Forecasting",
           designation: "Operational Forecaster",
         });
       }
-    }, 400);
+    }, 300);
   };
 
-  const fillProfile = (role: Role) => {
-    setEmail(`${role}@capacityconnect.in`);
-    setPassword("Demo@123");
-    setLoginError("");
+  // Instant 1-click test sign-in helper
+  const quickSignIn = (role: Role) => {
+    const testEmail = `${role}@capacityconnect.in`;
+    const testPass = "Demo@123";
+    setEmail(testEmail);
+    setPassword(testPass);
+    setLoginLoading(true);
+    window.setTimeout(() => {
+      const result = login(testEmail, testPass);
+      setLoginLoading(false);
+      if (result.ok) {
+        navigate(`/${result.role}`);
+      }
+    }, 200);
   };
 
   return (
-    <div className="auth-portal-shell">
-      {/* Top Ministry Banner */}
-      <header className="auth-gov-header">
-        <div className="auth-gov-brand">
-          <div className="gov-emblem-badge">IMD</div>
-          <div>
-            <strong>NATIONAL METEOROLOGICAL ACADEMY</strong>
-            <span>India Meteorological Department · Ministry of Earth Sciences, Govt. of India</span>
+    <div className="modern-auth-screen">
+      {/* Top clean header */}
+      <header className="modern-auth-nav">
+        <Link to="/explore" className="modern-auth-brand">
+          <div className="brand-logo-pill">
+            <CloudLightning size={20} />
           </div>
-        </div>
-        <div className="auth-gov-meta">
-          <span className="gov-status-pill">
-            <span className="status-dot" /> Secure Authentication Gateway
-          </span>
-          <Link to="/explore" className="catalog-link">
-            Explore Program Catalog <ArrowRight size={14} />
-          </Link>
-        </div>
+          <div>
+            <strong>MeteoLearn</strong>
+            <span>India Meteorological Department · MoES</span>
+          </div>
+        </Link>
+        <Link to="/explore" className="btn btn-secondary btn-sm browse-btn">
+          Browse Courses <ArrowRight size={14} />
+        </Link>
       </header>
 
-      {/* Main Split Portal Area */}
-      <div className="auth-portal-content">
-        {/* Left Information & Institutional Dossier */}
-        <section className="auth-dossier-panel">
-          <div className="dossier-top">
-            <span className="dossier-kicker">CONTINUOUS TECHNICAL EDUCATION</span>
-            <h1>Advancing National Meteorological Capabilities</h1>
-            <p>
-              The official centralized training and qualification system for atmospheric
-              scientists, forecasters, and technical personnel of the India Meteorological
-              Department.
-            </p>
+      {/* Main Container */}
+      <main className="modern-auth-main">
+        <div className="modern-auth-card">
+          {/* Welcome Header */}
+          <div className="auth-card-hero">
+            <div className="badge-pill-soft">
+              <Sparkles size={14} />
+              <span>Training & Qualification Hub</span>
+            </div>
+            <h2>Welcome to MeteoLearn</h2>
+            <p>Sign in to your account or register to start training.</p>
           </div>
 
-          <div className="dossier-highlights">
-            <div className="dossier-highlight-item">
-              <div className="highlight-icon">
-                <GraduationCap size={20} />
-              </div>
-              <div>
-                <strong>WMO-Aligned Technical Specializations</strong>
-                <p>Curricula mapped to WMO-No. 1083 competency standards in NWP, DWR, and Satellite Analysis.</p>
-              </div>
-            </div>
-
-            <div className="dossier-highlight-item">
-              <div className="highlight-icon">
-                <ShieldCheck size={20} />
-              </div>
-              <div>
-                <strong>Faculty-Evaluated Practical Deliverables</strong>
-                <p>Direct evaluation of synoptic diagnoses and forecast briefings by accredited senior meteorologists.</p>
-              </div>
-            </div>
-
-            <div className="dossier-highlight-item">
-              <div className="highlight-icon">
-                <Users size={20} />
-              </div>
-              <div>
-                <strong>Digital Competency Transcript</strong>
-                <p>Verifiable record of frontline operational proficiency and disaster-response simulation readiness.</p>
-              </div>
-            </div>
+          {/* Segmented Pill Tabs */}
+          <div className="segmented-pill-tabs">
+            <button
+              type="button"
+              className={`pill-tab ${tab === "login" ? "active" : ""}`}
+              onClick={() => {
+                setTab("login");
+                setLoginError("");
+              }}
+            >
+              <LockKeyhole size={16} />
+              <span>Sign In</span>
+            </button>
+            <button
+              type="button"
+              className={`pill-tab ${tab === "register" ? "active" : ""}`}
+              onClick={() => {
+                setTab("register");
+                setRegStatus(null);
+              }}
+            >
+              <UserPlus size={16} />
+              <span>Create Account</span>
+            </button>
           </div>
 
-          <div className="dossier-stats-strip">
-            <div>
-              <strong>850+</strong>
-              <span>Officers Certified</span>
-            </div>
-            <div>
-              <strong>24</strong>
-              <span>Specializations</span>
-            </div>
-            <div>
-              <strong>14</strong>
-              <span>Accredited Faculty</span>
-            </div>
-          </div>
+          {/* TAB 1: LOGIN */}
+          {tab === "login" && (
+            <form className="modern-form-body" onSubmit={handleLoginSubmit}>
+              <div className="input-field">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="e.g. officer@imd.gov.in"
+                  required
+                />
+              </div>
 
-          <div className="dossier-footer-note">
-            <CheckCircle2 size={16} />
-            <span>Authorized access under Ministry of Earth Sciences digital security guidelines.</span>
-          </div>
-        </section>
-
-        {/* Right Authentication & Clearance Card */}
-        <section className="auth-form-card-container">
-          <div className="auth-terminal-card">
-            {/* Tab Switcher */}
-            <div className="auth-tab-switch">
-              <button
-                type="button"
-                className={`tab-btn ${tab === "login" ? "active" : ""}`}
-                onClick={() => setTab("login")}
-              >
-                <LockKeyhole size={16} />
-                <span>Sign In</span>
-              </button>
-              <button
-                type="button"
-                className={`tab-btn ${tab === "register" ? "active" : ""}`}
-                onClick={() => setTab("register")}
-              >
-                <UserPlus size={16} />
-                <span>Register Officer</span>
-              </button>
-            </div>
-
-            {/* TAB 1: LOGIN */}
-            {tab === "login" && (
-              <form className="auth-form-body" onSubmit={handleLoginSubmit}>
-                <div className="form-intro">
-                  <h2>Portal Sign In</h2>
-                  <p>Enter your departmental credentials to access your designated workspace.</p>
-                </div>
-
-                <div className="field-group">
-                  <label>Official Email</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="e.g. officer@imd.gov.in"
-                    required
-                  />
-                </div>
-
-                <div className="field-group">
-                  <label>Account Password</label>
-                  <div className="password-input-wrap">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••••••"
-                      required
-                    />
-                    <button
-                      type="button"
-                      className="password-toggle-btn"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label="Toggle password visibility"
-                    >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="auth-meta-row">
-                  <label className="checkbox-wrap">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                    />
-                    <span>Remember terminal</span>
-                  </label>
+              <div className="input-field">
+                <div className="label-with-link">
+                  <label>Password</label>
                   <a
                     href="#forgot"
                     onClick={(e) => {
                       e.preventDefault();
-                      alert("Please contact the IMD IT Services Directorate at support@imd.gov.in for password reset.");
+                      alert("Please contact the IMD IT Administrator to recover your credentials.");
                     }}
-                    className="forgot-link"
+                    className="subtle-link"
                   >
-                    Forgot password?
+                    Forgot?
                   </a>
                 </div>
-
-                {loginError && <div className="form-feedback error">{loginError}</div>}
-
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block submit-btn"
-                  disabled={loginLoading}
-                >
-                  {loginLoading ? "Verifying Credentials..." : "Authenticate & Open Workspace"}
-                </button>
-
-                {/* Instant Role Access Pills for smooth pair-programming review */}
-                <div className="profile-quick-switch">
-                  <span className="quick-switch-title">Quick Select Profile:</span>
-                  <div className="quick-switch-pills">
-                    <button
-                      type="button"
-                      className="quick-pill"
-                      onClick={() => fillProfile("admin")}
-                    >
-                      Director / Admin
-                    </button>
-                    <button
-                      type="button"
-                      className="quick-pill"
-                      onClick={() => fillProfile("trainer")}
-                    >
-                      Faculty Lead
-                    </button>
-                    <button
-                      type="button"
-                      className="quick-pill"
-                      onClick={() => fillProfile("trainee")}
-                    >
-                      Forecaster Trainee
-                    </button>
-                  </div>
-                </div>
-
-                <div className="auth-card-footnote">
-                  <span>New to the academy? </span>
+                <div className="password-wrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    required
+                  />
                   <button
                     type="button"
-                    className="inline-tab-link"
-                    onClick={() => setTab("register")}
+                    className="toggle-password"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label="Toggle password view"
                   >
-                    Submit registration for departmental clearance
+                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
-              </form>
-            )}
+              </div>
 
-            {/* TAB 2: REGISTER */}
-            {tab === "register" && (
-              <form className="auth-form-body" onSubmit={handleRegisterSubmit}>
-                <div className="form-intro">
-                  <h2>Personnel Clearance Registration</h2>
-                  <p>Submit your professional credentials for departmental account provisioning.</p>
+              <div className="checkbox-row">
+                <label className="checkbox-item">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  <span>Keep me signed in</span>
+                </label>
+              </div>
+
+              {loginError && <div className="feedback-badge error">{loginError}</div>}
+
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg btn-block auth-submit-btn"
+                disabled={loginLoading}
+              >
+                {loginLoading ? "Signing in..." : "Sign In to Portal"}
+              </button>
+
+              {/* 1-Click Fast Profile Switcher */}
+              <div className="fast-access-box">
+                <span className="fast-access-title">Quick Test Sign In (1-Click):</span>
+                <div className="fast-access-pills">
+                  <button
+                    type="button"
+                    className="fast-pill"
+                    onClick={() => quickSignIn("trainee")}
+                  >
+                    <UserCheck size={14} /> Trainee (Officer)
+                  </button>
+                  <button
+                    type="button"
+                    className="fast-pill"
+                    onClick={() => quickSignIn("trainer")}
+                  >
+                    <Users size={14} /> Trainer (Faculty)
+                  </button>
+                  <button
+                    type="button"
+                    className="fast-pill"
+                    onClick={() => quickSignIn("admin")}
+                  >
+                    <ShieldCheck size={14} /> Admin
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+
+          {/* TAB 2: REGISTER */}
+          {tab === "register" && (
+            <form className="modern-form-body" onSubmit={handleRegisterSubmit}>
+              <div className="input-field">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  value={regForm.name}
+                  onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+                  placeholder="e.g. Ramesh Kumar"
+                  required
+                />
+              </div>
+
+              <div className="input-field">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  value={regForm.email}
+                  onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
+                  placeholder="e.g. ramesh@imd.gov.in"
+                  required
+                />
+              </div>
+
+              <div className="input-grid-2">
+                <div className="input-field">
+                  <label>Department</label>
+                  <select
+                    value={regForm.department}
+                    onChange={(e) => setRegForm({ ...regForm, department: e.target.value })}
+                  >
+                    {departments.map((d) => (
+                      <option key={d} value={d}>
+                        {d}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-                <div className="field-group">
-                  <label>Full Name</label>
+                <div className="input-field">
+                  <label>Designation</label>
                   <input
                     type="text"
-                    value={regForm.name}
-                    onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
-                    placeholder="e.g. Dr. Ramesh Chander"
+                    value={regForm.designation}
+                    onChange={(e) => setRegForm({ ...regForm, designation: e.target.value })}
+                    placeholder="e.g. Forecaster"
                     required
                   />
                 </div>
+              </div>
 
-                <div className="field-group">
-                  <label>Official Email</label>
-                  <input
-                    type="email"
-                    value={regForm.email}
-                    onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
-                    placeholder="officer@imd.gov.in"
-                    required
-                  />
-                </div>
-
-                <div className="form-grid-two">
-                  <div className="field-group">
-                    <label>Meteorological Division</label>
-                    <select
-                      value={regForm.department}
-                      onChange={(e) => setRegForm({ ...regForm, department: e.target.value })}
-                    >
-                      {departments.map((d) => (
-                        <option key={d} value={d}>
-                          {d}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="field-group">
-                    <label>Designation</label>
-                    <input
-                      type="text"
-                      value={regForm.designation}
-                      onChange={(e) => setRegForm({ ...regForm, designation: e.target.value })}
-                      placeholder="e.g. Meteorologist-B"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-grid-two">
-                  <div className="field-group">
-                    <label>Requested Clearance</label>
-                    <select
-                      value={regForm.role}
-                      onChange={(e) =>
-                        setRegForm({
-                          ...regForm,
-                          role: e.target.value as "trainer" | "trainee",
-                        })
-                      }
-                    >
-                      <option value="trainee">Operational Trainee / Forecaster</option>
-                      <option value="trainer">Accredited Faculty / Trainer</option>
-                    </select>
-                  </div>
-
-                  <div className="field-group">
-                    <label>Create Password</label>
-                    <input
-                      type="password"
-                      minLength={6}
-                      value={regForm.password}
-                      onChange={(e) => setRegForm({ ...regForm, password: e.target.value })}
-                      placeholder="Min 6 characters"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {regStatus && (
-                  <div className={`form-feedback ${regStatus.ok ? "success" : "error"}`}>
-                    {regStatus.text}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-block submit-btn"
-                  disabled={regLoading}
-                >
-                  {regLoading ? "Submitting Clearance Request..." : "Submit Registration for Approval"}
-                </button>
-
-                <div className="auth-card-footnote">
-                  <span>Already hold clearance? </span>
-                  <button
-                    type="button"
-                    className="inline-tab-link"
-                    onClick={() => setTab("login")}
+              <div className="input-grid-2">
+                <div className="input-field">
+                  <label>Account Role</label>
+                  <select
+                    value={regForm.role}
+                    onChange={(e) =>
+                      setRegForm({
+                        ...regForm,
+                        role: e.target.value as "trainer" | "trainee",
+                      })
+                    }
                   >
-                    Return to Sign In
-                  </button>
+                    <option value="trainee">Trainee (Learner)</option>
+                    <option value="trainer">Trainer (Faculty)</option>
+                  </select>
                 </div>
-              </form>
-            )}
-          </div>
-        </section>
-      </div>
 
-      {/* Footer Strip */}
-      <footer className="auth-portal-footer">
-        <p>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences, Government of India.</p>
-        <div className="footer-mini-links">
-          <Link to="/explore">Public Curricula</Link>
-          <a href="#">Information Security Policy</a>
-          <a href="#">WMO Competency Framework</a>
-          <a href="#">Help Desk</a>
+                <div className="input-field">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    minLength={6}
+                    value={regForm.password}
+                    onChange={(e) => setRegForm({ ...regForm, password: e.target.value })}
+                    placeholder="Min 6 characters"
+                    required
+                  />
+                </div>
+              </div>
+
+              {regStatus && (
+                <div className={`feedback-badge ${regStatus.ok ? "success" : "error"}`}>
+                  {regStatus.text}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg btn-block auth-submit-btn"
+                disabled={regLoading}
+              >
+                {regLoading ? "Creating Account..." : "Create Account"}
+              </button>
+
+              <div className="switch-card-footer">
+                <span>Already have an account? </span>
+                <button
+                  type="button"
+                  className="text-action-link"
+                  onClick={() => setTab("login")}
+                >
+                  Sign In instead
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="modern-auth-footer">
+        <span>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences</span>
+        <div className="auth-footer-links">
+          <Link to="/explore">Course Catalog</Link>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Support</a>
         </div>
       </footer>
     </div>
