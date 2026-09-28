@@ -14,7 +14,7 @@ interface AppContextType {
   traineeLevels: TraineeLevelsMap;
   login: (email: string, password: string) => { ok: boolean; message: string; role?: Role };
   logout: () => void;
-  register: (input: { name: string; email: string; password: string; role: "trainer" | "trainee"; department: string; designation: string; jobRole?: string }) => { ok: boolean; message: string };
+  register: (input: { name: string; email: string; password: string; role: Role; department: string; designation: string; jobRole?: string }) => { ok: boolean; message: string };
   createUser: (input: { name: string; email: string; password: string; role: Role; department: string; designation: string; employeeId?: string; jobRole?: string }) => { ok: boolean; message: string };
   resetDemo: () => void;
   notify: (message: string, tone?: Toast["tone"]) => void;
