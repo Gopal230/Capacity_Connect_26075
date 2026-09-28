@@ -1,26 +1,20 @@
-import { ArrowLeft, ShieldCheck, UserPlus } from "lucide-react";
+import { ArrowLeft, CheckCircle2, ShieldCheck, Sparkles, UserPlus } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 
 export default function RegisterPage() {
-  const { register, roleRequirements } = useApp();
+  const { register } = useApp();
   const [searchParams] = useSearchParams();
   const roleParam = searchParams.get("role");
 
   const initialRole: "trainer" | "trainee" = roleParam === "trainer" ? "trainer" : "trainee";
-
-  // Dynamic job roles list derived from role requirements map
-  const availableJobRoles = Object.keys(roleRequirements).length > 0
-    ? Object.keys(roleRequirements)
-    : ["Radar Operator"];
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     role: initialRole,
-    jobRole: availableJobRoles[0] || "Radar Operator",
     department: "",
     designation: "",
   });
@@ -35,15 +29,7 @@ export default function RegisterPage() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    const r = register({
-      name: form.name,
-      email: form.email,
-      password: form.password,
-      role: form.role,
-      department: form.department,
-      designation: form.designation,
-      jobRole: form.role === "trainee" ? form.jobRole : undefined,
-    });
+    const r = register(form);
     setMessage({ ok: r.ok, text: r.message });
     if (r.ok) {
       setForm({
@@ -51,7 +37,6 @@ export default function RegisterPage() {
         email: "",
         password: "",
         role: initialRole,
-        jobRole: availableJobRoles[0] || "Radar Operator",
         department: "",
         designation: "",
       });
@@ -116,7 +101,7 @@ export default function RegisterPage() {
               />
             </label>
             <label>
-              Portal User Type
+              Desired Role
               <select
                 value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value as "trainer" | "trainee" })}
@@ -125,25 +110,6 @@ export default function RegisterPage() {
                 <option value="trainer">Accredited Faculty / Trainer</option>
               </select>
             </label>
-
-            {/* Job Role dropdown for Trainees only */}
-            {form.role === "trainee" && (
-              <label>
-                Target Job Role
-                <select
-                  value={form.jobRole}
-                  onChange={(e) => setForm({ ...form, jobRole: e.target.value })}
-                  required
-                >
-                  {availableJobRoles.map((jr) => (
-                    <option key={jr} value={jr}>
-                      {jr}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-
             <label>
               Password
               <input
@@ -161,7 +127,7 @@ export default function RegisterPage() {
                 value={form.department}
                 onChange={(e) => setForm({ ...form, department: e.target.value })}
                 required
-                placeholder="e.g. Radar Division / Bhopal DWR"
+                placeholder="e.g. NWP Division / RMC New Delhi"
               />
             </label>
             <label>
@@ -170,7 +136,7 @@ export default function RegisterPage() {
                 value={form.designation}
                 onChange={(e) => setForm({ ...form, designation: e.target.value })}
                 required
-                placeholder="e.g. Scientific Assistant / Radar Operator"
+                placeholder="e.g. Meteorologist-A / Scientific Assistant"
               />
             </label>
           </div>

@@ -1,5 +1,5 @@
 import { COMPETENCY_LEVELS } from "../data/constants";
-import { CompetencyLevel, Course, DB, Level, Trainer } from "../types";
+import { CompetencyLevel, Course, DB, Level, RoleCompetencyGapItem, RoleRequirementsMap, Trainee, TraineeLevelsMap, Trainer } from "../types";
 
 export const levelRank: Record<Level, number> = { Beginner: 1, Intermediate: 2, Advanced: 3 };
 
@@ -65,6 +65,168 @@ export function getLevelFullName(level?: string): string {
  */
 export function isLevelCourse(course: Course): boolean {
   return Boolean(course.competency && course.entryLevel && course.targetLevel);
+}
+
+/**
+ * Reusable function that takes a trainee and returns, for every competency their role requires:
+ * current level, required level, gap, status (Met or Gap), and recommended course (or none).
+ */
+export function getRoleCompetencyRecommendations(
+  trainee: Trainee | null | undefined,
+  courses: Course[],
+  roleRequirements: RoleRequirementsMap,
+  traineeLevels?: TraineeLevelsMap
+): RoleCompetencyGapItem[] {
+  if (!trainee) return [];
+
+  // If the user has no job role or the role has no requirements, return empty result
+  const roleName = trainee.jobRole || trainee.role;
+  if (!roleName || !roleRequirements[roleName]) {
+    return [];
+  }
+
+  const roleReqs = roleRequirements[roleName];
+  const storedLevels = traineeLevels
+    ? (traineeLevels[trainee.id] || traineeLevels[trainee.userId] || {})
+    : {};
+
+  const results: RoleCompetencyGapItem[] = [];
+
+  for (const [competencyName, reqLevelStr] of Object.entries(roleReqs)) {
+    const requiredRank = getLevelNumber(reqLevelStr);
+    const requiredLevel = formatLevel(requiredRank);
+
+    // Get trainee current level: check storedLevels first, then trainee.competencies, default to L1
+    const storedLevelStr = storedLevels[competencyName]
+      || trainee.competencies?.find(c => c.name === competencyName)?.currentLevel
+      || "L1";
+
+    const currentRank = getLevelNumber(storedLevelStr);
+    const currentLevel = formatLevel(currentRank);
+
+    // Rule 1: If current level >= required level: status is Met, no course recommended
+    if (currentRank >= requiredRank) {
+      results.push({
+        competency: competencyName,
+        currentLevel,
+        requiredLevel,
+        currentRank,
+        requiredRank,
+        gap: 0,
+        status: "Met",
+        recommendedCourse: null,
+      });
+      continue;
+    }
+
+    // Rule 2: Otherwise status is Gap. Candidate courses are those in the same competency
+    // whose target level is higher than trainee's current level AND not higher than required level.
+    const gap = requiredRank - currentRank;
+
+    const candidates = courses.filter((course) => {
+      // Courses missing level fields are ignored
+      if (!course.competency || !course.entryLevel || !course.targetLevel) {
+        return false;
+      }
+      if (course.status !== "published") {
+        return false;
+      }
+      if (course.competency !== competencyName && course.subject !== competencyName) {
+        return false;
+      }
+
+      const courseTargetRank = getLevelNumber(course.targetLevel);
+      // Course must actually raise their level
+      if (courseTargetRank <= currentRank) {
+        return false;
+      }
+      // Course must never push trainee past what the role needs
+      if (courseTargetRank > requiredRank) {
+        return false;
+      }
+      return true;
+    });
+
+    if (candidates.length === 0) {
+      results.push({
+        competency: competencyName,
+        currentLevel,
+        requiredLevel,
+        currentRank,
+        requiredRank,
+        gap,
+        status: "Gap",
+        recommendedCourse: null,
+        reasonMessage: "no course available yet",
+      });
+      continue;
+    }
+
+    // Rule 3: Prefer a candidate whose entry level equals the trainee's current level
+    const exactEntryCandidates = candidates.filter((c) => {
+      const entryRank = getLevelNumber(c.entryLevel);
+      return entryRank === currentRank;
+    });
+
+    let pool = exactEntryCandidates;
+
+    // Rule 4: Fallback (to avoid empty results): if none match exactly, accept candidates whose entry level is below current level
+    if (pool.length === 0) {
+      pool = candidates.filter((c) => {
+        const entryRank = getLevelNumber(c.entryLevel);
+        return entryRank < currentRank;
+      });
+    }
+
+    if (pool.length === 0) {
+      results.push({
+        competency: competencyName,
+        currentLevel,
+        requiredLevel,
+        currentRank,
+        requiredRank,
+        gap,
+        status: "Gap",
+        recommendedCourse: null,
+        reasonMessage: "no course available yet",
+      });
+      continue;
+    }
+
+    // Rule 5: If several candidates remain, choose the one with the highest target level
+    pool.sort((a, b) => {
+      const targetB = getLevelNumber(b.targetLevel);
+      const targetA = getLevelNumber(a.targetLevel);
+      return targetB - targetA;
+    });
+
+    const chosenCourse = pool[0];
+
+    results.push({
+      competency: competencyName,
+      currentLevel,
+      requiredLevel,
+      currentRank,
+      requiredRank,
+      gap,
+      status: "Gap",
+      recommendedCourse: chosenCourse,
+    });
+  }
+
+  return results;
+}
+
+/**
+ * Small helper that picks the single "next step" (the competency with the biggest gap that has a recommended course).
+ */
+export function getNextStepRecommendation(gapItems: RoleCompetencyGapItem[]): RoleCompetencyGapItem | null {
+  const eligible = gapItems.filter((item) => item.status === "Gap" && item.recommendedCourse !== null);
+  if (eligible.length === 0) return null;
+
+  // Choose the one with the biggest gap
+  eligible.sort((a, b) => b.gap - a.gap);
+  return eligible[0];
 }
 
 export function recommend(db: DB, subject: string, current: Level, required: Level): Recommendation[] {

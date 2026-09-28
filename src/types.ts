@@ -63,6 +63,18 @@ export interface RoleCompetencyRequirement {
   requiredLevel: CompetencyLevel;
 }
 
+export interface RoleCompetencyGapItem {
+  competency: string;
+  currentLevel: CompetencyLevel;
+  requiredLevel: CompetencyLevel;
+  currentRank: number;
+  requiredRank: number;
+  gap: number;
+  status: "Met" | "Gap";
+  recommendedCourse: Course | null;
+  reasonMessage?: string;
+}
+
 export interface LevelRecommendation {
   competency: string;
   currentLevel: CompetencyLevel;

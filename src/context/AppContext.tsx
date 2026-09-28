@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
-import { Assessment, AssessmentAttempt, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
-import { gapText, getLevelNumber, levelFromScore, recommend } from "../utils/engine";
+import { Assessment, AssessmentAttempt, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
+import { gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
 
 type Toast = { id: number; message: string; tone: "success" | "error" | "info" };
 
@@ -48,6 +48,8 @@ interface AppContextType {
   setTraineeLevel: (traineeId: string, competencyName: string, newLevel: CompetencyLevel) => void;
   getTraineeLevels: (traineeId: string) => Record<string, CompetencyLevel>;
   getRoleRequirements: (roleName: string) => Record<string, CompetencyLevel>;
+  getRoleRecommendations: (trainee?: Trainee) => RoleCompetencyGapItem[];
+  getNextStep: (trainee?: Trainee) => RoleCompetencyGapItem | null;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -579,6 +581,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return recommend(db, latest.subject, latest.currentLevel, latest.requiredLevel);
   };
 
+  const getRoleRecommendations = (targetTrainee?: Trainee): RoleCompetencyGapItem[] => {
+    const t = targetTrainee || (currentUser ? db.trainees.find(x => x.userId === currentUser.id) : undefined);
+    return getRoleCompetencyRecommendations(t, db.courses, roleRequirements, traineeLevels);
+  };
+
+  const getNextStep = (targetTrainee?: Trainee): RoleCompetencyGapItem | null => {
+    const items = getRoleRecommendations(targetTrainee);
+    return getNextStepRecommendation(items);
+  };
+
   const resetDemo = () => {
     localStorage.removeItem(KEYS.DB);
     localStorage.removeItem(KEYS.ROLE_REQUIREMENTS);
@@ -635,6 +647,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setTraineeLevel,
         getTraineeLevels,
         getRoleRequirements,
+        getRoleRecommendations,
+        getNextStep,
       }}
     >
       {children}
