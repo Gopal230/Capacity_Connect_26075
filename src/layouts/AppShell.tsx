@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Archive, Award, BarChart3, Bell, BookOpen, BrainCircuit, ChevronLeft, ChevronRight, ClipboardCheck, FileCheck2, Gauge, GraduationCap, Home, Library, LogOut, Menu, PanelLeftClose, PanelLeftOpen, Radar, Settings2, ShieldCheck, UserCheck, Users, X, WifiOff } from "lucide-react";
+import { Archive, Award, BarChart3, Bell, BookOpen, BrainCircuit, ChevronLeft, ChevronRight, ClipboardCheck, FileCheck2, Gauge, GraduationCap, Home, Library, LogOut, Menu, Radar, Settings2, ShieldCheck, UserCheck, Users, X, WifiOff } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { Role } from "../types";
 
@@ -92,20 +92,7 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
 
     <div className={`main-wrap ${minimized?"minimized":""}`}>
       <header className="topbar">
-        <button
-          className="sidebar-toggle-btn"
-          onClick={() => {
-            if (window.innerWidth <= 900) {
-              setOpen((prev) => !prev);
-            } else {
-              toggleMinimized();
-            }
-          }}
-          title={minimized ? "Expand navigation sidebar" : "Minimize navigation sidebar"}
-          aria-label="Toggle navigation sidebar"
-        >
-          {minimized ? <PanelLeftOpen size={19} /> : <PanelLeftClose size={19} />}
-        </button>
+        <button className="menu-btn" onClick={()=>setOpen(true)}><Menu/></button>
         <div><strong>Operational Capacity & Learning Center</strong><span>Ministry of Earth Sciences · India Meteorological Department</span></div>
         <div className="top-actions">
           <button className={`lite-toggle ${lite?"active":""}`} onClick={toggleLite} title="Reduce visual load for low-bandwidth use">

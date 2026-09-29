@@ -51,7 +51,7 @@ export default function CoursesPage() {
             <Link to={`/${currentUser.role}`} className="btn btn-primary btn-sm">Dashboard</Link>
           ) : (
             <>
-              <Link to="/login" className="btn btn-secondary btn-sm">Sign In</Link>
+              <Link to="/" className="btn btn-secondary btn-sm">Sign In / Get Started</Link>
               <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
             </>
           )}
@@ -191,7 +191,7 @@ export default function CoursesPage() {
                     </Link>
                   ) : (
                     <Link
-                      to={`/login?role=trainee`}
+                      to={`/?role=trainee`}
                       className="btn btn-primary btn-block btn-sm"
                       style={{ textDecoration: "none" }}
                     >
@@ -214,9 +214,9 @@ export default function CoursesPage() {
         <div className="footer-links">
           <Link to="/">Get Started</Link>
           <Link to="/courses">Courses</Link>
-          <Link to="/login?role=trainee">Trainee Portal</Link>
-          <Link to="/login?role=trainer">Trainer Portal</Link>
-          <Link to="/login?role=admin">Admin Command</Link>
+          <Link to="/?role=trainee">Trainee Portal</Link>
+          <Link to="/?role=trainer">Trainer Portal</Link>
+          <Link to="/?role=admin">Admin Command</Link>
         </div>
       </footer>
     </div>
