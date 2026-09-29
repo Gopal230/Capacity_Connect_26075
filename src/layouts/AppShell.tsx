@@ -1,6 +1,6 @@
-import { ReactNode, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { Archive, Award, BarChart3, Bell, BookOpen, BrainCircuit, ChevronLeft, ChevronRight, ClipboardCheck, FileCheck2, Gauge, GraduationCap, Home, Library, LogOut, Menu, Radar, Settings2, ShieldCheck, UserCheck, Users, X, WifiOff } from "lucide-react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Archive, Award, BarChart3, Bell, BookOpen, BrainCircuit, ChevronLeft, ChevronRight, ClipboardCheck, FileCheck2, Gauge, GraduationCap, Home, Library, LogOut, Menu, Radar, Settings2, ShieldCheck, User, UserCheck, Users, X, WifiOff } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { Role } from "../types";
 
@@ -19,7 +19,6 @@ const nav: Record<Role,{to:string;label:string;icon:ReactNode}[]> = {
   ],
   trainer:[
     {to:"/trainer",label:"Dashboard",icon:<Home/>},
-    {to:"/trainer/profile",label:"Professional Profile",icon:<ShieldCheck/>},
     {to:"/trainer/courses",label:"Courses & Content",icon:<BookOpen/>},
     {to:"/trainer/library",label:"Trainer Library",icon:<Library/>},
     {to:"/trainer/assessments",label:"Assessments",icon:<ClipboardCheck/>},
@@ -29,7 +28,6 @@ const nav: Record<Role,{to:string;label:string;icon:ReactNode}[]> = {
   ],
   trainee:[
     {to:"/trainee",label:"Dashboard",icon:<Home/>},
-    {to:"/trainee/profile",label:"Professional Profile",icon:<Users/>},
     {to:"/trainee/competency",label:"Competency Check",icon:<BrainCircuit/>},
     {to:"/trainee/recommendations",label:"Recommendations",icon:<Settings2/>},
     {to:"/trainee/learning",label:"My Learning",icon:<GraduationCap/>},
@@ -45,11 +43,29 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
   const [open,setOpen]=useState(false);
   const [minimized,setMinimized]=useState(()=>localStorage.getItem("capacityConnectSidebarMinimized")==="1");
   const [lite,setLite]=useState(()=>localStorage.getItem("capacityConnectLite")==="1");
+  const [profileOpen,setProfileOpen]=useState(false);
+  const profileMenuRef=useRef<HTMLDivElement>(null);
   const navigate=useNavigate();
 
   useEffect(()=>{document.body.classList.toggle("lite-mode",lite)},[lite]);
   const toggleLite=()=>{const next=!lite;setLite(next);localStorage.setItem("capacityConnectLite",next?"1":"0");document.body.classList.toggle("lite-mode",next)};
   const toggleMinimized=()=>{const next=!minimized;setMinimized(next);localStorage.setItem("capacityConnectSidebarMinimized",next?"1":"0")};
+
+  useEffect(()=>{
+    const handleOutsideClick=(e:MouseEvent)=>{
+      if(profileMenuRef.current&&!profileMenuRef.current.contains(e.target as Node)){
+        setProfileOpen(false);
+      }
+    };
+    if(profileOpen){
+      document.addEventListener("mousedown",handleOutsideClick);
+    }
+    return ()=>{
+      document.removeEventListener("mousedown",handleOutsideClick);
+    };
+  },[profileOpen]);
+
+  const profilePath = role === "trainer" ? "/trainer/profile" : role === "trainee" ? "/trainee/profile" : null;
 
   return <div className="app-shell">
     <aside className={`sidebar ${open?"open":""} ${minimized?"minimized":""}`}>
@@ -99,7 +115,50 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
             <WifiOff size={15}/><span>{lite?"Field Mode ON":"Field Mode"}</span>
           </button>
           <span className="system-status"><i/> Portal Online</span>
-          <div className="avatar small">{currentUser?.name.charAt(0)}</div>
+
+          {/* Circular Profile Button with Dropdown */}
+          <div className="profile-menu-container" ref={profileMenuRef}>
+            <button
+              className={`profile-avatar-btn ${profileOpen?"active":""}`}
+              onClick={()=>setProfileOpen(!profileOpen)}
+              title="Profile and account options"
+              aria-expanded={profileOpen}
+            >
+              <div className="avatar small">{currentUser?.name.charAt(0)}</div>
+            </button>
+
+            {profileOpen && (
+              <div className="profile-dropdown">
+                <div className="profile-dropdown-header">
+                  <strong>{currentUser?.name}</strong>
+                  <span>{currentUser?.email}</span>
+                  <span className="profile-dropdown-badge">{role}</span>
+                </div>
+                {profilePath && (
+                  <Link
+                    to={profilePath}
+                    className="profile-dropdown-item"
+                    onClick={()=>setProfileOpen(false)}
+                  >
+                    <User size={16}/>
+                    <span>Personal Profile</span>
+                  </Link>
+                )}
+                <div className="profile-dropdown-divider"/>
+                <button
+                  className="profile-dropdown-item logout"
+                  onClick={()=>{
+                    setProfileOpen(false);
+                    logout();
+                    navigate("/login");
+                  }}
+                >
+                  <LogOut size={16}/>
+                  <span>Sign out</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
       <main className="page-content">{children}</main>
