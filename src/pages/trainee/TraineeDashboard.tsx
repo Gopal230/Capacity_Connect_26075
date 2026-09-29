@@ -347,11 +347,11 @@ export default function TraineeDashboard() {
           )}
         </section>
 
-        {/* Recent Performance & Practical Simulations */}
+        {/* Recent Performance & Formal Assessments */}
         <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "20px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E5DCC5", paddingBottom: "10px" }}>
             <h3 style={{ margin: 0, fontSize: "16px", color: "#003049", display: "flex", alignItems: "center", gap: "6px" }}>
-              <Radar size={18} color="#C1121F" /> Practical Lab & Assessments
+              <Award size={18} color="#C1121F" /> Competency & Assessments
             </h3>
             <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#C1121F", fontWeight: 600 }}>
               View Exams →
@@ -372,14 +372,14 @@ export default function TraineeDashboard() {
             >
               <div>
                 <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#003049" }}>
-                  Operational Lab Simulations
+                  Knowledge Benchmark Assessments
                 </div>
                 <div style={{ fontSize: "12px", color: "#5C768D" }}>
-                  Severe Convection, Radar Diagnostics & Clutter
+                  Diagnostic pre-tests & verified level evaluations
                 </div>
               </div>
-              <Link to="/trainee/scenarios" className="btn btn-secondary btn-sm">
-                Launch Lab
+              <Link to="/trainee/assessments" className="btn btn-secondary btn-sm">
+                Open Tests
               </Link>
             </div>
 
