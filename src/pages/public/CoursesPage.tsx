@@ -78,14 +78,15 @@ export default function CoursesPage() {
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "28px",
-            padding: "16px",
+            padding: "16px 20px",
             background: "#FFFFFF",
-            border: "1.5px solid #CBD5E1",
+            border: "1.5px solid #E5DCC5",
             borderRadius: "12px",
+            boxShadow: "0 2px 8px rgba(0, 48, 73, 0.04)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: "1", minWidth: "240px" }}>
-            <Search size={18} color="#475569" />
+            <Search size={18} color="#5C768D" />
             <input
               type="text"
               value={search}
@@ -96,31 +97,36 @@ export default function CoursesPage() {
                 border: "none",
                 outline: "none",
                 fontSize: "14px",
-                color: "#0F172A",
+                color: "#003049",
                 background: "transparent",
               }}
             />
           </div>
 
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {departments.map((dept) => (
-              <button
-                key={dept}
-                onClick={() => setSelectedDept(dept)}
-                style={{
-                  padding: "6px 14px",
-                  borderRadius: "9999px",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  border: selectedDept === dept ? "1.5px solid #1D4ED8" : "1px solid #CBD5E1",
-                  background: selectedDept === dept ? "#1D4ED8" : "#F8FAFC",
-                  color: selectedDept === dept ? "#FFFFFF" : "#1E293B",
-                  cursor: "pointer",
-                }}
-              >
-                {dept === "all" ? "All Disciplines" : dept}
-              </button>
-            ))}
+            {departments.map((dept) => {
+              const isSelected = selectedDept === dept;
+              return (
+                <button
+                  key={dept}
+                  onClick={() => setSelectedDept(dept)}
+                  style={{
+                    padding: "7px 16px",
+                    borderRadius: "9999px",
+                    fontSize: "12.5px",
+                    fontWeight: 600,
+                    border: isSelected ? "1.5px solid #C1121F" : "1px solid #E5DCC5",
+                    background: isSelected ? "#C1121F" : "#FAF7EE",
+                    color: isSelected ? "#FFFFFF" : "#003049",
+                    boxShadow: isSelected ? "0 2px 6px rgba(193, 18, 31, 0.3)" : "none",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  {dept === "all" ? "All Disciplines" : dept}
+                </button>
+              );
+            })}
           </div>
         </div>
 
