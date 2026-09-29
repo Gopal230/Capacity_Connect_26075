@@ -574,7 +574,196 @@ export const seedDB: DB = {
     { id: "r2", trainerId: "tr1", title: "IMD Standard Warning Code Tables", subject: "Warning Communication", type: "PDF", level: "Beginner", addedAt: "2026-09-15" }
   ],
   evidence: [],
-  scenarios: [],
+  scenarios: [
+    {
+      id: "sc-conv-nowcast",
+      title: "Severe Convective Storm & Microburst Nowcasting",
+      subject: "Severe Weather Detection",
+      role: "Radar Operator",
+      difficulty: "Advanced",
+      passingPercentage: 75,
+      context: "Bhopal Doppler Radar Station (08:30 UTC): A fast-developing convective supercell at 240° azimuth, 65 km range exhibits base reflectivity surging past 62 dBZ with a prominent hook echo and rapid descending reflectivity core.",
+      steps: [
+        {
+          id: "sc-cn-1",
+          prompt: "Initial Detection: What Volume Coverage Pattern (VCP) adjustment should you execute to closely monitor storm updraft dynamics without cone-of-silence gaps?",
+          options: [
+            "Switch antenna scanning to rapid sector-scan volume pattern focused on the 220°–260° corridor with dense elevation tilts",
+            "Maintain wide clear-air surveillance mode with slow 10-minute rotation",
+            "Turn off radar transmitter to prevent receiver overload",
+            "Point the antenna fixed at 90° zenith"
+          ],
+          answer: 0,
+          competency: "Doppler Radar Operations"
+        },
+        {
+          id: "sc-cn-2",
+          prompt: "Velocity Analysis: On base radial velocity (PPI 0.5°), you identify adjacent green (-32 m/s inbound) and red (+28 m/s outbound) pixels within 3 km of each other. What operational signature does this couplet represent?",
+          options: [
+            "A tight cyclonic mesocyclone with imminent severe wind gust / tornado potential",
+            "Uniform straight-line sea breeze front with zero hazard",
+            "Ground clutter return from solar farm panels",
+            "Transmitter pulse repetition frequency synchronization error"
+          ],
+          answer: 0,
+          competency: "Radar Data Interpretation"
+        },
+        {
+          id: "sc-cn-3",
+          prompt: "Dual-Polarization Confirmation: The core reflectivity exceeds 60 dBZ while Differential Reflectivity (ZDR) drops below -0.2 dB with Correlation Coefficient (CC) at 0.88. What hydrometeor type is present in this core?",
+          options: [
+            "Large tumbling severe hailstones mixed with torrential rain",
+            "Uniform stratiform light drizzle droplets",
+            "Airborne high-altitude dry snow flakes",
+            "Biological bird migration cluster"
+          ],
+          answer: 0,
+          competency: "Severe Weather Detection"
+        },
+        {
+          id: "sc-cn-4",
+          prompt: "Dissemination Action: A high-reflectivity core collapse is observed descending to the surface within 6 minutes. What immediate warning protocol must be initiated?",
+          options: [
+            "Issue RED Nowcast Alert for microburst/severe wind gusts (> 80 km/h) to District Disaster Management Authority with 20–30 min lead time",
+            "Wait 2 hours for rain gauge verification before sending any notice",
+            "Issue a yellow general advisory without mentioning wind hazards",
+            "Send an internal email only without notifying emergency services"
+          ],
+          answer: 0,
+          competency: "Warning Communication"
+        }
+      ]
+    },
+    {
+      id: "sc-cyc-landfall",
+      title: "Tropical Cyclone Eyewall & Landfall Fix Simulation",
+      subject: "Radar Data Interpretation",
+      role: "Radar Operator",
+      difficulty: "Advanced",
+      passingPercentage: 75,
+      context: "Visakhapatnam Cyclone Radar Station: A Very Severe Cyclonic Storm (VSCS) is tracking northwestward at 110 km offshore. Coastal radar tracking is activated for hourly eye fixes and gale wind boundary estimation.",
+      steps: [
+        {
+          id: "sc-cl-1",
+          prompt: "Center Fix: Base reflectivity displays a well-defined circular echo-free region surrounded by an asymmetric 52 dBZ eyewall. How should the radar center fix coordinates be logged?",
+          options: [
+            "Determine geometric centroid of the echo-free eye bounded by the inner reflectivity gradient at lowest elevation angle",
+            "Pick the single highest dBZ pixel located anywhere in the outer spiral rainbands",
+            "Assume the storm is stationary at previous satellite fix position",
+            "Log the center only when the eye physically passes over the radar tower"
+          ],
+          answer: 0,
+          competency: "Radar Data Interpretation"
+        },
+        {
+          id: "sc-cl-2",
+          prompt: "Maximum Wind Sector: Doppler radial velocity indicates strongest outbound velocity exceeding 50 m/s (100 knots) in the storm's northeast quadrant. Why is the northeast sector the most destructive in Northern Hemisphere cyclones?",
+          options: [
+            "Cyclonic rotational wind vectors add constructively to storm forward translation velocity in the right-front quadrant",
+            "Atmospheric pressure is highest in the northeast quadrant",
+            "Ocean surface friction is zero only in the eastern sector",
+            "The radar beam is amplified by ionospheric reflection"
+          ],
+          answer: 0,
+          competency: "Severe Weather Detection"
+        },
+        {
+          id: "sc-cl-3",
+          prompt: "Hydrometeorological Assessment: The spiral rainbands produce continuous rainfall over coastal taluks. Which quantitative precipitation estimation (QPE) method is standard during cyclone landfall?",
+          options: [
+            "Gauge-adjusted radar hourly accumulation using tropical Z-R relation (Z = 250 R^1.2)",
+            "Standard dry-air continental relation without calibration",
+            "Fixed uniform assumption of 10 mm per day across the district",
+            "Disregard radar rainfall estimation entirely"
+          ],
+          answer: 0,
+          competency: "Radar Data Interpretation"
+        }
+      ]
+    },
+    {
+      id: "sc-ap-clutter",
+      title: "Anomalous Propagation (AP) Clutter Mitigation",
+      subject: "Radar Quality Control and Maintenance",
+      role: "Radar Operator",
+      difficulty: "Intermediate",
+      passingPercentage: 65,
+      context: "Patna Doppler Radar Station (01:00 UTC): Early morning radiational cooling produces a sharp ground-based temperature inversion. Wide patches of 48–56 dBZ echoes appear along river valleys where no clouds are visible on satellite.",
+      steps: [
+        {
+          id: "sc-ap-1",
+          prompt: "Diagnostic Verification: Which Doppler radar product characteristic definitively confirms that these valley echoes are anomalous ground clutter rather than real precipitation?",
+          options: [
+            "Near-zero radial Doppler velocity (0.0 m/s) with very high spectrum width and stationary echo boundaries over terrain",
+            "Rapid horizontal translation speed exceeding 60 km/h",
+            "High negative vertical velocity with cloud tops exceeding 15 km",
+            "Bright band ice-melting signature at freezing altitude"
+          ],
+          answer: 0,
+          competency: "Radar Quality Control and Maintenance"
+        },
+        {
+          id: "sc-ap-2",
+          prompt: "Filter Deployment: What software and signal processing tool should be engaged to suppress the AP returns before generating public composite products?",
+          options: [
+            "Activate Doppler notch clutter filter and Ground Clutter Mitigation Algorithm (GCMA)",
+            "Increase transmitter gain by 10 dB to overpower the echoes",
+            "Manually paint over the display screen with white correction",
+            "Switch the radar off until daytime convective heating begins"
+          ],
+          answer: 0,
+          competency: "Radar Quality Control and Maintenance"
+        },
+        {
+          id: "sc-ap-3",
+          prompt: "Elevation Inspection: When checking higher elevation tilts (1.5° and 2.4°), the false echoes disappear completely. What does this confirm?",
+          options: [
+            "The radar beam at higher elevation angles escapes the shallow ducting inversion layer into clear air",
+            "The radar antenna motor has failed",
+            "The precipitation cell has evaporated in 1 minute",
+            "The receiver low-noise amplifier is defective"
+          ],
+          answer: 0,
+          competency: "Doppler Radar Operations"
+        }
+      ]
+    },
+    {
+      id: "sc-flash-flood",
+      title: "Flash Flood & Cloudburst Early Warning Protocol",
+      subject: "Warning Communication",
+      role: "Radar Operator",
+      difficulty: "Intermediate",
+      passingPercentage: 70,
+      context: "Himalayan Region Radar Station: Rapid orographic convective development over steep river catchment indicates instant rain rate > 90 mm/hr with high flash flood hazard for downstream towns.",
+      steps: [
+        {
+          id: "sc-ff-1",
+          prompt: "Volume Liquid Metric: What radar derived product provides the best indicator of impending cloudburst intensity in mountainous terrain?",
+          options: [
+            "Vertically Integrated Liquid (VIL) and VIL Density combined with Echo Tops > 14 km",
+            "Surface barometric pressure map alone",
+            "Satellite visible channel albedo at nighttime",
+            "Standard dry-bulb thermometer reading at base station"
+          ],
+          answer: 0,
+          competency: "Basic Meteorology"
+        },
+        {
+          id: "sc-ff-2",
+          prompt: "Alert Formatting: What essential information must be included in the standardized CAP (Common Alerting Protocol) XML warning payload for district administration?",
+          options: [
+            "Exact catchment polygon, expected hazard severity (Red Flash Flood Alert), validity timeframe (0–3 hrs), and immediate life safety actions",
+            "Only the serial number of the radar magnetron tube",
+            "Scientific mathematical proofs of radar Navier-Stokes equations",
+            "General seasonal average precipitation tables without specific location"
+          ],
+          answer: 0,
+          competency: "Warning Communication"
+        }
+      ]
+    }
+  ],
   scenarioAttempts: [],
   knowledgeAssets: [],
   feedback: [],

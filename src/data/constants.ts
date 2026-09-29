@@ -7,10 +7,10 @@ export const KEYS = {
   ROLE_REQUIREMENTS: "cc_role_requirements",
   TRAINEE_LEVELS: "cc_trainee_levels",
   CERTIFICATES: "cc_certificates_v1",
-  TRAINER_EXPERTISE: "cc_trainer_expertise_v1",
+  TRAINER_EXPERTISE: "cc_trainer_expertise_v2",
 };
 
-export const CURRENT_SCHEMA_VERSION = "8.0.0";
+export const CURRENT_SCHEMA_VERSION = "10.0.0";
 
 export const COMPETENCY_LEVELS: Record<CompetencyLevel, LevelDefinition> = {
   L1: { level: "L1", code: "L1", name: "Awareness", fullName: "L1 Awareness", rank: 1 },
