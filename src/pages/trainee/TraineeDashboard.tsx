@@ -93,12 +93,12 @@ export default function TraineeDashboard() {
       {/* 1. Officer Profile & Station Command Header */}
       <section
         style={{
-          background: "linear-gradient(135deg, #003366 0%, #0056D2 100%)",
+          background: "linear-gradient(135deg, #081A2E 0%, #0F2A4A 100%)",
           borderRadius: "14px",
           padding: "24px 28px",
           color: "#FFFFFF",
           marginBottom: "24px",
-          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
+          boxShadow: "0 4px 16px rgba(8, 26, 46, 0.25)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
@@ -108,14 +108,14 @@ export default function TraineeDashboard() {
                 width: "56px",
                 height: "56px",
                 borderRadius: "50%",
-                background: "#FFFFFF",
-                color: "#0056D2",
+                background: "#DC2626",
+                color: "#FFFFFF",
                 display: "grid",
                 placeItems: "center",
                 fontWeight: 800,
                 fontSize: "20px",
                 flexShrink: 0,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                boxShadow: "0 2px 8px rgba(220, 38, 38, 0.35)",
               }}
             >
               {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
@@ -389,7 +389,7 @@ export default function TraineeDashboard() {
         )}
       </section>
 
-      {/* 5. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
+      {/* 4. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
       <div className="dashboard-grid two">
         {/* Active Courses In Progress */}
         <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
