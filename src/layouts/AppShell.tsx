@@ -41,7 +41,8 @@ const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
   ],
   trainer: [
     { to: "/trainer", label: "Dashboard", icon: <Home size={16} /> },
-    { to: "/trainer/library", label: "Trainer Library", icon: <BookOpen size={16} /> },
+    { to: "/trainer/courses", label: "Courses & Content", icon: <BookOpen size={16} /> },
+    { to: "/trainer/library", label: "Trainer Library", icon: <Library size={16} /> },
     { to: "/trainer/assessments", label: "Assessments", icon: <ClipboardCheck size={16} /> },
     { to: "/trainer/trainees", label: "Trainee Monitoring", icon: <Users size={16} /> },
     { to: "/trainer/evidence", label: "Evidence Review", icon: <FileCheck2 size={16} /> },
