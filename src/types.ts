@@ -114,6 +114,7 @@ export interface Course {
   title: string;
   code: string;
   competency?: string;
+  competencyId?: string;
   entryLevel?: CompetencyLevel;
   targetLevel?: CompetencyLevel;
   prerequisiteCourseId?: string | null;
@@ -124,6 +125,7 @@ export interface Course {
   trainerId: string;
   description: string;
   objectives: string[];
+  outcomes?: string[];
   durationHours: number;
   startDate: string;
   endDate: string;
