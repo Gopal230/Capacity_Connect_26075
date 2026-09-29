@@ -6,7 +6,6 @@ export const KEYS = {
   SESSION: "cc_session_v1",
   ROLE_REQUIREMENTS: "cc_role_requirements",
   TRAINEE_LEVELS: "cc_trainee_levels",
-  CERTIFICATES: "cc_certificates_v1",
 };
 
 export const CURRENT_SCHEMA_VERSION = "7.0.0";

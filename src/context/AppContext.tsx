@@ -12,7 +12,6 @@ interface AppContextType {
   toast: Toast | null;
   roleRequirements: RoleRequirementsMap;
   traineeLevels: TraineeLevelsMap;
-  certificates: Certificate[];
   login: (email: string, password: string) => { ok: boolean; message: string; role?: Role };
   logout: () => void;
   register: (input: { name: string; email: string; password: string; role: Role; department: string; designation: string; jobRole?: string }) => { ok: boolean; message: string };
@@ -155,15 +154,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  const [certificates, setCertificates] = useState<Certificate[]>(() => {
-    try {
-      const raw = localStorage.getItem(KEYS.CERTIFICATES);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  });
-
   const [sessionId, setSessionId] = useState<string | null>(() => {
     const sid = localStorage.getItem(KEYS.SESSION);
     // Keep currently logged-in session sensible (log out if user no longer exists)
@@ -187,10 +177,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem(KEYS.TRAINEE_LEVELS, JSON.stringify(traineeLevels));
   }, [traineeLevels]);
-
-  useEffect(() => {
-    localStorage.setItem(KEYS.CERTIFICATES, JSON.stringify(certificates));
-  }, [certificates]);
 
   useEffect(() => {
     if (sessionId) {
@@ -544,14 +530,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
           certificate,
         };
 
-        // Save to certificates state (synced with KEYS.CERTIFICATES in localStorage)
-        setCertificates(prev => {
-          const alreadyHasCert = prev.some(
-            c => c.traineeId === traineeId && c.courseId === course.id && c.levelAchieved === course.targetLevel
-          );
-          return alreadyHasCert ? prev : [certificate, ...prev];
-        });
-
         // Add certificate to db.certificates (preventing duplicate certificates if retaken)
         setDb(prev => {
           const alreadyHasCert = prev.certificates.some(
@@ -564,14 +542,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
           };
         });
 
-        addNotification({
-          title: `Competency Level Upgraded: ${newLevel}`,
-          body: `Congratulations! You advanced from ${formatLevel(previousRank)} to ${newLevel} in ${competencyName}. Official certificate ${certCode} issued.`,
-          type: "achievement",
-          audience: "trainee",
-        });
-
-        notify(`Level Updated: ${formatLevel(previousRank)} → ${newLevel}! Certificate issued.`, "success");
+        notify(`Level Updated: ${newLevel}! Certificate issued.`, "success");
         return attempt;
       } else {
         // Passed but already at or above target level (retake): no change
@@ -732,11 +703,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(KEYS.DB);
     localStorage.removeItem(KEYS.ROLE_REQUIREMENTS);
     localStorage.removeItem(KEYS.TRAINEE_LEVELS);
-    localStorage.removeItem(KEYS.CERTIFICATES);
     localStorage.setItem(KEYS.SCHEMA_VERSION, CURRENT_SCHEMA_VERSION);
     setRoleRequirements(DEFAULT_ROLE_REQUIREMENTS);
     setTraineeLevels(getDefaultTraineeLevels());
-    setCertificates([]);
     setDb(cloneSeed());
     setSessionId(null);
     notify("Demo data reset to Phase 1 data foundation", "info");
@@ -750,7 +719,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
         toast,
         roleRequirements,
         traineeLevels,
-        certificates,
         login,
         logout,
         register,
