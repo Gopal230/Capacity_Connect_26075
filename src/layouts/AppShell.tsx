@@ -20,7 +20,6 @@ import {
   User,
   UserCheck,
   Users,
-  WifiOff,
   X,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
@@ -62,21 +61,9 @@ const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
 export default function AppShell({ children, role }: { children: ReactNode; role: Role }) {
   const { currentUser, logout, toast } = useApp();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [lite, setLite] = useState(() => localStorage.getItem("capacityConnectLite") === "1");
   const [profileOpen, setProfileOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    document.body.classList.toggle("lite-mode", lite);
-  }, [lite]);
-
-  const toggleLite = () => {
-    const next = !lite;
-    setLite(next);
-    localStorage.setItem("capacityConnectLite", next ? "1" : "0");
-    document.body.classList.toggle("lite-mode", next);
-  };
 
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -111,16 +98,6 @@ export default function AppShell({ children, role }: { children: ReactNode; role
 
           {/* Right Utilities */}
           <div className="top-navbar-controls">
-            {/* Field Mode Toggle */}
-            <button
-              className={`lite-toggle ${lite ? "active" : ""}`}
-              onClick={toggleLite}
-              title="Reduce visual load for low-bandwidth field use"
-            >
-              <WifiOff size={14} />
-              <span className="lite-text">{lite ? "Field Mode ON" : "Field Mode"}</span>
-            </button>
-
             {/* Portal Online Status */}
             <span className="system-status">
               <i /> Portal Online
