@@ -118,17 +118,17 @@ function getDefaultTraineeLevels(): TraineeLevelsMap {
 export function getDefaultTrainerExpertise(): TrainerExpertiseMap {
   return {
     "tr1": [
-      { competencyId: "doppler-radar-operations", expertiseLevel: "L5" },
-      { competencyId: "radar-data-interpretation", expertiseLevel: "L5" },
-      { competencyId: "severe-weather-detection", expertiseLevel: "L4" },
-      { competencyId: "basic-meteorology", expertiseLevel: "L4" },
-      { competencyId: "radar-quality-control-and-maintenance", expertiseLevel: "L4" },
-      { competencyId: "warning-communication", expertiseLevel: "L3" },
+      { competencyId: "doppler-radar-operations", expertiseLevel: "L5", status: "Approved" },
+      { competencyId: "radar-data-interpretation", expertiseLevel: "L5", status: "Approved" },
+      { competencyId: "severe-weather-detection", expertiseLevel: "L4", status: "Approved" },
+      { competencyId: "basic-meteorology", expertiseLevel: "L4", status: "Approved" },
+      { competencyId: "radar-quality-control-and-maintenance", expertiseLevel: "L4", status: "Approved" },
+      { competencyId: "warning-communication", expertiseLevel: "L3", status: "Approved" },
     ],
     "tr2": [
-      { competencyId: "basic-meteorology", expertiseLevel: "L4" },
-      { competencyId: "doppler-radar-operations", expertiseLevel: "L4" },
-      { competencyId: "radar-data-interpretation", expertiseLevel: "L3" },
+      { competencyId: "basic-meteorology", expertiseLevel: "L4", status: "Approved" },
+      { competencyId: "doppler-radar-operations", expertiseLevel: "L4", status: "Approved" },
+      { competencyId: "radar-data-interpretation", expertiseLevel: "L3", status: "Approved" },
     ],
   };
 }
