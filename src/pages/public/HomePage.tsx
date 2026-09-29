@@ -321,49 +321,45 @@ export default function HomePage() {
                 </span>
               </div>
 
-              {activeRole === "trainee" ? (
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  {[
-                    { email: "trainee@test.com", label: "trainee@test.com (new joiner)", desc: "All L1 baseline with gaps across role competencies" },
-                    { email: "trainee2@test.com", label: "trainee2@test.com (mid-level)", desc: "L2 in Basic Meteorology & Doppler Radar Operations" },
-                    { email: "trainee3@test.com", label: "trainee3@test.com (nearly ready)", desc: "L3 in core competencies; nearly ready for role certification" },
-                  ].map((demo) => (
-                    <button
-                      key={demo.email}
-                      type="button"
-                      className="btn btn-secondary btn-block"
-                      onClick={() => quickDemoLogin(demo.email)}
-                      disabled={loading}
-                      style={{
-                        padding: "8px 12px",
-                        fontSize: "12.5px",
-                        fontWeight: 600,
-                        textAlign: "left",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                      }}
-                      title={demo.desc}
-                    >
-                      <span>
-                        <Sparkles size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px", color: "#0056D2" }} />
-                        {demo.label}
-                      </span>
-                      <small style={{ color: "#64748B", fontSize: "11px", fontWeight: 400 }}>1-click login →</small>
-                    </button>
-                  ))}
+              <button
+                type="button"
+                className="btn btn-primary btn-block"
+                onClick={() => quickDemoLogin(current.demoEmail)}
+                disabled={loading}
+                style={{ padding: "10px 16px", fontSize: "13.5px", fontWeight: 600 }}
+              >
+                <Sparkles size={16} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px" }} />
+                Launch Demo: {current.demoName}
+              </button>
+
+              {current.extraDemoAccounts && (
+                <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid #E2E8F0" }}>
+                  <small style={{ fontSize: "11px", color: "#64748B", display: "block", marginBottom: "6px" }}>
+                    Alternate Trainee Profiles:
+                  </small>
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                    {current.extraDemoAccounts.map((acc) => (
+                      <button
+                        key={acc.email}
+                        type="button"
+                        onClick={() => quickDemoLogin(acc.email)}
+                        style={{
+                          fontSize: "11.5px",
+                          padding: "5px 10px",
+                          background: "#F1F5F9",
+                          border: "1px solid #CBD5E1",
+                          borderRadius: "6px",
+                          color: "#1E293B",
+                          cursor: "pointer",
+                          fontWeight: 500,
+                        }}
+                        title={acc.desc}
+                      >
+                        {acc.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <button
-                  type="button"
-                  className="btn btn-primary btn-block"
-                  onClick={() => quickDemoLogin(current.demoEmail)}
-                  disabled={loading}
-                  style={{ padding: "10px 16px", fontSize: "13.5px", fontWeight: 600 }}
-                >
-                  <Sparkles size={16} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px" }} />
-                  Launch Demo: {current.demoName}
-                </button>
               )}
             </div>
           </div>
