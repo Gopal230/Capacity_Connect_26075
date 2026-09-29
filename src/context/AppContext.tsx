@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
 import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
-import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
+import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation, canEnroll } from "../utils/engine";
 
 type Toast = { id: number; message: string; tone: "success" | "error" | "info" };
 
@@ -413,7 +413,22 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const requestEnrollment = (courseId: string) => {
     const traineeId = currentTraineeId();
     if (!traineeId) return notify("Trainee profile not found", "error");
-    if (db.enrollments.some(e => e.traineeId === traineeId && e.courseId === courseId && e.status !== "rejected")) return notify("Enrollment already exists", "info");
+    const course = db.courses.find(c => c.id === courseId);
+    if (!course) return notify("Course not found", "error");
+
+    const trainee = db.trainees.find(t => t.id === traineeId || t.userId === currentUser?.id);
+    const courseComp = course.competency || course.subject;
+    const currentLvl = courseComp ? getTraineeLevel(traineeId, courseComp) : "L1";
+
+    const check = canEnroll(trainee, course, currentLvl, traineeLevels);
+    if (!check.canEnroll) {
+      notify(check.reason || `Enrollment blocked: Prerequisite level ${course.entryLevel} not met.`, "error");
+      return;
+    }
+
+    if (db.enrollments.some(e => e.traineeId === traineeId && e.courseId === courseId && e.status !== "rejected")) {
+      return notify("Enrollment already exists", "info");
+    }
     setDb(prev => ({ ...prev, enrollments: [{ id: `e-${Date.now()}`, traineeId, courseId, status: "approved", progress: 0, completedLessonIds: [], requestedAt: new Date().toISOString().slice(0, 10) }, ...prev.enrollments] }));
     notify("Enrollment successful");
   };

@@ -229,6 +229,52 @@ export function getNextStepRecommendation(gapItems: RoleCompetencyGapItem[]): Ro
   return eligible[0];
 }
 
+export interface CanEnrollResult {
+  canEnroll: boolean;
+  reason?: string;
+}
+
+/**
+ * Checks whether a user/trainee can enroll in a course.
+ * Returns false with a reason string if the course entryLevel is above the user's current level.
+ */
+export function canEnroll(
+  userOrTrainee: { id?: string; userId?: string; jobRole?: string; role?: string } | null | undefined,
+  course: Course | null | undefined,
+  currentLevelInput?: string | CompetencyLevel,
+  traineeLevels?: TraineeLevelsMap
+): CanEnrollResult {
+  if (!course) {
+    return { canEnroll: false, reason: "Course not found." };
+  }
+  if (!course.entryLevel || !course.competency) {
+    return { canEnroll: true };
+  }
+
+  let currentLevelStr = currentLevelInput;
+  if (!currentLevelStr && userOrTrainee) {
+    const id = userOrTrainee.id || userOrTrainee.userId || "";
+    if (traineeLevels) {
+      const map = traineeLevels[id] || (userOrTrainee.userId ? traineeLevels[userOrTrainee.userId] : undefined);
+      if (map && map[course.competency]) {
+        currentLevelStr = map[course.competency];
+      }
+    }
+  }
+
+  const currentRank = getLevelNumber(currentLevelStr || "L1");
+  const entryRank = getLevelNumber(course.entryLevel);
+
+  if (entryRank > currentRank) {
+    return {
+      canEnroll: false,
+      reason: `Requires ${course.entryLevel} in ${course.competency}. Your current level is ${formatLevel(currentRank)}.`,
+    };
+  }
+
+  return { canEnroll: true };
+}
+
 export function recommend(db: DB, subject: string, current: Level, required: Level): Recommendation[] {
   const courses = db.courses.filter(c => c.status === "published" && (c.subject === subject || c.competency === subject));
   return courses.map(course => {
