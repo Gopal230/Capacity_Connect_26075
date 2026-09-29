@@ -42,7 +42,6 @@ export default function TraineeDashboard() {
     certificates,
     getRoleRecommendations,
     getNextStep,
-    requestEnrollment,
   } = useApp();
 
   const trainee = db.trainees.find((t) => t.userId === currentUser?.id);
@@ -93,12 +92,12 @@ export default function TraineeDashboard() {
       {/* 1. Officer Profile & Station Command Header */}
       <section
         style={{
-          background: "linear-gradient(135deg, #081A2E 0%, #0F2A4A 100%)",
+          background: "linear-gradient(135deg, #003366 0%, #0056D2 100%)",
           borderRadius: "14px",
           padding: "24px 28px",
           color: "#FFFFFF",
           marginBottom: "24px",
-          boxShadow: "0 4px 16px rgba(8, 26, 46, 0.25)",
+          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
@@ -108,14 +107,14 @@ export default function TraineeDashboard() {
                 width: "56px",
                 height: "56px",
                 borderRadius: "50%",
-                background: "#DC2626",
-                color: "#FFFFFF",
+                background: "#FFFFFF",
+                color: "#0056D2",
                 display: "grid",
                 placeItems: "center",
                 fontWeight: 800,
                 fontSize: "20px",
                 flexShrink: 0,
-                boxShadow: "0 2px 8px rgba(220, 38, 38, 0.35)",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
               }}
             >
               {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
@@ -219,11 +218,53 @@ export default function TraineeDashboard() {
         />
       </div>
 
-      {/* 3. Role Competency Benchmark & Recommendations Matrix */}
-      <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "24px", marginBottom: "24px", background: "#FFFFFF" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
+      {/* 3. Priority Next Action Banner (If applicable) */}
+      {nextStep && nextStep.recommendedCourse && (
+        <section
+          style={{
+            background: "linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%)",
+            border: "1.5px solid #BFDBFE",
+            borderRadius: "12px",
+            padding: "20px 24px",
+            marginBottom: "24px",
+            boxShadow: "0 2px 8px rgba(0, 86, 210, 0.06)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Compass size={18} color="#0056D2" />
+              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#0056D2" }}>
+                Targeted Next Priority Action
+              </span>
+            </div>
+            <Badge tone="blue">Priority Gap: {nextStep.competency}</Badge>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+            <div>
+              <h3 style={{ margin: "0 0 6px", fontSize: "17px", color: "#0F172A" }}>
+                {nextStep.recommendedCourse.title}
+              </h3>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", fontSize: "13px", color: "var(--text-muted)" }}>
+                <LevelJumpBadge from={nextStep.recommendedCourse.entryLevel || "L1"} to={nextStep.recommendedCourse.targetLevel || "L2"} size="sm" />
+                <span>{nextStep.recommendedCourse.competency} · {nextStep.recommendedCourse.durationHours} hrs</span>
+              </div>
+            </div>
+
+            <div>
+              <Link to="/trainee/learning" className="btn btn-primary" style={{ fontWeight: 600 }}>
+                View in Courses →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 4. Role Competency Benchmark & Level Progression Map */}
+      <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "22px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
           <div>
-            <h3 style={{ margin: "0 0 4px", fontSize: "18px", color: "#0F172A", fontWeight: 800 }}>
+            <h3 style={{ margin: "0 0 4px", fontSize: "17.5px" }}>
               Role Competency Benchmark Matrix ({jobRole})
             </h3>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
@@ -231,7 +272,7 @@ export default function TraineeDashboard() {
             </p>
           </div>
 
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "10px" }}>
             <Link to="/trainee/competency" className="btn btn-secondary btn-sm">
               Take Competency Check
             </Link>
@@ -241,155 +282,58 @@ export default function TraineeDashboard() {
           </div>
         </div>
 
-        {/* Priority Recommendation Banner */}
-        {nextStep && nextStep.recommendedCourse && (
-          <div
-            style={{
-              background: "#FFFFFF",
-              border: "1.5px solid #CBD5E1",
-              borderLeft: "5px solid #DC2626",
-              borderRadius: "10px",
-              padding: "18px 20px",
-              marginBottom: "20px",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.04)",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "8px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Compass size={18} color="#DC2626" />
-                <span style={{ fontSize: "12px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.5px", color: "#DC2626" }}>
-                  Priority Recommendation
-                </span>
-              </div>
-              <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  color: "#991B1B",
-                  background: "#FEF2F2",
-                  border: "1px solid #FECACA",
-                  padding: "2px 8px",
-                  borderRadius: "9999px",
-                }}
-              >
-                Biggest Gap: {nextStep.competency} ({nextStep.gap} Levels)
-              </span>
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "14px" }}>
-              <div>
-                <h4 style={{ margin: "0 0 6px", fontSize: "16px", color: "#0F172A", fontWeight: 700 }}>
-                  {nextStep.recommendedCourse.title}
-                </h4>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", fontSize: "12.5px", color: "var(--text-muted)" }}>
-                  <LevelJumpBadge from={nextStep.recommendedCourse.entryLevel || "L1"} to={nextStep.recommendedCourse.targetLevel || "L2"} size="sm" />
-                  <span>{nextStep.recommendedCourse.competency} · {nextStep.recommendedCourse.durationHours} hrs</span>
-                </div>
-              </div>
-
-              <div>
-                {enrollments.some((e) => e.courseId === nextStep.recommendedCourse!.id) ? (
-                  <Link to={`/trainee/learning/${nextStep.recommendedCourse.id}`} className="btn btn-secondary btn-sm" style={{ fontWeight: 600 }}>
-                    Continue Learning →
-                  </Link>
-                ) : (
-                  <button onClick={() => requestEnrollment(nextStep.recommendedCourse!.id)} className="btn btn-primary btn-sm" style={{ fontWeight: 600 }}>
-                    Enroll Now →
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Competency Gap Overview Table */}
         {roleRecommendations.length === 0 ? (
           <LevelEmptyState
             type="no-requirements"
             message={`No role requirements set for "${jobRole}". Please contact your station training supervisor.`}
           />
         ) : (
-          <div style={{ overflowX: "auto", border: "1px solid #E2E8F0", borderRadius: "10px" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
-              <thead>
-                <tr style={{ background: "#F8FAFC", borderBottom: "1.5px solid #CBD5E1", textAlign: "left" }}>
-                  <th style={{ padding: "11px 14px", fontWeight: 700, color: "#475569" }}>COMPETENCY</th>
-                  <th style={{ padding: "11px 14px", fontWeight: 700, color: "#475569", width: "90px" }}>CURRENT</th>
-                  <th style={{ padding: "11px 14px", fontWeight: 700, color: "#475569", width: "90px" }}>REQUIRED</th>
-                  <th style={{ padding: "11px 14px", fontWeight: 700, color: "#475569", width: "100px" }}>STATUS</th>
-                  <th style={{ padding: "11px 14px", fontWeight: 700, color: "#475569", minWidth: "160px" }}>LEVEL PROGRESSION</th>
-                  <th style={{ padding: "11px 14px", fontWeight: 700, color: "#475569" }}>RECOMMENDED COURSE</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sortedRecommendations.map((item) => {
-                  const isMet = item.status === "Met";
-                  return (
-                    <tr key={item.competency} style={{ borderBottom: "1px solid #E2E8F0", background: isMet ? "#FAFAFA" : "#FFFFFF" }}>
-                      <td style={{ padding: "12px 14px" }}>
-                        <strong style={{ color: "#0F172A" }}>{item.competency}</strong>
-                      </td>
-                      <td style={{ padding: "12px 14px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {sortedRecommendations.map((item) => {
+              const isMet = item.status === "Met";
+              return (
+                <div
+                  key={item.competency}
+                  style={{
+                    background: isMet ? "#F8FAFC" : "#FFFFFF",
+                    border: `1.5px solid ${isMet ? "#E2E8F0" : "#CBD5E1"}`,
+                    borderLeft: `5px solid ${isMet ? "#10B981" : "#EA580C"}`,
+                    borderRadius: "10px",
+                    padding: "14px 18px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <strong style={{ fontSize: "15px", color: "var(--text-heading)" }}>{item.competency}</strong>
+                      <StatusBadge status={item.status} size="sm" />
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
+                        <span style={{ color: "var(--text-muted)" }}>Current:</span>
                         <LevelBadge level={item.currentLevel} size="sm" />
-                      </td>
-                      <td style={{ padding: "12px 14px" }}>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
+                        <span style={{ color: "var(--text-muted)" }}>Required:</span>
                         <LevelBadge level={item.requiredLevel} size="sm" />
-                      </td>
-                      <td style={{ padding: "12px 14px" }}>
-                        {isMet ? (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0", padding: "2px 8px", borderRadius: "9999px", fontSize: "11px", fontWeight: 700 }}>
-                            Met
-                          </span>
-                        ) : (
-                          <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA", padding: "2px 8px", borderRadius: "9999px", fontSize: "11px", fontWeight: 700 }}>
-                            Gap ({item.gap})
-                          </span>
-                        )}
-                      </td>
-                      <td style={{ padding: "12px 14px" }}>
-                        <LevelPathBar
-                          currentLevel={item.currentLevel}
-                          requiredLevel={item.requiredLevel}
-                          compact={true}
-                        />
-                      </td>
-                      <td style={{ padding: "12px 14px" }}>
-                        {item.recommendedCourse ? (
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-                            <span style={{ fontSize: "12.5px", fontWeight: 600, color: "#0F172A" }}>
-                              {item.recommendedCourse.title}
-                            </span>
-                            <span style={{ fontSize: "10.5px", background: "#EFF6FF", color: "#1D4ED8", border: "1px solid #BFDBFE", padding: "1px 6px", borderRadius: "4px", fontWeight: 700 }}>
-                              {item.recommendedCourse.entryLevel} → {item.recommendedCourse.targetLevel}
-                            </span>
-                            {enrollments.some((e) => e.courseId === item.recommendedCourse!.id) ? (
-                              <Link to={`/trainee/learning/${item.recommendedCourse.id}`} className="btn btn-secondary btn-sm" style={{ padding: "3px 8px", fontSize: "11.5px" }}>
-                                Continue
-                              </Link>
-                            ) : (
-                              <button onClick={() => requestEnrollment(item.recommendedCourse!.id)} className="btn btn-primary btn-sm" style={{ padding: "3px 8px", fontSize: "11.5px" }}>
-                                Enroll
-                              </button>
-                            )}
-                          </div>
-                        ) : isMet ? (
-                          <span style={{ color: "#059669", fontSize: "12px", fontWeight: 600 }}>— Requirement Met —</span>
-                        ) : (
-                          <span style={{ color: "#92400E", fontSize: "12px" }}>
-                            {item.reasonMessage || "No course available yet"}
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </div>
+                    </div>
+                  </div>
+
+                  <LevelPathBar
+                    currentLevel={item.currentLevel}
+                    requiredLevel={item.requiredLevel}
+                    compact={true}
+                  />
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
 
-      {/* 4. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
+      {/* 5. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
       <div className="dashboard-grid two">
         {/* Active Courses In Progress */}
         <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
