@@ -29,7 +29,6 @@ const nav: Record<Role,{to:string;label:string;icon:ReactNode}[]> = {
   trainee:[
     {to:"/trainee",label:"Dashboard",icon:<Home/>},
     {to:"/trainee/competency",label:"Competency Check",icon:<BrainCircuit/>},
-    {to:"/trainee/recommendations",label:"Recommendations",icon:<Settings2/>},
     {to:"/trainee/learning",label:"Courses",icon:<GraduationCap/>},
     {to:"/trainee/assessments",label:"Assessments",icon:<ClipboardCheck/>},
     {to:"/trainee/scenarios",label:"Practical Lab Assessment",icon:<Radar/>},
