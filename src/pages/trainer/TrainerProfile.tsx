@@ -3,19 +3,11 @@ import { Badge, PageHeader } from "../../components/UI";
 import { LevelBadge } from "../../components/LevelUI";
 import { useApp } from "../../context/AppContext";
 import { IMD_RADAR_COMPETENCIES } from "../../data/constants";
-import { ExpertiseStatus, Level, TrainerExpertiseItem } from "../../types";
-import { Award, Clock, ShieldCheck } from "lucide-react";
-
-interface CompetencyEntryState {
-  enabled: boolean;
-  level: "L3" | "L4" | "L5";
-  status: ExpertiseStatus;
-  originalLevel?: "L3" | "L4" | "L5";
-  originalStatus?: ExpertiseStatus;
-}
+import { Level, TrainerExpertiseItem } from "../../types";
+import { Award, BookOpen, CheckCircle, ShieldCheck } from "lucide-react";
 
 export default function TrainerProfile() {
-  const { db, currentUser, updateTrainerProfile, getTrainerExpertise, setTrainerExpertise, notify } = useApp();
+  const { db, currentUser, updateTrainerProfile, getTrainerExpertise, setTrainerExpertise } = useApp();
   const trainer = db.trainers.find(t => t.userId === currentUser?.id);
 
   const [form, setForm] = useState(() => ({
@@ -29,11 +21,11 @@ export default function TrainerProfile() {
     bio: trainer?.bio || "",
   }));
 
-  // State for competency expertise keyed by competencyId
-  const [expertiseMap, setExpertiseMap] = useState<Record<string, CompetencyEntryState>>(() => {
-    const initialMap: Record<string, CompetencyEntryState> = {};
+  // State for competency expertise keyed by competencyId: { enabled: boolean, expertiseLevel: "L3" | "L4" | "L5" }
+  const [expertiseMap, setExpertiseMap] = useState<Record<string, { enabled: boolean; level: "L3" | "L4" | "L5" }>>(() => {
+    const initialMap: Record<string, { enabled: boolean; level: "L3" | "L4" | "L5" }> = {};
     IMD_RADAR_COMPETENCIES.forEach(c => {
-      initialMap[c.id] = { enabled: false, level: "L3", status: "Pending" };
+      initialMap[c.id] = { enabled: false, level: "L3" };
     });
 
     if (trainer) {
@@ -42,9 +34,6 @@ export default function TrainerProfile() {
         initialMap[item.competencyId] = {
           enabled: true,
           level: item.expertiseLevel,
-          status: item.status || "Approved",
-          originalLevel: item.expertiseLevel,
-          originalStatus: item.status || "Approved",
         };
       });
     }
@@ -55,23 +44,13 @@ export default function TrainerProfile() {
   useEffect(() => {
     if (trainer) {
       const stored = getTrainerExpertise(trainer.id);
-      const updated: Record<string, CompetencyEntryState> = {};
+      const updated: Record<string, { enabled: boolean; level: "L3" | "L4" | "L5" }> = {};
       IMD_RADAR_COMPETENCIES.forEach(c => {
         const found = stored.find(s => s.competencyId === c.id);
         if (found) {
-          updated[c.id] = {
-            enabled: true,
-            level: found.expertiseLevel,
-            status: found.status || "Approved",
-            originalLevel: found.expertiseLevel,
-            originalStatus: found.status || "Approved",
-          };
+          updated[c.id] = { enabled: true, level: found.expertiseLevel };
         } else {
-          updated[c.id] = {
-            enabled: false,
-            level: "L3",
-            status: "Pending",
-          };
+          updated[c.id] = { enabled: false, level: "L3" };
         }
       });
       setExpertiseMap(updated);
@@ -81,49 +60,23 @@ export default function TrainerProfile() {
   if (!trainer) return <div className="panel">Trainer profile not available.</div>;
 
   const toggleCompetency = (compId: string) => {
-    setExpertiseMap(prev => {
-      const current = prev[compId];
-      const nextEnabled = !current?.enabled;
-      let nextStatus: ExpertiseStatus = "Pending";
-
-      if (nextEnabled) {
-        // If toggling on, check if it was originally approved with the exact same level
-        if (current?.originalStatus === "Approved" && current.level === current.originalLevel) {
-          nextStatus = "Approved";
-        } else {
-          nextStatus = "Pending";
-        }
-      }
-
-      return {
-        ...prev,
-        [compId]: {
-          ...current,
-          enabled: nextEnabled,
-          status: nextStatus,
-        },
-      };
-    });
+    setExpertiseMap(prev => ({
+      ...prev,
+      [compId]: {
+        ...prev[compId],
+        enabled: !prev[compId]?.enabled,
+      },
+    }));
   };
 
-  const setExpertiseLevel = (compId: string, newLevel: "L3" | "L4" | "L5") => {
-    setExpertiseMap(prev => {
-      const current = prev[compId];
-      // If the level changed from originally approved level, mark as Pending
-      let nextStatus: ExpertiseStatus = "Pending";
-      if (current?.originalStatus === "Approved" && newLevel === current.originalLevel) {
-        nextStatus = "Approved";
-      }
-
-      return {
-        ...prev,
-        [compId]: {
-          ...current,
-          level: newLevel,
-          status: nextStatus,
-        },
-      };
-    });
+  const setExpertiseLevel = (compId: string, level: "L3" | "L4" | "L5") => {
+    setExpertiseMap(prev => ({
+      ...prev,
+      [compId]: {
+        ...prev[compId],
+        level,
+      },
+    }));
   };
 
   const submit = (e: FormEvent) => {
@@ -139,7 +92,7 @@ export default function TrainerProfile() {
       bio: form.bio,
     });
 
-    // Save Competency Expertise with status (Approved / Pending) for Admin recommendation
+    // Save Competency Expertise for Admin recommendation
     const itemsToSave: TrainerExpertiseItem[] = [];
     IMD_RADAR_COMPETENCIES.forEach(comp => {
       const entry = expertiseMap[comp.id];
@@ -147,13 +100,11 @@ export default function TrainerProfile() {
         itemsToSave.push({
           competencyId: comp.id,
           expertiseLevel: entry.level,
-          status: entry.status,
         });
       }
     });
 
     setTrainerExpertise(trainer.id, itemsToSave);
-    notify("Trainer profile and competency expertise updated successfully.", "success");
   };
 
   const teachingCount = Object.values(expertiseMap).filter(x => x.enabled).length;
@@ -168,38 +119,37 @@ export default function TrainerProfile() {
 
       <form className="stack-form" onSubmit={submit}>
         {/* Competency Expertise Section */}
-        <section className="panel profile-panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "10px" }}>
+        <section className="panel profile-panel">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1rem", flexWrap: "wrap", gap: "0.5rem" }}>
             <div>
               <h3 style={{ margin: "0 0 0.25rem 0", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "1.1rem" }}>
-                <Award size={20} color="#0056D2" /> Competency Expertise & Instructional Levels
+                <Award size={20} className="text-primary" /> Competency Expertise & Instructional Levels
               </h3>
               <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--text-muted)" }}>
-                Select which radar competencies you can deliver courses for and your verified expertise level (L3 to L5). Newly added or edited competencies require Admin approval before being matched to courses.
+                Select which radar competencies you can deliver courses for and your verified expertise level (L3 to L5). Used for smart admin course-trainer matching.
               </p>
             </div>
-            <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "#0056D2", background: "#EFF6FF", padding: "0.35rem 0.85rem", borderRadius: "1rem", border: "1px solid #BFDBFE" }}>
+            <div style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--color-primary)", background: "var(--color-primary-soft, #f0fdf4)", padding: "0.25rem 0.75rem", borderRadius: "1rem", border: "1px solid var(--border-color)" }}>
               {teachingCount} of {IMD_RADAR_COMPETENCIES.length} Competencies Selected
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))", gap: "0.9rem", marginTop: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "0.85rem", marginTop: "1rem" }}>
             {IMD_RADAR_COMPETENCIES.map(comp => {
-              const current = expertiseMap[comp.id] || { enabled: false, level: "L3", status: "Pending" };
+              const current = expertiseMap[comp.id] || { enabled: false, level: "L3" };
               return (
                 <div
                   key={comp.id}
                   style={{
-                    padding: "1rem",
-                    border: current.enabled ? "1.5px solid #0056D2" : "1px solid #CBD5E1",
-                    borderRadius: "8px",
-                    backgroundColor: current.enabled ? "#F0F5FF" : "#FFFFFF",
+                    padding: "0.85rem 1rem",
+                    border: current.enabled ? "1.5px solid var(--color-primary, #059669)" : "1px solid var(--border-color, #e2e8f0)",
+                    borderRadius: "0.5rem",
+                    backgroundColor: current.enabled ? "var(--color-primary-soft, rgba(5, 150, 105, 0.03))" : "var(--bg-card, #ffffff)",
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    gap: "0.85rem",
+                    gap: "0.75rem",
                     transition: "all 0.15s ease",
-                    boxShadow: current.enabled ? "0 2px 6px rgba(0, 86, 210, 0.08)" : "none",
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem" }}>
@@ -208,35 +158,34 @@ export default function TrainerProfile() {
                       id={`comp-${comp.id}`}
                       checked={current.enabled}
                       onChange={() => toggleCompetency(comp.id)}
-                      style={{ marginTop: "0.2rem", width: "1.1rem", height: "1.1rem", cursor: "pointer", accentColor: "#0056D2" }}
+                      style={{ marginTop: "0.2rem", width: "1.1rem", height: "1.1rem", cursor: "pointer", accentColor: "var(--color-primary, #059669)" }}
                     />
                     <label htmlFor={`comp-${comp.id}`} style={{ cursor: "pointer", flex: 1, margin: 0 }}>
-                      <div style={{ fontWeight: 600, fontSize: "0.95rem", color: current.enabled ? "#0F172A" : "#64748B" }}>
+                      <div style={{ fontWeight: 600, fontSize: "0.925rem", color: current.enabled ? "var(--text-main, #0f172a)" : "var(--text-muted, #64748b)" }}>
                         {comp.name}
                       </div>
                       {comp.description && (
-                        <div style={{ fontSize: "0.75rem", color: "#64748B", marginTop: "0.15rem", lineHeight: 1.3 }}>
+                        <div style={{ fontSize: "0.75rem", color: "var(--text-muted, #64748b)", marginTop: "0.15rem", lineHeight: 1.3 }}>
                           {comp.description}
                         </div>
                       )}
                     </label>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", paddingTop: "0.6rem", borderTop: "1px dashed #CBD5E1", opacity: current.enabled ? 1 : 0.45 }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "0.5rem", borderTop: "1px dashed var(--border-color, #e2e8f0)", opacity: current.enabled ? 1 : 0.4 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                      <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>Level:</span>
+                      <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Level:</span>
                       <select
                         disabled={!current.enabled}
                         value={current.level}
                         onChange={e => setExpertiseLevel(comp.id, e.target.value as "L3" | "L4" | "L5")}
                         style={{
                           fontSize: "0.825rem",
-                          padding: "0.25rem 0.5rem",
-                          borderRadius: "4px",
-                          border: "1px solid #CBD5E1",
-                          background: current.enabled ? "#FFFFFF" : "#F1F5F9",
-                          fontWeight: 600,
-                          cursor: current.enabled ? "pointer" : "default",
+                          padding: "0.2rem 0.5rem",
+                          borderRadius: "0.25rem",
+                          border: "1px solid var(--border-color)",
+                          background: current.enabled ? "var(--bg-surface, #fff)" : "#f1f5f9",
+                          fontWeight: 500,
                         }}
                       >
                         <option value="L3">L3 (Proficient)</option>
@@ -245,29 +194,7 @@ export default function TrainerProfile() {
                       </select>
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "nowrap" }}>
-                      <LevelBadge level={current.level} size="sm" />
-                      {current.enabled && current.status === "Pending" && (
-                        <span
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            fontSize: "11px",
-                            fontWeight: 600,
-                            padding: "2px 7px",
-                            borderRadius: "4px",
-                            background: "#FEF3C7",
-                            color: "#92400E",
-                            border: "1px solid #FDE68A",
-                            whiteSpace: "nowrap",
-                            lineHeight: 1,
-                          }}
-                        >
-                          <Clock size={11} style={{ flexShrink: 0 }} /> Pending admin approval
-                        </span>
-                      )}
-                    </div>
+                    <LevelBadge level={current.level} size="sm" />
                   </div>
                 </div>
               );
@@ -276,7 +203,7 @@ export default function TrainerProfile() {
         </section>
 
         {/* Existing General Profile Form */}
-        <section className="panel profile-panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "10px" }}>
+        <section className="panel profile-panel">
           <h3 style={{ margin: "0 0 1rem 0", fontSize: "1.1rem" }}>Professional Background & Credentials</h3>
           <div className="form-grid two">
             <label>

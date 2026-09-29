@@ -55,7 +55,7 @@ export type ExpertiseStatus = "Pending" | "Approved";
 export interface TrainerExpertiseItem {
   competencyId: string;
   expertiseLevel: "L3" | "L4" | "L5";
-  status: ExpertiseStatus;
+  status?: ExpertiseStatus;
 }
 
 export type TrainerExpertiseMap = Record<string, TrainerExpertiseItem[]>;

@@ -54,6 +54,8 @@ interface AppContextType {
   getNextStep: (trainee?: Trainee) => RoleCompetencyGapItem | null;
   getTrainerExpertise: (trainerId: string) => TrainerExpertiseItem[];
   setTrainerExpertise: (trainerId: string, items: TrainerExpertiseItem[]) => void;
+  approveTrainerExpertise: (trainerId: string, competencyId: string) => void;
+  rejectTrainerExpertise: (trainerId: string, competencyId: string) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -118,17 +120,17 @@ function getDefaultTraineeLevels(): TraineeLevelsMap {
 export function getDefaultTrainerExpertise(): TrainerExpertiseMap {
   return {
     "tr1": [
-      { competencyId: "doppler-radar-operations", expertiseLevel: "L5", status: "Approved" },
-      { competencyId: "radar-data-interpretation", expertiseLevel: "L5", status: "Approved" },
-      { competencyId: "severe-weather-detection", expertiseLevel: "L4", status: "Approved" },
-      { competencyId: "basic-meteorology", expertiseLevel: "L4", status: "Approved" },
-      { competencyId: "radar-quality-control-and-maintenance", expertiseLevel: "L4", status: "Approved" },
-      { competencyId: "warning-communication", expertiseLevel: "L3", status: "Approved" },
+      { competencyId: "doppler-radar-operations", expertiseLevel: "L5" },
+      { competencyId: "radar-data-interpretation", expertiseLevel: "L5" },
+      { competencyId: "severe-weather-detection", expertiseLevel: "L4" },
+      { competencyId: "basic-meteorology", expertiseLevel: "L4" },
+      { competencyId: "radar-quality-control-and-maintenance", expertiseLevel: "L4" },
+      { competencyId: "warning-communication", expertiseLevel: "L3" },
     ],
     "tr2": [
-      { competencyId: "basic-meteorology", expertiseLevel: "L4", status: "Approved" },
-      { competencyId: "doppler-radar-operations", expertiseLevel: "L4", status: "Approved" },
-      { competencyId: "radar-data-interpretation", expertiseLevel: "L3", status: "Approved" },
+      { competencyId: "basic-meteorology", expertiseLevel: "L4" },
+      { competencyId: "doppler-radar-operations", expertiseLevel: "L4" },
+      { competencyId: "radar-data-interpretation", expertiseLevel: "L3" },
     ],
   };
 }
@@ -778,6 +780,26 @@ export function AppProvider({ children }: { children: ReactNode }) {
     notify("Trainer competency expertise updated");
   };
 
+  const approveTrainerExpertise = (trainerId: string, competencyId: string) => {
+    setTrainerExpertiseState(prev => {
+      const currentList = prev[trainerId] || getDefaultTrainerExpertise()[trainerId] || [];
+      const updated = currentList.map(item =>
+        item.competencyId === competencyId ? { ...item, status: "Approved" as const } : item
+      );
+      return { ...prev, [trainerId]: updated };
+    });
+    notify("Trainer competency expertise approved", "success");
+  };
+
+  const rejectTrainerExpertise = (trainerId: string, competencyId: string) => {
+    setTrainerExpertiseState(prev => {
+      const currentList = prev[trainerId] || getDefaultTrainerExpertise()[trainerId] || [];
+      const updated = currentList.filter(item => item.competencyId !== competencyId);
+      return { ...prev, [trainerId]: updated };
+    });
+    notify("Trainer competency expertise rejected", "info");
+  };
+
   const resetDemo = () => {
     localStorage.removeItem(KEYS.DB);
     localStorage.removeItem(KEYS.ROLE_REQUIREMENTS);
@@ -844,6 +866,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         getNextStep,
         getTrainerExpertise,
         setTrainerExpertise,
+        approveTrainerExpertise,
+        rejectTrainerExpertise,
       }}
     >
       {children}

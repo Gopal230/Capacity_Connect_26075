@@ -1,5 +1,5 @@
 import { COMPETENCY_LEVELS } from "../data/constants";
-import { CompetencyLevel, Course, DB, Level, RoleCompetencyGapItem, RoleRequirementsMap, Trainee, TraineeLevelsMap, Trainer } from "../types";
+import { CompetencyLevel, Course, DB, Level, RoleCompetencyGapItem, RoleRequirementsMap, Trainee, TraineeLevelsMap, Trainer, TrainerExpertiseItem, TrainerExpertiseMap } from "../types";
 
 export const levelRank: Record<Level, number> = { Beginner: 1, Intermediate: 2, Advanced: 3 };
 
@@ -308,6 +308,112 @@ export function recommend(db: DB, subject: string, current: Level, required: Lev
     const reasons = breakdown.filter(b => b.points >= b.max * .7).map(b => b.explanation).slice(0, 5);
     return { course, trainer, match, reasons, breakdown };
   }).sort((a, b) => b.match - a.match);
+}
+
+/* =========================================================
+   LEVEL-BASED TRAINER MATCHING (PROMPT 2)
+   Matches trainers to competencies based on Approved Expertise (L3-L5),
+   with higher level preferred, instructional rating, experience, and availability.
+   ========================================================= */
+export interface TrainerCompetencyMatch {
+  trainer: Trainer;
+  expertiseLevel: "L3" | "L4" | "L5";
+  status: "Approved";
+  matchScore: number;
+  breakdown: {
+    levelPoints: number;      // L5=50, L4=40, L3=30
+    ratingPoints: number;     // (rating/5)*20
+    experiencePoints: number; // min(20, years*1.5)
+    availabilityPoints: number;// Available=10, Limited=5, Unavailable=0
+  };
+  reasons: string[];
+}
+
+export function calculateTrainerMatchScore(
+  trainer: Trainer,
+  competencyIdOrName: string,
+  trainerExpertise?: TrainerExpertiseMap
+): TrainerCompetencyMatch | null {
+  if (!trainer || !competencyIdOrName) return null;
+
+  // Retrieve trainer's expertise entries
+  const list: TrainerExpertiseItem[] = trainerExpertise
+    ? (trainerExpertise[trainer.id] || [])
+    : [];
+
+  // Look for matching approved entry by competencyId or normalized name
+  const compKey = competencyIdOrName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+
+  const approvedEntry = list.find(item => {
+    if (item.status !== "Approved") return false;
+    const itemKey = item.competencyId.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+    return itemKey === compKey || item.competencyId.toLowerCase() === competencyIdOrName.toLowerCase();
+  });
+
+  // Only consider approved expertise entries!
+  if (!approvedEntry) {
+    return null;
+  }
+
+  // Formula calculation (Max 100 points):
+  // 1. Level Score (Max 50 pts): L5=50, L4=40, L3=30
+  const levelRankMap: Record<"L3" | "L4" | "L5", number> = { L3: 30, L4: 40, L5: 50 };
+  const levelPoints = levelRankMap[approvedEntry.expertiseLevel] || 30;
+
+  // 2. Rating Score (Max 20 pts): (rating / 5) * 20
+  const ratingPoints = Math.round(((trainer.rating || 0) / 5) * 20);
+
+  // 3. Experience Score (Max 20 pts): min(20, experienceYears * 1.5)
+  const experiencePoints = Math.min(20, Math.round((trainer.experienceYears || 0) * 1.5));
+
+  // 4. Availability Score (Max 10 pts): Available=10, Limited=5, Unavailable=0
+  const availabilityPoints = trainer.availability === "Available" ? 10 : trainer.availability === "Limited" ? 5 : 0;
+
+  const totalScore = Math.min(100, levelPoints + ratingPoints + experiencePoints + availabilityPoints);
+
+  const reasons: string[] = [
+    `Approved ${approvedEntry.expertiseLevel} instructional authority (+${levelPoints} pts)`,
+    `${trainer.rating.toFixed(1)}/5 verified rating (+${ratingPoints} pts)`,
+    `${trainer.experienceYears} years operational experience (+${experiencePoints} pts)`,
+    `Station deployment availability: ${trainer.availability} (+${availabilityPoints} pts)`,
+  ];
+
+  return {
+    trainer,
+    expertiseLevel: approvedEntry.expertiseLevel,
+    status: "Approved",
+    matchScore: totalScore,
+    breakdown: {
+      levelPoints,
+      ratingPoints,
+      experiencePoints,
+      availabilityPoints,
+    },
+    reasons,
+  };
+}
+
+export function matchTrainersForCompetency(
+  trainers: Trainer[],
+  competencyIdOrName: string,
+  trainerExpertise?: TrainerExpertiseMap
+): TrainerCompetencyMatch[] {
+  const matches: TrainerCompetencyMatch[] = [];
+
+  for (const trainer of trainers) {
+    const match = calculateTrainerMatchScore(trainer, competencyIdOrName, trainerExpertise);
+    if (match) {
+      matches.push(match);
+    }
+  }
+
+  // Sort by match score descending, with higher expertiseLevel preferred
+  return matches.sort((a, b) => {
+    if (b.matchScore !== a.matchScore) {
+      return b.matchScore - a.matchScore;
+    }
+    return getLevelNumber(b.expertiseLevel) - getLevelNumber(a.expertiseLevel);
+  });
 }
 
 export function assessmentImprovement(db: DB, traineeId: string, courseId: string) {
