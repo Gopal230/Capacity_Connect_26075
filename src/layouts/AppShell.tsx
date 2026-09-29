@@ -1,265 +1,322 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Archive, Award, BarChart3, Bell, BookOpen, BrainCircuit, ChevronLeft, ChevronRight, ClipboardCheck, FileCheck2, Gauge, GraduationCap, Home, Library, LogOut, Menu, Radar, Settings2, ShieldCheck, User, UserCheck, Users, X, WifiOff } from "lucide-react";
+import {
+  Archive,
+  Award,
+  BarChart3,
+  Bell,
+  BookOpen,
+  BrainCircuit,
+  ClipboardCheck,
+  FileCheck2,
+  Gauge,
+  GraduationCap,
+  Home,
+  Library,
+  LogOut,
+  Menu,
+  Radar,
+  Settings2,
+  ShieldCheck,
+  Sparkles,
+  User,
+  UserCheck,
+  Users,
+  WifiOff,
+  X
+} from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { Role } from "../types";
 
-const nav: Record<Role,{to:string;label:string;icon:ReactNode}[]> = {
-  admin:[
-    {to:"/admin",label:"Dashboard",icon:<Home/>},
-    {to:"/admin/users",label:"User Approval",icon:<UserCheck/>},
-    {to:"/admin/trainers",label:"Trainer Management",icon:<Users/>},
-    {to:"/admin/courses",label:"Course Management",icon:<BookOpen/>},
-    {to:"/admin/media",label:"Media Governance",icon:<Library/>},
-    {to:"/admin/competencies",label:"Competencies",icon:<BrainCircuit/>},
-    {to:"/admin/reports",label:"Reports & Analytics",icon:<BarChart3/>},
-    {to:"/admin/readiness",label:"Readiness Command",icon:<Gauge/>},
-    {to:"/admin/knowledge",label:"Knowledge Continuity",icon:<Archive/>},
-    {to:"/admin/content",label:"Content & Notifications",icon:<Bell/>}
+const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
+  admin: [
+    { to: "/admin", label: "Dashboard", icon: <Home size={16} /> },
+    { to: "/admin/users", label: "User Approval", icon: <UserCheck size={16} /> },
+    { to: "/admin/trainers", label: "Trainer Management", icon: <Users size={16} /> },
+    { to: "/admin/courses", label: "Course Management", icon: <BookOpen size={16} /> },
+    { to: "/admin/media", label: "Media Governance", icon: <Library size={16} /> },
+    { to: "/admin/competencies", label: "Competencies", icon: <BrainCircuit size={16} /> },
+    { to: "/admin/reports", label: "Reports & Analytics", icon: <BarChart3 size={16} /> },
+    { to: "/admin/readiness", label: "Readiness Command", icon: <Gauge size={16} /> },
+    { to: "/admin/knowledge", label: "Knowledge Continuity", icon: <Archive size={16} /> },
+    { to: "/admin/content", label: "Content & Notifications", icon: <Bell size={16} /> }
   ],
-  trainer:[
-    {to:"/trainer",label:"Dashboard",icon:<Home/>},
-    {to:"/trainer/courses",label:"Courses & Content",icon:<BookOpen/>},
-    {to:"/trainer/library",label:"Trainer Library",icon:<Library/>},
-    {to:"/trainer/assessments",label:"Assessments",icon:<ClipboardCheck/>},
-    {to:"/trainer/trainees",label:"Trainee Monitoring",icon:<Users/>},
-    {to:"/trainer/evidence",label:"Evidence Review",icon:<FileCheck2/>},
-    {to:"/trainer/knowledge",label:"Knowledge Capture",icon:<Archive/>}
+  trainer: [
+    { to: "/trainer", label: "Dashboard", icon: <Home size={16} /> },
+    { to: "/trainer/courses", label: "Courses & Content", icon: <BookOpen size={16} /> },
+    { to: "/trainer/library", label: "Trainer Library", icon: <Library size={16} /> },
+    { to: "/trainer/assessments", label: "Assessments", icon: <ClipboardCheck size={16} /> },
+    { to: "/trainer/trainees", label: "Trainee Monitoring", icon: <Users size={16} /> },
+    { to: "/trainer/evidence", label: "Evidence Review", icon: <FileCheck2 size={16} /> },
+    { to: "/trainer/knowledge", label: "Knowledge Capture", icon: <Archive size={16} /> }
   ],
-  trainee:[
-    {to:"/trainee",label:"Dashboard",icon:<Home/>},
-    {to:"/trainee/competency",label:"Competency Check",icon:<BrainCircuit/>},
-    {to:"/trainee/recommendations",label:"Recommendations",icon:<Settings2/>},
-    {to:"/trainee/learning",label:"Courses",icon:<GraduationCap/>},
-    {to:"/trainee/assessments",label:"Assessments",icon:<ClipboardCheck/>},
-    {to:"/trainee/scenarios",label:"Practical Lab Assessment",icon:<Radar/>},
-    {to:"/trainee/passport",label:"Capability Passport",icon:<ShieldCheck/>},
-    {to:"/trainee/certificates",label:"Certificates",icon:<Award/>}
+  trainee: [
+    { to: "/trainee", label: "Dashboard", icon: <Home size={16} /> },
+    { to: "/trainee/competency", label: "Competency Check", icon: <BrainCircuit size={16} /> },
+    { to: "/trainee/recommendations", label: "Recommendations", icon: <Settings2 size={16} /> },
+    { to: "/trainee/learning", label: "Courses", icon: <GraduationCap size={16} /> },
+    { to: "/trainee/assessments", label: "Assessments", icon: <ClipboardCheck size={16} /> },
+    { to: "/trainee/scenarios", label: "Practical Lab Assessment", icon: <Radar size={16} /> },
+    { to: "/trainee/passport", label: "Capability Passport", icon: <ShieldCheck size={16} /> },
+    { to: "/trainee/certificates", label: "Certificates", icon: <Award size={16} /> }
   ]
 };
 
-export default function AppShell({children,role}:{children:ReactNode;role:Role}){
-  const {currentUser,logout,toast}=useApp();
-  const [open,setOpen]=useState(false);
-  const [minimized,setMinimized]=useState(()=>localStorage.getItem("capacityConnectSidebarMinimized")==="1");
-  const [lite,setLite]=useState(()=>localStorage.getItem("capacityConnectLite")==="1");
-  const [profileOpen,setProfileOpen]=useState(false);
-  const profileMenuRef=useRef<HTMLDivElement>(null);
-  const navigate=useNavigate();
+const FLOW_STEPS: Record<Role, string> = {
+  trainee: "Trainee Flow (8 Steps)",
+  trainer: "Trainer Flow (7 Steps)",
+  admin: "Admin Flow (10 Steps)"
+};
 
-  useEffect(()=>{document.body.classList.toggle("lite-mode",lite)},[lite]);
-  const toggleLite=()=>{const next=!lite;setLite(next);localStorage.setItem("capacityConnectLite",next?"1":"0");document.body.classList.toggle("lite-mode",next)};
-  const toggleMinimized=()=>{const next=!minimized;setMinimized(next);localStorage.setItem("capacityConnectSidebarMinimized",next?"1":"0")};
+export default function AppShell({ children, role }: { children: ReactNode; role: Role }) {
+  const { currentUser, logout, login, toast } = useApp();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [lite, setLite] = useState(() => localStorage.getItem("capacityConnectLite") === "1");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-    const handleOutsideClick=(e:MouseEvent)=>{
-      if(profileMenuRef.current&&!profileMenuRef.current.contains(e.target as Node)){
+  useEffect(() => {
+    document.body.classList.toggle("lite-mode", lite);
+  }, [lite]);
+
+  const toggleLite = () => {
+    const next = !lite;
+    setLite(next);
+    localStorage.setItem("capacityConnectLite", next ? "1" : "0");
+    document.body.classList.toggle("lite-mode", next);
+  };
+
+  const handleQuickPersonaSwitch = (targetRole: Role) => {
+    if (targetRole === "trainee") {
+      login("priya.verma@imd.gov.in", "trainee123");
+      navigate("/trainee");
+    } else if (targetRole === "trainer") {
+      login("rajesh.kumar@imd.gov.in", "trainer123");
+      navigate("/trainer");
+    } else if (targetRole === "admin") {
+      login("dr.sharma@imd.gov.in", "admin123");
+      navigate("/admin");
+    }
+    setMobileNavOpen(false);
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target as Node)) {
         setProfileOpen(false);
       }
     };
-    if(profileOpen){
-      document.addEventListener("mousedown",handleOutsideClick);
+    if (profileOpen) {
+      document.addEventListener("mousedown", handleOutsideClick);
     }
-    return ()=>{
-      document.removeEventListener("mousedown",handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
-  },[profileOpen]);
+  }, [profileOpen]);
 
   const profilePath = role === "trainer" ? "/trainer/profile" : role === "trainee" ? "/trainee/profile" : null;
 
-  return <div className="app-shell">
-    <aside className={`sidebar ${open?"open":""} ${minimized?"minimized":""}`}>
-      <div className="brand">
-        <div className="brand-mark" title="Capacity Connect">CC</div>
-        {!minimized&&<div><strong>CAPACITY CONNECT</strong><span>Operational Capacity & Learning Portal</span></div>}
-        <button className="sidebar-collapse-btn" onClick={toggleMinimized} title={minimized?"Expand sidebar":"Collapse sidebar"}>
-          {minimized?<ChevronRight size={16}/>:<ChevronLeft size={16}/>}
-        </button>
-        <button className="sidebar-close" onClick={()=>setOpen(false)}><X size={18}/></button>
-      </div>
-
-      <nav>
-        {nav[role].map(item=>(
-          <NavLink
-            end={item.to===`/${role}`}
-            key={item.to}
-            to={item.to}
-            onClick={()=>setOpen(false)}
-            title={minimized?item.label:undefined}
-            className={({isActive})=>isActive?"active":""}
-          >
-            {item.icon}
-            {!minimized&&<span>{item.label}</span>}
-          </NavLink>
-        ))}
-      </nav>
-
-    </aside>
-
-    <div className={`main-wrap ${minimized?"minimized":""}`}>
-      <header className="topbar">
-        <button className="menu-btn" onClick={()=>setOpen(true)}><Menu/></button>
-        
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
-          <div>
-            <strong>Capacity Connect</strong>
-            <span>Operational Capacity & Learning Portal</span>
-          </div>
-
-          <span
-            style={{
-              background: "#DC2626",
-              color: "#FFFFFF",
-              fontSize: "11.5px",
-              fontWeight: 700,
-              padding: "3px 10px",
-              borderRadius: "9999px",
-              letterSpacing: "0.3px",
-              display: "inline-flex",
-              alignItems: "center",
-              boxShadow: "0 2px 6px rgba(220, 38, 38, 0.3)",
-            }}
-          >
-            {role === "trainee" ? "Trainee Flow (7 Steps)" : role === "trainer" ? "Faculty Command" : "Directorate Admin"}
-          </span>
-
-          <span
-            style={{
-              color: "#F59E0B",
-              fontSize: "12px",
-              fontWeight: 700,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "4px",
-            }}
-          >
-            ★ Core Competency Mapping Engine
-          </span>
-        </div>
-
-        <div className="top-actions">
-          {/* Active Persona Switcher */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              background: "#05101E",
-              border: "1px solid #1E293B",
-              padding: "3px 6px",
-              borderRadius: "8px",
-              fontSize: "12px",
-            }}
-          >
-            <span style={{ color: "#94A3B8", fontSize: "11px", fontWeight: 600, paddingLeft: "4px" }}>
-              Active Persona:
-            </span>
-            <button
-              type="button"
-              onClick={() => navigate("/trainee")}
-              style={{
-                background: role === "trainee" ? "#0284C7" : "transparent",
-                color: role === "trainee" ? "#FFFFFF" : "#94A3B8",
-                border: "none",
-                borderRadius: "5px",
-                padding: "3px 8px",
-                fontSize: "11px",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Trainee
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/trainer")}
-              style={{
-                background: role === "trainer" ? "#0284C7" : "transparent",
-                color: role === "trainer" ? "#FFFFFF" : "#94A3B8",
-                border: "none",
-                borderRadius: "5px",
-                padding: "3px 8px",
-                fontSize: "11px",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Trainer
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/admin")}
-              style={{
-                background: role === "admin" ? "#0284C7" : "transparent",
-                color: role === "admin" ? "#FFFFFF" : "#94A3B8",
-                border: "none",
-                borderRadius: "5px",
-                padding: "3px 8px",
-                fontSize: "11px",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Admin
-            </button>
-          </div>
-
-          <button className={`lite-toggle ${lite?"active":""}`} onClick={toggleLite} title="Reduce visual load for low-bandwidth use">
-            <WifiOff size={15}/><span>{lite?"Field Mode ON":"Field Mode"}</span>
-          </button>
-          <span className="system-status"><i/> Portal Online</span>
-
-          {/* Circular Profile Button with Dropdown */}
-          <div className="profile-menu-container" ref={profileMenuRef}>
-            <button
-              className={`profile-avatar-btn ${profileOpen?"active":""}`}
-              onClick={()=>setProfileOpen(!profileOpen)}
-              title="Profile and account options"
-              aria-expanded={profileOpen}
-            >
-              <div className="avatar small" style={{ background: "#DC2626", color: "#FFFFFF", fontWeight: 800 }}>
-                {currentUser?.name.charAt(0)}
-              </div>
-            </button>
-
-            {profileOpen && (
-              <div className="profile-dropdown">
-                <div className="profile-dropdown-header">
-                  <strong>{currentUser?.name}</strong>
-                  <span>{currentUser?.email}</span>
-                  <span className="profile-dropdown-badge">{role}</span>
+  return (
+    <div className="app-shell top-nav-layout">
+      {/* Top Navbar Header */}
+      <header className="top-navbar-container">
+        {/* Tier 1: Brand, Engine Tagline, Persona Switcher & Account Utilities */}
+        <div className="top-navbar-main">
+          {/* Left: Brand Identity */}
+          <div className="top-navbar-brand-col">
+            <Link to={`/${role}`} className="top-navbar-brand-link">
+              <div className="brand-mark" title="Capacity Connect">CC</div>
+              <div className="brand-details">
+                <div className="brand-title-row">
+                  <strong className="brand-title">CAPACITY CONNECT</strong>
+                  <span className="brand-flow-pill">{FLOW_STEPS[role]}</span>
                 </div>
-                {profilePath && (
-                  <Link
-                    to={profilePath}
-                    className="profile-dropdown-item"
-                    onClick={()=>setProfileOpen(false)}
-                  >
-                    <User size={16}/>
-                    <span>Personal Profile</span>
-                  </Link>
-                )}
-                <div className="profile-dropdown-divider"/>
+                <div className="brand-subtitle-row">
+                  <span className="brand-subtext">Ministry of Earth Sciences · India Meteorological Department</span>
+                  <span className="brand-engine-star">
+                    <Sparkles size={11} className="inline mr-1" />
+                    Core Competency Mapping Engine
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* Right: Quick Persona Switcher & Utilities */}
+          <div className="top-navbar-controls">
+            {/* Quick Persona Switcher */}
+            <div className="persona-switcher-strip">
+              <span className="persona-label">Persona:</span>
+              <div className="persona-btn-group">
                 <button
-                  className="profile-dropdown-item logout"
-                  onClick={()=>{
-                    setProfileOpen(false);
-                    logout();
-                    navigate("/login");
-                  }}
+                  type="button"
+                  onClick={() => handleQuickPersonaSwitch("trainee")}
+                  className={`persona-pill ${role === "trainee" ? "active" : ""}`}
                 >
-                  <LogOut size={16}/>
-                  <span>Sign out</span>
+                  Trainee
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickPersonaSwitch("trainer")}
+                  className={`persona-pill ${role === "trainer" ? "active" : ""}`}
+                >
+                  Trainer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickPersonaSwitch("admin")}
+                  className={`persona-pill ${role === "admin" ? "active" : ""}`}
+                >
+                  Admin
                 </button>
               </div>
-            )}
+            </div>
+
+            {/* Field Mode Toggle */}
+            <button
+              className={`lite-toggle ${lite ? "active" : ""}`}
+              onClick={toggleLite}
+              title="Reduce visual load for low-bandwidth field use"
+            >
+              <WifiOff size={14} />
+              <span className="lite-text">{lite ? "Field Mode ON" : "Field Mode"}</span>
+            </button>
+
+            {/* System Status */}
+            <span className="system-status">
+              <i /> Portal Online
+            </span>
+
+            {/* Circular Profile Avatar Button with Dropdown */}
+            <div className="profile-menu-container" ref={profileMenuRef}>
+              <button
+                className={`profile-avatar-btn ${profileOpen ? "active" : ""}`}
+                onClick={() => setProfileOpen(!profileOpen)}
+                title="Profile and account options"
+                aria-expanded={profileOpen}
+              >
+                <div className="avatar small">{currentUser?.name.charAt(0) || "U"}</div>
+              </button>
+
+              {profileOpen && (
+                <div className="profile-dropdown">
+                  <div className="profile-dropdown-header">
+                    <strong>{currentUser?.name}</strong>
+                    <span>{currentUser?.email}</span>
+                    <span className="profile-dropdown-badge">{role.toUpperCase()}</span>
+                  </div>
+                  {profilePath && (
+                    <Link
+                      to={profilePath}
+                      className="profile-dropdown-item"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      <User size={15} />
+                      <span>Personal Profile</span>
+                    </Link>
+                  )}
+                  <div className="profile-dropdown-divider" />
+                  <button
+                    className="profile-dropdown-item logout"
+                    onClick={() => {
+                      setProfileOpen(false);
+                      logout();
+                      navigate("/login");
+                    }}
+                  >
+                    <LogOut size={15} />
+                    <span>Sign out</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              className="top-mobile-hamburger"
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </div>
-      </header>
-      <main className="page-content">{children}</main>
-    </div>
 
-    {open&&<div className="sidebar-overlay" onClick={()=>setOpen(false)}/>}
-    {toast&&<div className={`toast toast-${toast.tone}`}>{toast.message}</div>}
-  </div>
+        {/* Tier 2: Horizontal Left-to-Right Navigation Buttons */}
+        <nav className="top-navbar-links-bar">
+          <div className="top-navbar-links-scroll">
+            {nav[role].map(item => (
+              <NavLink
+                end={item.to === `/${role}`}
+                key={item.to}
+                to={item.to}
+                onClick={() => setMobileNavOpen(false)}
+                className={({ isActive }) => `top-nav-btn ${isActive ? "active" : ""}`}
+              >
+                <span className="nav-btn-icon">{item.icon}</span>
+                <span className="nav-btn-label">{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
+        </nav>
+
+        {/* Mobile Navigation Drawer Dropdown */}
+        {mobileNavOpen && (
+          <div className="mobile-nav-drawer">
+            <div className="mobile-nav-links">
+              {nav[role].map(item => (
+                <NavLink
+                  end={item.to === `/${role}`}
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMobileNavOpen(false)}
+                  className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
+                >
+                  <span className="nav-btn-icon">{item.icon}</span>
+                  <span className="nav-btn-label">{item.label}</span>
+                </NavLink>
+              ))}
+            </div>
+            <div className="mobile-nav-footer">
+              <div className="mobile-persona-selector">
+                <span>Switch Role:</span>
+                <div className="persona-btn-group">
+                  <button
+                    type="button"
+                    onClick={() => handleQuickPersonaSwitch("trainee")}
+                    className={`persona-pill ${role === "trainee" ? "active" : ""}`}
+                  >
+                    Trainee
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickPersonaSwitch("trainer")}
+                    className={`persona-pill ${role === "trainer" ? "active" : ""}`}
+                  >
+                    Trainer
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickPersonaSwitch("admin")}
+                    className={`persona-pill ${role === "admin" ? "active" : ""}`}
+                  >
+                    Admin
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Main Full-Width Content Container */}
+      <div className="main-wrap-full">
+        <main className="page-content">{children}</main>
+      </div>
+
+      {mobileNavOpen && <div className="sidebar-overlay" onClick={() => setMobileNavOpen(false)} />}
+      {toast && <div className={`toast toast-${toast.tone}`}>{toast.message}</div>}
+    </div>
+  );
 }
