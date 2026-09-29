@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* =========================================================
-   COURSERA DESIGN SYSTEM TOKENS & ARCHITECTURE
+   CAPACITY CONNECT DESIGN SYSTEM (DARK NAVY & CRIMSON ACCENT)
    ========================================================= */
 :root {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Inter, Arial, sans-serif;
@@ -11,18 +11,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Primary Brand: Coursera Signature Royal Blue */
-  --brand-primary: #0056D2;
-  --brand-hover: #00419E;
-  --brand-accent: #2563EB;
-  --brand-soft: #EFF6FF;
-  --brand-border: #BFDBFE;
+  /* Primary Brand: Dark Navy Header + Crimson Red Accents */
+  --brand-navy: #081A2E;
+  --brand-navy-light: #0F2847;
+  --brand-primary: #DC2626;
+  --brand-hover: #B91C1C;
+  --brand-accent: #DC2626;
+  --brand-soft: #FEF2F2;
+  --brand-border: #FECACA;
+  --brand-sky: #0284C7;
 
   /* Surfaces & Backgrounds */
-  --surface-base: #F8FAFC;
+  --surface-base: #F0F4F8;
   --surface-card: #FFFFFF;
-  --surface-tint: #F0F5FF;
-  --surface-alt: #F1F5F9;
+  --surface-tint: #F8FAFC;
+  --surface-alt: #E2E8F0;
 
   /* Clean Slate Dividers & Borders */
   --border-clean: #E2E8F0;
@@ -30,28 +33,28 @@
   --border-subtle: #F1F5F9;
 
   /* Typography Colors */
-  --text-heading: #0F172A;
-  --text-body: #334155;
+  --text-heading: #081A2E;
+  --text-body: #1E293B;
   --text-muted: #64748B;
 
   /* Badges, Ratings & Accents */
-  --badge-gold: #F59E0B;
+  --badge-gold: #D97706;
   --badge-gold-bg: #FFFBEB;
   --badge-gold-border: #FDE68A;
 
-  --badge-emerald: #10B981;
+  --badge-emerald: #059669;
   --badge-emerald-bg: #ECFDF5;
   --badge-emerald-border: #A7F3D0;
 
-  --badge-red: #EF4444;
+  --badge-red: #DC2626;
   --badge-red-bg: #FEF2F2;
   --badge-red-border: #FECACA;
 
   /* High-Trust Subtle Shadows */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.08);
-  --shadow-dropdown: 0 4px 14px rgba(0, 0, 0, 0.1);
+  --shadow-subtle: 0 1px 3px rgba(8, 26, 46, 0.04);
+  --shadow-card: 0 2px 6px rgba(8, 26, 46, 0.06);
+  --shadow-hover: 0 6px 18px rgba(8, 26, 46, 0.1);
+  --shadow-dropdown: 0 8px 20px rgba(8, 26, 46, 0.14);
 
   /* Legacy variable mapping for full codebase compatibility */
   --blue: var(--brand-primary);
@@ -479,13 +482,13 @@ textarea {
   height: 38px;
   display: grid;
   place-items: center;
-  background: var(--brand-primary);
+  background: #DC2626;
   color: #FFFFFF;
   border-radius: 8px;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 15px;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 6px rgba(0, 86, 210, 0.4);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.45);
 }
 
 .brand div:nth-child(2) {
@@ -541,22 +544,22 @@ textarea {
 }
 
 .sidebar nav a:hover {
-  background: #1E293B;
+  background: #0F2847;
   color: #FFFFFF;
 }
 
 .sidebar nav a.active {
-  background: var(--brand-primary);
+  background: #DC2626;
   color: #FFFFFF;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 86, 210, 0.35);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
 }
 
 .sidebar-footer {
   margin-top: auto;
   border-top: 1px solid #1E293B;
   padding: 14px 16px;
-  background: #081426;
+  background: #05101E;
 }
 
 .mini-user {
@@ -602,7 +605,7 @@ textarea {
 }
 
 .logout-btn:hover {
-  background: #1E293B;
+  background: #0F2847;
   color: #FFFFFF;
   border-color: #475569;
 }
@@ -613,9 +616,9 @@ textarea {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--brand-soft);
-  color: var(--brand-primary);
-  border: 1px solid var(--brand-border);
+  background: #081A2E;
+  color: #FFFFFF;
+  border: 1px solid #1E293B;
   font-size: 12px;
   font-weight: 700;
 }
@@ -646,9 +649,9 @@ textarea {
 
 .topbar {
   height: 68px;
-  background: var(--surface-card);
-  border-bottom: 1px solid var(--border-clean);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  background: #081A2E;
+  border-bottom: 1px solid #0F2847;
+  box-shadow: 0 2px 8px rgba(8, 26, 46, 0.25);
   display: flex;
   align-items: center;
   padding: 0 28px;
@@ -663,21 +666,22 @@ textarea {
 }
 
 .topbar strong {
-  font-size: 14px;
-  color: var(--text-heading);
-  font-weight: 600;
+  font-size: 14.5px;
+  color: #FFFFFF;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .topbar span {
   font-size: 12px;
-  color: var(--text-muted);
+  color: #94A3B8;
 }
 
 .menu-btn {
   display: none;
   border: none;
   background: none;
-  color: var(--text-heading);
+  color: #FFFFFF;
   margin-right: 12px;
 }
 
@@ -692,9 +696,9 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border: 1px solid var(--border-clean);
-  background: var(--surface-card);
-  color: var(--text-body);
+  border: 1px solid #1E293B;
+  background: #0F2847;
+  color: #E2E8F0;
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 11px;
@@ -702,9 +706,9 @@ textarea {
 }
 
 .lite-toggle.active {
-  background: var(--brand-soft);
-  border-color: var(--brand-border);
-  color: var(--brand-primary);
+  background: #DC2626;
+  border-color: #DC2626;
+  color: #FFFFFF;
 }
 
 .system-status {
@@ -713,9 +717,9 @@ textarea {
   gap: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #065F46;
-  background: var(--badge-emerald-bg);
-  border: 1px solid var(--badge-emerald-border);
+  color: #86EFAC;
+  background: rgba(5, 150, 105, 0.18);
+  border: 1px solid rgba(5, 150, 105, 0.35);
   padding: 4px 10px;
   border-radius: 9999px;
 }
@@ -724,7 +728,7 @@ textarea {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--badge-emerald);
+  background: #10B981;
 }
 
 

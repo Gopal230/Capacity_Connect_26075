@@ -99,8 +99,111 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
     <div className={`main-wrap ${minimized?"minimized":""}`}>
       <header className="topbar">
         <button className="menu-btn" onClick={()=>setOpen(true)}><Menu/></button>
-        <div><strong>Operational Capacity & Learning Center</strong><span>Ministry of Earth Sciences · India Meteorological Department</span></div>
+        
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
+          <div>
+            <strong>Capacity Connect</strong>
+            <span>Operational Capacity & Learning Portal</span>
+          </div>
+
+          <span
+            style={{
+              background: "#DC2626",
+              color: "#FFFFFF",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              padding: "3px 10px",
+              borderRadius: "9999px",
+              letterSpacing: "0.3px",
+              display: "inline-flex",
+              alignItems: "center",
+              boxShadow: "0 2px 6px rgba(220, 38, 38, 0.3)",
+            }}
+          >
+            {role === "trainee" ? "Trainee Flow (7 Steps)" : role === "trainer" ? "Faculty Command" : "Directorate Admin"}
+          </span>
+
+          <span
+            style={{
+              color: "#F59E0B",
+              fontSize: "12px",
+              fontWeight: 700,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            ★ Core Competency Mapping Engine
+          </span>
+        </div>
+
         <div className="top-actions">
+          {/* Active Persona Switcher */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "#05101E",
+              border: "1px solid #1E293B",
+              padding: "3px 6px",
+              borderRadius: "8px",
+              fontSize: "12px",
+            }}
+          >
+            <span style={{ color: "#94A3B8", fontSize: "11px", fontWeight: 600, paddingLeft: "4px" }}>
+              Active Persona:
+            </span>
+            <button
+              type="button"
+              onClick={() => navigate("/trainee")}
+              style={{
+                background: role === "trainee" ? "#0284C7" : "transparent",
+                color: role === "trainee" ? "#FFFFFF" : "#94A3B8",
+                border: "none",
+                borderRadius: "5px",
+                padding: "3px 8px",
+                fontSize: "11px",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Trainee
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/trainer")}
+              style={{
+                background: role === "trainer" ? "#0284C7" : "transparent",
+                color: role === "trainer" ? "#FFFFFF" : "#94A3B8",
+                border: "none",
+                borderRadius: "5px",
+                padding: "3px 8px",
+                fontSize: "11px",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Trainer
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/admin")}
+              style={{
+                background: role === "admin" ? "#0284C7" : "transparent",
+                color: role === "admin" ? "#FFFFFF" : "#94A3B8",
+                border: "none",
+                borderRadius: "5px",
+                padding: "3px 8px",
+                fontSize: "11px",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Admin
+            </button>
+          </div>
+
           <button className={`lite-toggle ${lite?"active":""}`} onClick={toggleLite} title="Reduce visual load for low-bandwidth use">
             <WifiOff size={15}/><span>{lite?"Field Mode ON":"Field Mode"}</span>
           </button>
@@ -114,7 +217,9 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
               title="Profile and account options"
               aria-expanded={profileOpen}
             >
-              <div className="avatar small">{currentUser?.name.charAt(0)}</div>
+              <div className="avatar small" style={{ background: "#DC2626", color: "#FFFFFF", fontWeight: 800 }}>
+                {currentUser?.name.charAt(0)}
+              </div>
             </button>
 
             {profileOpen && (
