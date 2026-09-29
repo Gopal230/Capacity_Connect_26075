@@ -28,7 +28,7 @@ export default function CoursesPage() {
     : null;
 
   return (
-    <div className="public-site">
+    <div className="public-site" style={{ background: "#080E18", minHeight: "100vh", color: "#CBD5E1" }}>
       <header className="public-nav">
         <Link to="/" className="public-brand">
           <span className="public-brand-mark">CC</span>
@@ -46,13 +46,13 @@ export default function CoursesPage() {
         </button>
         <nav className={menu ? "show" : ""}>
           <Link to="/">Get Started / Roles</Link>
-          <Link to="/courses" className="active">Courses</Link>
+          <Link to="/courses" style={{ color: "#F87171", fontWeight: 700 }}>Courses</Link>
           {currentUser ? (
-            <Link to={`/${currentUser.role}`} className="btn btn-primary btn-sm">Dashboard</Link>
+            <Link to={`/${currentUser.role}`} className="btn btn-primary btn-sm" style={{ background: "#991B1B", borderColor: "#991B1B" }}>Dashboard</Link>
           ) : (
             <>
-              <Link to="/login" className="btn btn-secondary btn-sm">Sign In</Link>
-              <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
+              <Link to="/login" className="btn btn-secondary btn-sm" style={{ background: "#142034", color: "#F8FAFC", borderColor: "#1B2A44" }}>Sign In</Link>
+              <Link to="/register" className="btn btn-primary btn-sm" style={{ background: "#991B1B", borderColor: "#991B1B" }}>Register</Link>
             </>
           )}
         </nav>
@@ -60,11 +60,11 @@ export default function CoursesPage() {
 
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 24px" }}>
         <div style={{ marginBottom: "32px", textAlign: "center" }}>
-          <span className="section-kicker">COURSE CATALOG</span>
-          <h1 style={{ fontSize: "26px", color: "var(--text-heading)", margin: "8px 0 12px" }}>
+          <span className="section-kicker" style={{ color: "#F87171" }}>COURSE CATALOG</span>
+          <h1 style={{ fontSize: "28px", color: "#F8FAFC", margin: "8px 0 12px", fontWeight: 800 }}>
             Operational Training Programs
           </h1>
-          <p style={{ color: "var(--text-muted)", fontSize: "14px", maxWidth: "600px", margin: "0 auto" }}>
+          <p style={{ color: "#8899B0", fontSize: "14px", maxWidth: "600px", margin: "0 auto" }}>
             Explore standardized curricula developed for operational forecasters and meteorological staff.
           </p>
         </div>
@@ -78,14 +78,15 @@ export default function CoursesPage() {
             justifyContent: "space-between",
             alignItems: "center",
             marginBottom: "28px",
-            padding: "16px",
-            background: "#FFFFFF",
-            border: "1.5px solid #CBD5E1",
+            padding: "16px 20px",
+            background: "#0E1726",
+            border: "1.5px solid #1B2A44",
             borderRadius: "12px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: "1", minWidth: "240px" }}>
-            <Search size={18} color="#475569" />
+            <Search size={18} color="#8899B0" />
             <input
               type="text"
               value={search}
@@ -96,7 +97,7 @@ export default function CoursesPage() {
                 border: "none",
                 outline: "none",
                 fontSize: "14px",
-                color: "#0F172A",
+                color: "#F8FAFC",
                 background: "transparent",
               }}
             />
@@ -112,10 +113,11 @@ export default function CoursesPage() {
                   borderRadius: "9999px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  border: selectedDept === dept ? "1.5px solid #1D4ED8" : "1px solid #CBD5E1",
-                  background: selectedDept === dept ? "#1D4ED8" : "#F8FAFC",
-                  color: selectedDept === dept ? "#FFFFFF" : "#1E293B",
+                  border: selectedDept === dept ? "1.5px solid #991B1B" : "1px solid #1B2A44",
+                  background: selectedDept === dept ? "#991B1B" : "#142034",
+                  color: selectedDept === dept ? "#FFFFFF" : "#CBD5E1",
                   cursor: "pointer",
+                  transition: "all 0.15s ease",
                 }}
               >
                 {dept === "all" ? "All Disciplines" : dept}
@@ -144,39 +146,60 @@ export default function CoursesPage() {
             }
 
             return (
-              <article className={`course-card ${isLocked ? "locked" : ""}`} key={c.id} style={isLocked ? { background: "#F8FAFC", borderColor: "#E2E8F0" } : {}}>
+              <article
+                className={`course-card ${isLocked ? "locked" : ""}`}
+                key={c.id}
+                style={{
+                  background: isLocked ? "#080E18" : "#0E1726",
+                  border: `1.5px solid ${isLocked ? "#16233B" : "#1B2A44"}`,
+                  borderRadius: "12px",
+                  padding: "20px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                }}
+              >
                 <div className="course-top">
-                  <span className="course-category-pill">{competencyName}</span>
+                  <span className="course-category-pill" style={{ background: "#241114", color: "#F87171", border: "1px solid #4C1D24" }}>
+                    {competencyName}
+                  </span>
                   {hasLevels ? (
-                    <span className="badge badge-blue">{c.entryLevel} → {c.targetLevel}</span>
+                    <span className="badge badge-blue" style={{ background: "#142034", color: "#93C5FD", border: "1px solid #233454" }}>
+                      {c.entryLevel} → {c.targetLevel}
+                    </span>
                   ) : (
-                    <span className="badge badge-blue">{c.level}</span>
+                    <span className="badge badge-blue" style={{ background: "#142034", color: "#93C5FD", border: "1px solid #233454" }}>
+                      {c.level}
+                    </span>
                   )}
                 </div>
-                <h3 style={isLocked ? { color: "#64748B" } : {}}>{c.title}</h3>
-                <p>{c.description}</p>
-                <div className="course-meta">
+                <h3 style={{ color: isLocked ? "#8899B0" : "#F8FAFC", fontSize: "16px", margin: "12px 0 8px", fontWeight: 700 }}>
+                  {c.title}
+                </h3>
+                <p style={{ color: "#8899B0", fontSize: "13px", lineHeight: "1.5", margin: "0 0 16px" }}>
+                  {c.description}
+                </p>
+                <div className="course-meta" style={{ color: "#8899B0", fontSize: "12px" }}>
                   <span>
                     <Clock size={13} /> {c.durationHours} hours
                   </span>
-                  <span className="course-rating">
-                    <Star size={13} fill="#F59E0B" color="#F59E0B" /> {c.rating}
+                  <span className="course-rating" style={{ color: "#FBBF24" }}>
+                    <Star size={13} fill="#FBBF24" color="#FBBF24" /> {c.rating}
                   </span>
-                  <span className="course-code">{c.code}</span>
+                  <span className="course-code" style={{ color: "#8899B0" }}>{c.code}</span>
                 </div>
 
                 {isLocked && (
-                  <p style={{ fontSize: "11.5px", color: "#92400E", background: "#FEF3C7", padding: "6px 8px", borderRadius: "4px", margin: "10px 0 0" }}>
+                  <p style={{ fontSize: "11.5px", color: "#FBBF24", background: "#261D0C", border: "1px solid #543E19", padding: "8px 10px", borderRadius: "6px", margin: "12px 0 0" }}>
                     <Lock size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />
                     {lockMessage}
                   </p>
                 )}
 
-                <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid #E2E8F0" }}>
+                <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid #1B2A44" }}>
                   {isLocked ? (
                     <button
                       disabled
                       className="btn btn-disabled btn-block btn-sm"
+                      style={{ background: "#16233B", color: "#8899B0", border: "none" }}
                     >
                       <Lock size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />
                       Locked (Requires {c.entryLevel})
@@ -185,7 +208,7 @@ export default function CoursesPage() {
                     <Link
                       to={`/trainee`}
                       className="btn btn-primary btn-block btn-sm"
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: "none", background: "#991B1B", borderColor: "#991B1B" }}
                     >
                       Go to Dashboard to Enroll
                     </Link>
@@ -193,7 +216,7 @@ export default function CoursesPage() {
                     <Link
                       to={`/login?role=trainee`}
                       className="btn btn-primary btn-block btn-sm"
-                      style={{ textDecoration: "none" }}
+                      style={{ textDecoration: "none", background: "#991B1B", borderColor: "#991B1B" }}
                     >
                       Sign In to Enroll
                     </Link>
