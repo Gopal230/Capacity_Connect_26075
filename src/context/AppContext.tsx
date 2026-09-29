@@ -56,6 +56,7 @@ interface AppContextType {
   setTrainerExpertise: (trainerId: string, items: TrainerExpertiseItem[]) => void;
   approveTrainerExpertise: (trainerId: string, competencyId: string) => void;
   rejectTrainerExpertise: (trainerId: string, competencyId: string) => void;
+  switchPersona: (role: Role) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -816,6 +817,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
     notify("Demo data reset to Phase 1 data foundation", "info");
   };
 
+  const switchPersona = (targetRole: Role) => {
+    const user = db.users.find(u => u.role === targetRole && u.status === "active");
+    if (user) {
+      setSessionId(user.id);
+      notify(`Switched to ${targetRole.toUpperCase()} mode: ${user.name}`);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -868,6 +877,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setTrainerExpertise,
         approveTrainerExpertise,
         rejectTrainerExpertise,
+        switchPersona,
       }}
     >
       {children}

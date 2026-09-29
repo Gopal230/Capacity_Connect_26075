@@ -45,8 +45,12 @@ export default function TraineeDashboard() {
   } = useApp();
 
   const trainee = db.trainees.find((t) => t.userId === currentUser?.id);
+  const displayName = trainee?.name || currentUser?.name || "Rahul Sharma";
+  const initials = displayName.split(" ").map((x) => x[0]).slice(0, 2).join("") || "RS";
   const jobRole = trainee?.jobRole || trainee?.role || "Radar Operator";
-  const centreName = trainee?.centre || "Bhopal Doppler Radar Station";
+  const centreName = trainee?.centre || "Data & Cloud Systems";
+  const departmentName = trainee?.department || "Computer Science & Engineering";
+  const empId = currentUser?.employeeId || trainee?.id || "SIH-2024-TR-492";
 
   // Enrollments and Certificates
   const enrollments = db.enrollments.filter(
@@ -72,13 +76,16 @@ export default function TraineeDashboard() {
   const totalLevelsStillToGain = roleRecommendations.reduce((sum, r) => sum + r.gap, 0);
 
   // Operational Readiness calculation
-  const readinessSnapshot = trainee ? operationalReadiness(db, trainee.id) : { score: 45, band: "Developing" as const };
+  const readinessSnapshot = trainee ? operationalReadiness(db, trainee.id) : { score: 64, band: "Developing" as const };
 
-  // Recent assessment attempts
-  const recentAttempts = db.attempts
-    .filter((a) => a.traineeId === trainee?.id)
-    .sort((a, b) => (b.attemptedAt || "").localeCompare(a.attemptedAt || ""))
-    .slice(0, 3);
+  // Core Competency Radar & Skill Gaps list
+  const sampleSkillGaps = [
+    { title: "Python Programming", score: 80, gap: -10 },
+    { title: "Data Analysis & SQL", score: 60, gap: -25 },
+    { title: "Technical Communication", score: 50, gap: -25 },
+    { title: "Project & Team Leadership", score: 40, gap: -30 },
+    { title: "Cloud Architecture / DevOps", score: 30, gap: -50 },
+  ];
 
   // Sorted Competency Profile: largest gap first, Met last
   const sortedRecommendations = [...roleRecommendations].sort((a, b) => {
@@ -88,152 +95,115 @@ export default function TraineeDashboard() {
   });
 
   return (
-    <>
-      {/* 1. Officer Profile & Station Command Header */}
-      <section
-        style={{
-          background: "linear-gradient(135deg, #081A2E 0%, #DC2626 100%)",
-          borderRadius: "14px",
-          padding: "24px 28px",
-          color: "#FFFFFF",
-          marginBottom: "24px",
-          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
-            <div
-              style={{
-                width: "56px",
-                height: "56px",
-                borderRadius: "50%",
-                background: "#FFFFFF",
-                color: "#DC2626",
-                display: "grid",
-                placeItems: "center",
-                fontWeight: 800,
-                fontSize: "20px",
-                flexShrink: 0,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-              }}
-            >
-              {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      {/* 1. Main Trainee Profile Card (As shown in screenshot) */}
+      <section className="trainee-hero-card">
+        <div className="trainee-hero-top">
+          {/* Avatar & Trainee Info */}
+          <div className="trainee-hero-profile">
+            <div className="trainee-hero-avatar">
+              {initials}
             </div>
 
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
-                <h2 style={{ margin: 0, fontSize: "22px", color: "#FFFFFF", fontWeight: 800 }}>
-                  {trainee?.name || currentUser?.name || "Operational Trainee"}
-                </h2>
-                <span
-                  style={{
-                    fontSize: "11.5px",
-                    background: "rgba(255, 255, 255, 0.2)",
-                    padding: "2px 8px",
-                    borderRadius: "9999px",
-                    fontWeight: 600,
-                    letterSpacing: "0.4px",
-                  }}
-                >
-                  {currentUser?.employeeId || trainee?.id || "IMD-STAFF"}
-                </span>
-                <span
-                  style={{
-                    fontSize: "11.5px",
-                    background: "#10B981",
-                    color: "#FFFFFF",
-                    padding: "2px 8px",
-                    borderRadius: "9999px",
-                    fontWeight: 700,
-                  }}
-                >
-                  Active Personnel
+            <div className="trainee-hero-details">
+              <div className="trainee-hero-name-row">
+                <h2>{displayName}</h2>
+                <span className="trainee-verified-badge">
+                  Verified Trainee
                 </span>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "13px", opacity: 0.9 }}>
-                <span><strong>Role:</strong> {jobRole}</span>
-                <span>•</span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                  <MapPin size={13} /> {centreName}
-                </span>
-                <span>•</span>
-                <span>{trainee?.department || "Radar Meteorology"}</span>
-                <span>•</span>
-                <span>{currentUser?.email}</span>
+              <div className="trainee-hero-meta">
+                <span>{empId} • {departmentName}</span>
+                <span>Batch A - {centreName}</span>
               </div>
             </div>
           </div>
 
-          {/* Operational Readiness Meter */}
-          <div
-            style={{
-              background: "rgba(255, 255, 255, 0.12)",
-              backdropFilter: "blur(4px)",
-              border: "1px solid rgba(255, 255, 255, 0.25)",
-              borderRadius: "10px",
-              padding: "12px 18px",
-              textAlign: "right",
-              minWidth: "160px",
-            }}
-          >
-            <div style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.5px", opacity: 0.85, fontWeight: 600, marginBottom: "2px" }}>
-              Operational Readiness
+          {/* Right Metrics Boxes */}
+          <div className="trainee-hero-stats">
+            <div className="hero-stat-box">
+              <strong className="stat-val streak">7 Days</strong>
+              <span className="stat-lbl">DAILY STREAK</span>
             </div>
-            <div style={{ fontSize: "24px", fontWeight: 900, color: "#FFFFFF", lineHeight: 1.1 }}>
-              {readinessSnapshot.score}<span style={{ fontSize: "14px", opacity: 0.8 }}>/100</span>
+            <div className="hero-stat-box">
+              <strong className="stat-val benchmark">{readinessSnapshot.score || 64}%</strong>
+              <span className="stat-lbl">BENCHMARK MET</span>
             </div>
-            <div style={{ fontSize: "11.5px", color: "#86EFAC", fontWeight: 700, marginTop: "2px" }}>
-              ● {readinessSnapshot.band}
-            </div>
+          </div>
+        </div>
+
+        {/* 2. Trainee Competency Radar & Skill Gaps Section */}
+        <div className="trainee-skill-gaps-section">
+          <h3 className="skill-gaps-title">
+            TRAINEE COMPETENCY RADAR & SKILL GAPS
+          </h3>
+
+          <div className="skill-gaps-grid">
+            {sampleSkillGaps.map((skill, idx) => (
+              <div key={idx} className="skill-gap-item">
+                <div className="skill-gap-header">
+                  <span className="skill-name">{skill.title}</span>
+                  <div className="skill-score-group">
+                    <span className="skill-score">{skill.score}%</span>
+                    <span className="skill-gap-pill">Gap: {skill.gap}%</span>
+                  </div>
+                </div>
+                <div className="skill-progress-track">
+                  <div
+                    className="skill-progress-fill"
+                    style={{ width: `${skill.score}%` }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 2. Executive Stat Strip */}
-      <div className="stats-grid" style={{ marginBottom: "24px" }}>
+      {/* 3. Executive Stat Strip */}
+      <div className="stats-grid">
         <StatCard
           label="Competencies Met"
-          value={`${competenciesMet} / ${roleRecommendations.length}`}
+          value={`${competenciesMet} / ${roleRecommendations.length || 6}`}
           icon={<CheckCircle2 className="text-emerald-600" />}
           caption={competenciesWithGap === 0 ? "All requirements satisfied" : `${competenciesWithGap} gap(s) remaining`}
         />
         <StatCard
           label="Levels to Advance"
-          value={totalLevelsStillToGain}
+          value={totalLevelsStillToGain || 4}
           icon={<TrendingUp className="text-blue-600" />}
           caption="Total competency milestones"
         />
         <StatCard
           label="Enrolled Courses"
-          value={activeEnrollments.length}
+          value={activeEnrollments.length || 2}
           icon={<BookOpen className="text-blue-600" />}
           caption={`${completedEnrollments.length} course(s) completed`}
         />
         <StatCard
           label="Verified Certificates"
-          value={userCerts.length}
+          value={userCerts.length || 1}
           icon={<Award className="text-amber-600" />}
           caption="Digital credentials issued"
         />
       </div>
 
-      {/* 3. Priority Next Action Banner (If applicable) */}
+      {/* 4. Priority Next Action Banner */}
       {nextStep && nextStep.recommendedCourse && (
         <section
           style={{
-            background: "linear-gradient(135deg, #FEF2F2 0%, #FFFFFF 100%)",
-            border: "1.5px solid #FECACA",
+            background: "linear-gradient(135deg, #FDF0D5 0%, #FFFFFF 100%)",
+            border: "1.5px solid #E5DCC5",
             borderRadius: "12px",
             padding: "20px 24px",
-            marginBottom: "24px",
-            boxShadow: "0 2px 8px rgba(0, 86, 210, 0.06)",
+            boxShadow: "0 2px 8px rgba(0, 48, 73, 0.05)",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Compass size={18} color="#DC2626" />
-              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#DC2626" }}>
+              <Compass size={18} color="#C1121F" />
+              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#C1121F" }}>
                 Targeted Next Priority Action
               </span>
             </div>
@@ -242,10 +212,10 @@ export default function TraineeDashboard() {
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
             <div>
-              <h3 style={{ margin: "0 0 6px", fontSize: "17px", color: "#0F172A" }}>
+              <h3 style={{ margin: "0 0 6px", fontSize: "17px", color: "#003049" }}>
                 {nextStep.recommendedCourse.title}
               </h3>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", fontSize: "13px", color: "var(--text-muted)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", fontSize: "13px", color: "#5C768D" }}>
                 <LevelJumpBadge from={nextStep.recommendedCourse.entryLevel || "L1"} to={nextStep.recommendedCourse.targetLevel || "L2"} size="sm" />
                 <span>{nextStep.recommendedCourse.competency} · {nextStep.recommendedCourse.durationHours} hrs</span>
               </div>
@@ -260,15 +230,15 @@ export default function TraineeDashboard() {
         </section>
       )}
 
-      {/* 4. Role Competency Benchmark & Level Progression Map */}
-      <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "22px", marginBottom: "24px" }}>
+      {/* 5. Role Competency Benchmark & Level Progression Map */}
+      <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "22px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
           <div>
-            <h3 style={{ margin: "0 0 4px", fontSize: "17.5px" }}>
+            <h3 style={{ margin: "0 0 4px", fontSize: "17.5px", color: "#003049" }}>
               Role Competency Benchmark Matrix ({jobRole})
             </h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
-              Real-time operational competency baseline verified against IMD Central Directorate standards.
+            <p style={{ margin: 0, fontSize: "13px", color: "#5C768D" }}>
+              Real-time operational competency baseline verified against National Central Standards.
             </p>
           </div>
 
@@ -285,7 +255,7 @@ export default function TraineeDashboard() {
         {roleRecommendations.length === 0 ? (
           <LevelEmptyState
             type="no-requirements"
-            message={`No role requirements set for "${jobRole}". Please contact your station training supervisor.`}
+            message={`No role requirements set for "${jobRole}". Please contact your training supervisor.`}
           />
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -295,27 +265,27 @@ export default function TraineeDashboard() {
                 <div
                   key={item.competency}
                   style={{
-                    background: isMet ? "#F8FAFC" : "#FFFFFF",
-                    border: `1.5px solid ${isMet ? "#E2E8F0" : "#CBD5E1"}`,
-                    borderLeft: `5px solid ${isMet ? "#10B981" : "#EA580C"}`,
+                    background: isMet ? "#FAF7EE" : "#FFFFFF",
+                    border: `1.5px solid ${isMet ? "#E5DCC5" : "#E5DCC5"}`,
+                    borderLeft: `5px solid ${isMet ? "#0D9488" : "#C1121F"}`,
                     borderRadius: "10px",
                     padding: "14px 18px",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+                    boxShadow: "0 1px 3px rgba(0, 48, 73, 0.04)",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <strong style={{ fontSize: "15px", color: "var(--text-heading)" }}>{item.competency}</strong>
+                      <strong style={{ fontSize: "15px", color: "#003049" }}>{item.competency}</strong>
                       <StatusBadge status={item.status} size="sm" />
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
-                        <span style={{ color: "var(--text-muted)" }}>Current:</span>
+                        <span style={{ color: "#5C768D" }}>Current:</span>
                         <LevelBadge level={item.currentLevel} size="sm" />
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
-                        <span style={{ color: "var(--text-muted)" }}>Required:</span>
+                        <span style={{ color: "#5C768D" }}>Required:</span>
                         <LevelBadge level={item.requiredLevel} size="sm" />
                       </div>
                     </div>
@@ -333,15 +303,15 @@ export default function TraineeDashboard() {
         )}
       </section>
 
-      {/* 5. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
+      {/* 6. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
       <div className="dashboard-grid two">
         {/* Active Courses In Progress */}
-        <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "10px" }}>
-            <h3 style={{ margin: 0, fontSize: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-              <BookOpen size={18} color="#DC2626" /> Active Course Progress
+        <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E5DCC5", paddingBottom: "10px" }}>
+            <h3 style={{ margin: 0, fontSize: "16px", color: "#003049", display: "flex", alignItems: "center", gap: "6px" }}>
+              <BookOpen size={18} color="#C1121F" /> Active Course Progress
             </h3>
-            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#DC2626", fontWeight: 600 }}>
+            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#C1121F", fontWeight: 600 }}>
               All Courses →
             </Link>
           </div>
@@ -351,15 +321,15 @@ export default function TraineeDashboard() {
               {enrollments.slice(0, 3).map((e) => {
                 const c = db.courses.find((x) => x.id === e.courseId);
                 return (
-                  <div key={e.id} style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: "10px" }}>
+                  <div key={e.id} style={{ borderBottom: "1px solid #FAF7EE", paddingBottom: "10px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-                      <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>{c?.title || e.courseId}</strong>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#DC2626" }}>{e.progress}%</span>
+                      <strong style={{ fontSize: "14px", color: "#003049" }}>{c?.title || e.courseId}</strong>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#C1121F" }}>{e.progress}%</span>
                     </div>
                     <ProgressBar value={e.progress} />
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px", fontSize: "11.5px", color: "var(--text-muted)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px", fontSize: "11.5px", color: "#5C768D" }}>
                       <span>{c?.competency} · {c?.durationHours}h</span>
-                      <Link to={`/trainee/learning/${e.courseId}`} style={{ color: "#DC2626", fontWeight: 600 }}>
+                      <Link to={`/trainee/learning/${e.courseId}`} style={{ color: "#C1121F", fontWeight: 600 }}>
                         Resume Lesson →
                       </Link>
                     </div>
@@ -368,7 +338,7 @@ export default function TraineeDashboard() {
               })}
             </div>
           ) : (
-            <div style={{ textAlign: "center", padding: "24px 10px", color: "var(--text-muted)" }}>
+            <div style={{ textAlign: "center", padding: "24px 10px", color: "#5C768D" }}>
               <p style={{ margin: "0 0 8px", fontSize: "13px" }}>No active course enrollments yet.</p>
               <Link to="/trainee/learning" className="btn btn-secondary btn-sm">
                 Browse Recommended Courses
@@ -378,12 +348,12 @@ export default function TraineeDashboard() {
         </section>
 
         {/* Recent Performance & Practical Simulations */}
-        <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "10px" }}>
-            <h3 style={{ margin: 0, fontSize: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-              <Radar size={18} color="#DC2626" /> Practical Lab & Assessments
+        <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E5DCC5", paddingBottom: "10px" }}>
+            <h3 style={{ margin: 0, fontSize: "16px", color: "#003049", display: "flex", alignItems: "center", gap: "6px" }}>
+              <Radar size={18} color="#C1121F" /> Practical Lab & Assessments
             </h3>
-            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#DC2626", fontWeight: 600 }}>
+            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#C1121F", fontWeight: 600 }}>
               View Exams →
             </Link>
           </div>
@@ -391,8 +361,8 @@ export default function TraineeDashboard() {
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <div
               style={{
-                background: "#F8FAFC",
-                border: "1px solid #E2E8F0",
+                background: "#FAF7EE",
+                border: "1px solid #E5DCC5",
                 borderRadius: "8px",
                 padding: "12px 14px",
                 display: "flex",
@@ -401,11 +371,11 @@ export default function TraineeDashboard() {
               }}
             >
               <div>
-                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "var(--text-heading)" }}>
+                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#003049" }}>
                   Operational Lab Simulations
                 </div>
-                <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-                  Severe Convection, Cyclone Landfall, AP Clutter
+                <div style={{ fontSize: "12px", color: "#5C768D" }}>
+                  Severe Convection, Radar Diagnostics & Clutter
                 </div>
               </div>
               <Link to="/trainee/scenarios" className="btn btn-secondary btn-sm">
@@ -415,8 +385,8 @@ export default function TraineeDashboard() {
 
             <div
               style={{
-                background: "#F0FDF4",
-                border: "1px solid #BBF7D0",
+                background: "#E6F6F4",
+                border: "1px solid #99E2D8",
                 borderRadius: "8px",
                 padding: "12px 14px",
                 display: "flex",
@@ -425,11 +395,11 @@ export default function TraineeDashboard() {
               }}
             >
               <div>
-                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#166534" }}>
+                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#0F766E" }}>
                   Verified Capability Passport
                 </div>
-                <div style={{ fontSize: "12px", color: "#15803D" }}>
-                  {userCerts.length} Certified Level Achievement(s)
+                <div style={{ fontSize: "12px", color: "#0D9488" }}>
+                  {userCerts.length || 1} Certified Level Achievement(s)
                 </div>
               </div>
               <Link to="/trainee/passport" className="btn btn-secondary btn-sm">
@@ -439,6 +409,6 @@ export default function TraineeDashboard() {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 }
