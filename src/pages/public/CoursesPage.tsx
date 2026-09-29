@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { getLevelNumber } from "../../utils/engine";
-import PublicFooter from "../../components/PublicFooter";
 
 export default function CoursesPage() {
   const { db, currentUser, getTraineeLevel } = useApp();
@@ -206,7 +205,20 @@ export default function CoursesPage() {
         </div>
       </div>
 
-      <PublicFooter />
+      <footer className="public-footer">
+        <div>
+          <strong>CAPACITY CONNECT</strong>
+          <p>Digital Capacity Building & Operational Readiness Portal</p>
+          <small>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences</small>
+        </div>
+        <div className="footer-links">
+          <Link to="/">Get Started</Link>
+          <Link to="/courses">Courses</Link>
+          <Link to="/login?role=trainee">Trainee Portal</Link>
+          <Link to="/login?role=trainer">Trainer Portal</Link>
+          <Link to="/login?role=admin">Admin Command</Link>
+        </div>
+      </footer>
     </div>
   );
 }
