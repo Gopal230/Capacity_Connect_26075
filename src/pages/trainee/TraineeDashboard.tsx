@@ -30,12 +30,10 @@ export default function TraineeDashboard() {
   } = useApp();
 
   const trainee = db.trainees.find((t) => t.userId === currentUser?.id);
-  const displayName = trainee?.name || currentUser?.name || "Rahul Verma";
-  const initials = displayName
-    .split(" ")
-    .map((x) => x[0])
-    .slice(0, 2)
-    .join("") || "RV";
+  const displayName = trainee?.name || currentUser?.name || "RADAR-BOT-01";
+  const initials = displayName.includes("(") 
+    ? displayName.split("(")[0].trim().split("-").slice(0, 2).map(x => x[0]).join("")
+    : displayName.split(" ").map((x) => x[0]).slice(0, 2).join("") || "RB";
   const jobRole = trainee?.jobRole || trainee?.role || "Radar Operator";
   const centreName = trainee?.centre || "Bhopal Doppler Radar Station";
   const departmentName = trainee?.department || "Radar Operations Center";

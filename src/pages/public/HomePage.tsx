@@ -79,7 +79,7 @@ export default function HomePage() {
       subtitle: "Meteorological Officers, Observers, Scientific Assistants, and Radar Operators.",
       icon: GraduationCap,
       demoEmail: "trainee@test.com",
-      demoName: "Rahul Verma (L1 Baseline)",
+      demoName: "RADAR-BOT-01 (Unit RV - L1 Baseline)",
       features: [
         "Level-based competency diagnostics and gap-targeted progression (L1 to L5)",
         "Standardized Doppler Radar, Synoptic, and Warning Communication courses",
@@ -88,8 +88,8 @@ export default function HomePage() {
         "Digital Capability Passport and verified competency transcript",
       ],
       extraDemoAccounts: [
-        { label: "Priya Sharma (Mid-Level L2)", email: "trainee2@test.com", desc: "L2 in Basic Met & Radar Ops" },
-        { label: "Amit Patel (Nearly Ready L3)", email: "trainee3@test.com", desc: "L3 in 3 core competencies" },
+        { label: "METEO-BOT-02 (Unit AK - Mid L2)", email: "trainee2@test.com", desc: "L2 in Basic Met & Radar Ops" },
+        { label: "STORM-BOT-03 (Unit PV - Ready L3)", email: "trainee3@test.com", desc: "L3 in 3 core competencies" },
       ],
     },
     trainer: {
@@ -98,7 +98,7 @@ export default function HomePage() {
       subtitle: "Senior Meteorologists, Radar Specialists, and Regional Training Centre Faculty.",
       icon: Users,
       demoEmail: "trainer@test.com",
-      demoName: "Dr. Arvind Rao (Chief Radar Instructor)",
+      demoName: "CYBER-INSTRUCTOR-09 (Neural Radar Faculty)",
       features: [
         "Curriculum authoring studio with competency level mapping",
         "Doppler radar archives, satellite loops, and operational case repository",
@@ -113,7 +113,7 @@ export default function HomePage() {
       subtitle: "IMD Directorate, Training Division Heads, and Capability Governance Officers.",
       icon: ShieldCheck,
       demoEmail: "admin@test.com",
-      demoName: "Directorate Administrator",
+      demoName: "NEXUS-COMMAND-BOT (System Core AI)",
       features: [
         "User clearance approvals and role-governed credential authorization",
         "National Operational Readiness Index (ORI) diagnostics and radar station analytics",
