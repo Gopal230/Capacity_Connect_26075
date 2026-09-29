@@ -1,4 +1,4 @@
-import { Award, BookOpen, CalendarClock, CheckCircle2, ClipboardCheck, FileCheck2, FileUp, Lock, Sparkles, Users } from "lucide-react";
+import { Archive, BookOpen, CalendarClock, CheckCircle2, ClipboardCheck, FileCheck2, FileUp, Lock, Sparkles, Users } from "lucide-react";
 import { Badge, PageHeader, ProgressBar, StatCard } from "../../components/UI";
 import { LevelBadge, LevelJumpBadge, StatusBadge } from "../../components/LevelUI";
 import { useApp } from "../../context/AppContext";
@@ -14,7 +14,7 @@ export default function TrainerDashboard() {
     (e) => e.progress === 100 && !db.certificates.some((c) => c.traineeId === e.traineeId && c.courseId === e.courseId)
   ).length;
   const pendingEvidence = db.evidence.filter((e) => courses.some((c) => c.id === e.courseId) && e.status === "submitted").length;
-  const verifiedCerts = db.certificates.filter((c) => courses.some((x) => x.id === c.courseId)).length;
+  const knowledge = db.knowledgeAssets.filter((a) => a.trainerId === trainer?.id).length;
 
   return (
     <>
@@ -31,7 +31,7 @@ export default function TrainerDashboard() {
         <StatCard label="Average Progress" value={`${avg}%`} icon={<Users />} />
         <StatCard label="Recent Uploads" value={db.resources.filter((r) => r.trainerId === trainer?.id).length} icon={<FileUp />} />
         <StatCard label="Evidence Reviews" value={pendingEvidence} icon={<FileCheck2 />} caption="Awaiting sign-off" />
-        <StatCard label="Issued Credentials" value={verifiedCerts} icon={<Award />} caption="Accredited certifications" />
+        <StatCard label="Knowledge Assets" value={knowledge} icon={<Archive />} caption="Continuity vault" />
       </div>
 
       <div className="dashboard-grid two">

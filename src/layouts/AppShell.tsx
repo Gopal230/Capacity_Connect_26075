@@ -36,6 +36,7 @@ const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
     { to: "/admin/competencies", label: "Competencies", icon: <BrainCircuit size={16} /> },
     { to: "/admin/reports", label: "Reports & Analytics", icon: <BarChart3 size={16} /> },
     { to: "/admin/readiness", label: "Readiness Command", icon: <Gauge size={16} /> },
+    { to: "/admin/knowledge", label: "Knowledge Continuity", icon: <Archive size={16} /> },
     { to: "/admin/content", label: "Content & Notifications", icon: <Bell size={16} /> },
   ],
   trainer: [
@@ -45,6 +46,7 @@ const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
     { to: "/trainer/assessments", label: "Assessments", icon: <ClipboardCheck size={16} /> },
     { to: "/trainer/trainees", label: "Trainee Monitoring", icon: <Users size={16} /> },
     { to: "/trainer/evidence", label: "Evidence Review", icon: <FileCheck2 size={16} /> },
+    { to: "/trainer/knowledge", label: "Knowledge Capture", icon: <Archive size={16} /> },
   ],
   trainee: [
     { to: "/trainee", label: "Dashboard", icon: <Home size={16} /> },
