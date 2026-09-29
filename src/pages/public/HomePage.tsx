@@ -180,13 +180,13 @@ export default function HomePage() {
                   type="button"
                   onClick={() => switchRole(r)}
                   style={{
-                    background: isSelected ? "#142034" : "#0E1726",
-                    border: isSelected ? "2.5px solid #991B1B" : "1.5px solid #1B2A44",
+                    background: isSelected ? "#FFFFFF" : "#F8FAFC",
+                    border: isSelected ? "2.5px solid #DC2626" : "1.5px solid #CBD5E1",
                     borderRadius: "12px",
                     padding: "18px 20px",
                     textAlign: "left",
                     cursor: "pointer",
-                    boxShadow: isSelected ? "0 4px 16px rgba(153, 27, 27, 0.35)" : "0 2px 6px rgba(0, 0, 0, 0.3)",
+                    boxShadow: isSelected ? "0 4px 14px rgba(0, 86, 210, 0.15)" : "none",
                     transition: "all 0.2s ease",
                     display: "flex",
                     alignItems: "flex-start",
@@ -198,8 +198,8 @@ export default function HomePage() {
                       width: "42px",
                       height: "42px",
                       borderRadius: "10px",
-                      background: isSelected ? "#991B1B" : "#1B2A44",
-                      color: isSelected ? "#FFFFFF" : "#8899B0",
+                      background: isSelected ? "#DC2626" : "#E2E8F0",
+                      color: isSelected ? "#FFFFFF" : "#475569",
                       display: "grid",
                       placeItems: "center",
                       flexShrink: 0,
@@ -208,14 +208,14 @@ export default function HomePage() {
                     <RIcon size={22} />
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "#F87171" : "#8899B0", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "#DC2626" : "#64748B", letterSpacing: "0.5px", textTransform: "uppercase" }}>
                       {r === "trainee" ? "LEARN" : r === "trainer" ? "TEACH" : "GOVERN"}
                     </span>
-                    <h3 style={{ margin: "2px 0 4px", fontSize: "16px", color: isSelected ? "#F8FAFC" : "#CBD5E1" }}>
+                    <h3 style={{ margin: "2px 0 4px", fontSize: "16px", color: isSelected ? "#0F172A" : "#334155" }}>
                       {r === "trainee" ? "Operational Trainee" : r === "trainer" ? "Trainer" : "Portal Administrator"}
                     </h3>
-                    <p style={{ margin: 0, fontSize: "12px", color: "#8899B0", lineHeight: "1.4" }}>
-                      {r === "trainee" ? "Competency progression & certification" : r === "trainer" ? "Curriculum authoring & operational evaluation" : "Clearance, ORI & system command"}
+                    <p style={{ margin: 0, fontSize: "12px", color: "#64748B", lineHeight: "1.4" }}>
+                      {r === "trainee" ? "Competency progression & certification" : r === "trainer" ? "Curriculum authoring & evidence review" : "Clearance, ORI & system command"}
                     </p>
                   </div>
                 </button>
@@ -227,10 +227,10 @@ export default function HomePage() {
         {/* Grand Unified Workspace & Sign-In Card */}
         <section
           style={{
-            background: "#0E1726",
-            border: "1.5px solid #1B2A44",
+            background: "#FFFFFF",
+            border: "1.5px solid #CBD5E1",
             borderRadius: "16px",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
+            boxShadow: "0 6px 24px rgba(0, 0, 0, 0.06)",
             overflow: "hidden",
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
@@ -240,8 +240,8 @@ export default function HomePage() {
           <div
             style={{
               padding: "36px 32px",
-              background: "#0A1220",
-              borderRight: "1px solid #1B2A44",
+              background: "#F8FAFC",
+              borderRight: "1px solid #E2E8F0",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -254,7 +254,7 @@ export default function HomePage() {
                     width: "36px",
                     height: "36px",
                     borderRadius: "8px",
-                    background: "#991B1B",
+                    background: "#DC2626",
                     color: "#FFFFFF",
                     display: "grid",
                     placeItems: "center",
@@ -263,27 +263,27 @@ export default function HomePage() {
                   <Icon size={20} />
                 </div>
                 <div>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#F87171", letterSpacing: "0.5px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#DC2626", letterSpacing: "0.5px" }}>
                     {current.category}
                   </span>
-                  <h2 style={{ margin: 0, fontSize: "20px", color: "#F8FAFC" }}>
+                  <h2 style={{ margin: 0, fontSize: "20px", color: "#0F172A" }}>
                     {current.title}
                   </h2>
                 </div>
               </div>
 
-              <p style={{ fontSize: "13.5px", color: "#8899B0", margin: "0 0 20px", lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13.5px", color: "#475569", margin: "0 0 20px", lineHeight: "1.5" }}>
                 {current.subtitle}
               </p>
 
               <div style={{ marginBottom: "24px" }}>
-                <span style={{ fontSize: "12px", fontWeight: 700, color: "#F8FAFC", textTransform: "uppercase", letterSpacing: "0.5px", display: "block", marginBottom: "10px" }}>
+                <span style={{ fontSize: "12px", fontWeight: 700, color: "#0F172A", textTransform: "uppercase", letterSpacing: "0.5px", display: "block", marginBottom: "10px" }}>
                   Active Workspace Capabilities
                 </span>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
                   {current.features.map((feat, idx) => (
-                    <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", color: "#CBD5E1" }}>
-                      <CheckCircle2 size={16} color="#F87171" style={{ marginTop: "2px", flexShrink: 0 }} />
+                    <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", color: "#334155" }}>
+                      <CheckCircle2 size={16} color="#DC2626" style={{ marginTop: "2px", flexShrink: 0 }} />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -294,8 +294,8 @@ export default function HomePage() {
             {/* Instant Demo Accounts Box */}
             <div
               style={{
-                background: "#142034",
-                border: "1.5px solid #4C1D24",
+                background: "#FFFFFF",
+                border: "1.5px solid #FECACA",
                 borderRadius: "10px",
                 padding: "16px",
                 marginTop: "16px",
@@ -303,10 +303,10 @@ export default function HomePage() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#F87171" />
-                  <strong style={{ fontSize: "13px", color: "#F87171" }}>Instant 1-Click Demo Evaluation</strong>
+                  <Sparkles size={16} color="#DC2626" />
+                  <strong style={{ fontSize: "13px", color: "#DC2626" }}>Instant 1-Click Demo Evaluation</strong>
                 </div>
-                <span style={{ fontSize: "11px", color: "#F87171", background: "#241114", border: "1px solid #4C1D24", padding: "2px 8px", borderRadius: "4px" }}>
+                <span style={{ fontSize: "11px", color: "#64748B", background: "#FEF2F2", padding: "2px 8px", borderRadius: "4px" }}>
                   Pre-seeded
                 </span>
               </div>
@@ -316,15 +316,15 @@ export default function HomePage() {
                 className="btn btn-primary btn-block"
                 onClick={() => quickDemoLogin(current.demoEmail)}
                 disabled={loading}
-                style={{ padding: "10px 16px", fontSize: "13.5px", fontWeight: 600, background: "#991B1B", borderColor: "#991B1B" }}
+                style={{ padding: "10px 16px", fontSize: "13.5px", fontWeight: 600 }}
               >
                 <Sparkles size={16} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px" }} />
                 Launch Demo: {current.demoName}
               </button>
 
               {current.extraDemoAccounts && (
-                <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid #1B2A44" }}>
-                  <small style={{ fontSize: "11px", color: "#8899B0", display: "block", marginBottom: "6px" }}>
+                <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid #E2E8F0" }}>
+                  <small style={{ fontSize: "11px", color: "#64748B", display: "block", marginBottom: "6px" }}>
                     Alternate Trainee Profiles:
                   </small>
                   <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -336,10 +336,10 @@ export default function HomePage() {
                         style={{
                           fontSize: "11.5px",
                           padding: "5px 10px",
-                          background: "#0E1726",
-                          border: "1px solid #1B2A44",
+                          background: "#F1F5F9",
+                          border: "1px solid #CBD5E1",
                           borderRadius: "6px",
-                          color: "#CBD5E1",
+                          color: "#1E293B",
                           cursor: "pointer",
                           fontWeight: 500,
                         }}
@@ -355,23 +355,23 @@ export default function HomePage() {
           </div>
 
           {/* Right Column: Direct Sign-In Form */}
-          <div style={{ padding: "36px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#0E1726" }}>
+          <div style={{ padding: "36px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div>
-              <div style={{ borderBottom: "1px solid #1B2A44", paddingBottom: "14px", marginBottom: "22px" }}>
-                <span style={{ fontSize: "11px", fontWeight: 700, color: "#8899B0", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+              <div style={{ borderBottom: "1px solid #E2E8F0", paddingBottom: "14px", marginBottom: "22px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: "#64748B", letterSpacing: "0.5px", textTransform: "uppercase" }}>
                   AUTHENTICATED ACCESS
                 </span>
-                <h3 style={{ margin: "4px 0 0", fontSize: "20px", color: "#F8FAFC" }}>
+                <h3 style={{ margin: "4px 0 0", fontSize: "20px", color: "#0F172A" }}>
                   Sign In to Your Account
                 </h3>
-                <small style={{ color: "#8899B0", fontSize: "12.5px" }}>
+                <small style={{ color: "#64748B", fontSize: "12.5px" }}>
                   Enter your credentials for official clearance access.
                 </small>
               </div>
 
               <form onSubmit={handleLoginSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 <div>
-                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#CBD5E1", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
                     Official Email Address
                   </label>
                   <input
@@ -384,17 +384,16 @@ export default function HomePage() {
                       width: "100%",
                       padding: "10px 12px",
                       borderRadius: "6px",
-                      border: "1.5px solid #1B2A44",
-                      background: "#080E18",
+                      border: "1.5px solid #CBD5E1",
                       fontSize: "13.5px",
                       outline: "none",
-                      color: "#F8FAFC",
+                      color: "#0F172A",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#CBD5E1", marginBottom: "6px" }}>
+                  <label style={{ display: "block", fontSize: "12.5px", fontWeight: 600, color: "#334155", marginBottom: "6px" }}>
                     Password
                   </label>
                   <div style={{ position: "relative" }}>
@@ -408,11 +407,10 @@ export default function HomePage() {
                         width: "100%",
                         padding: "10px 40px 10px 12px",
                         borderRadius: "6px",
-                        border: "1.5px solid #1B2A44",
-                        background: "#080E18",
+                        border: "1.5px solid #CBD5E1",
                         fontSize: "13.5px",
                         outline: "none",
-                        color: "#F8FAFC",
+                        color: "#0F172A",
                       }}
                     />
                     <button
@@ -425,7 +423,7 @@ export default function HomePage() {
                         transform: "translateY(-50%)",
                         background: "none",
                         border: "none",
-                        color: "#8899B0",
+                        color: "#64748B",
                         cursor: "pointer",
                       }}
                       aria-label="Toggle password visibility"
@@ -438,9 +436,9 @@ export default function HomePage() {
                 {error && (
                   <div
                     style={{
-                      background: "#241114",
-                      border: "1px solid #4C1D24",
-                      color: "#F87171",
+                      background: "#FEE2E2",
+                      border: "1px solid #FCA5A5",
+                      color: "#991B1B",
                       padding: "10px 12px",
                       borderRadius: "6px",
                       fontSize: "12.5px",
@@ -455,21 +453,21 @@ export default function HomePage() {
                   type="submit"
                   className="btn btn-primary btn-block"
                   disabled={loading}
-                  style={{ padding: "11px 16px", fontSize: "14px", fontWeight: 600, marginTop: "6px", background: "#991B1B", borderColor: "#991B1B" }}
+                  style={{ padding: "11px 16px", fontSize: "14px", fontWeight: 600, marginTop: "6px" }}
                 >
                   {loading ? "Authenticating..." : `Sign In as ${activeRole.charAt(0).toUpperCase() + activeRole.slice(1)}`}
                 </button>
               </form>
             </div>
 
-            <div style={{ marginTop: "28px", paddingTop: "18px", borderTop: "1px solid #1B2A44", textAlign: "center" }}>
-              <p style={{ margin: "0 0 10px", fontSize: "13px", color: "#8899B0" }}>
+            <div style={{ marginTop: "28px", paddingTop: "18px", borderTop: "1px solid #E2E8F0", textAlign: "center" }}>
+              <p style={{ margin: "0 0 10px", fontSize: "13px", color: "#475569" }}>
                 Need portal clearance?
               </p>
               <Link
                 to={`/register?role=${activeRole}`}
                 className="btn btn-secondary btn-block"
-                style={{ fontSize: "13px", padding: "9px 14px", display: "inline-block", textAlign: "center", background: "#142034", color: "#F8FAFC", borderColor: "#1B2A44" }}
+                style={{ fontSize: "13px", padding: "9px 14px", display: "inline-block", textAlign: "center" }}
               >
                 Register for {activeRole.charAt(0).toUpperCase() + activeRole.slice(1)} Clearance →
               </Link>
