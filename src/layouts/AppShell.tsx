@@ -29,33 +29,32 @@ import { Role } from "../types";
 
 const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
   admin: [
-    { to: "/admin", label: "1. Dashboard", icon: <Home size={15} /> },
-    { to: "/admin/users", label: "2. User Approval", icon: <UserCheck size={15} /> },
-    { to: "/admin/trainers", label: "3. Trainers", icon: <Users size={15} /> },
-    { to: "/admin/courses", label: "4. Courses", icon: <BookOpen size={15} /> },
-    { to: "/admin/media", label: "5. Media Governance", icon: <Library size={15} /> },
-    { to: "/admin/competencies", label: "6. Competencies", icon: <BrainCircuit size={15} /> },
-    { to: "/admin/reports", label: "7. Reports", icon: <BarChart3 size={15} /> },
-    { to: "/admin/readiness", label: "8. Readiness Command", icon: <Gauge size={15} /> },
-    { to: "/admin/content", label: "9. Notifications", icon: <Bell size={15} /> },
+    { to: "/admin", label: "Dashboard", icon: <Home size={15} /> },
+    { to: "/admin/users", label: "User Approval", icon: <UserCheck size={15} /> },
+    { to: "/admin/trainers", label: "Trainers", icon: <Users size={15} /> },
+    { to: "/admin/courses", label: "Courses", icon: <BookOpen size={15} /> },
+    { to: "/admin/media", label: "Media Governance", icon: <Library size={15} /> },
+    { to: "/admin/competencies", label: "Competencies", icon: <BrainCircuit size={15} /> },
+    { to: "/admin/reports", label: "Reports", icon: <BarChart3 size={15} /> },
+    { to: "/admin/readiness", label: "Readiness Command", icon: <Gauge size={15} /> },
+    { to: "/admin/content", label: "Notifications", icon: <Bell size={15} /> },
   ],
   trainer: [
-    { to: "/trainer", label: "1. Dashboard", icon: <Home size={15} /> },
-    { to: "/trainer/courses", label: "2. Courses & Content", icon: <BookOpen size={15} /> },
-    { to: "/trainer/library", label: "3. Library", icon: <Library size={15} /> },
-    { to: "/trainer/assessments", label: "4. Assessments", icon: <ClipboardCheck size={15} /> },
-    { to: "/trainer/trainees", label: "5. Trainee Monitoring", icon: <Users size={15} /> },
-    { to: "/trainer/profile", label: "6. Instructor Profile", icon: <User size={15} /> },
+    { to: "/trainer", label: "Dashboard", icon: <Home size={15} /> },
+    { to: "/trainer/courses", label: "Courses & Content", icon: <BookOpen size={15} /> },
+    { to: "/trainer/library", label: "Library", icon: <Library size={15} /> },
+    { to: "/trainer/assessments", label: "Assessments", icon: <ClipboardCheck size={15} /> },
+    { to: "/trainer/trainees", label: "Trainee Monitoring", icon: <Users size={15} /> },
+    { to: "/trainer/profile", label: "Instructor Profile", icon: <User size={15} /> },
   ],
   trainee: [
-    { to: "/trainee", label: "1. Profile", icon: <User size={15} /> },
-    { to: "/courses", label: "2. Browse Courses", icon: <BookOpen size={15} /> },
-    { to: "/trainee/learning", label: "3. Enroll", icon: <FileCheck2 size={15} /> },
-    { to: "/trainee/learning", label: "4. Study Material", icon: <GraduationCap size={15} /> },
-    { to: "/trainee/competency", label: "5. Practice MCQs", icon: <BrainCircuit size={15} /> },
-    { to: "/trainee/assessments", label: "6. Assessment", icon: <ClipboardCheck size={15} /> },
-    { to: "/trainee/certificates", label: "7. Certificate", icon: <Award size={15} /> },
-    { to: "/trainee/passport", label: "8. Feedback", icon: <ShieldCheck size={15} /> },
+    { to: "/trainee", label: "Dashboard", icon: <Home size={15} /> },
+    { to: "/trainee/competency", label: "Competency Check", icon: <BrainCircuit size={15} /> },
+    { to: "/trainee/learning", label: "Courses", icon: <BookOpen size={15} /> },
+    { to: "/trainee/assessments", label: "Assessments", icon: <ClipboardCheck size={15} /> },
+    { to: "/trainee/scenarios", label: "Practical Lab Assessment", icon: <Radar size={15} /> },
+    { to: "/trainee/passport", label: "Capability Passport", icon: <ShieldCheck size={15} /> },
+    { to: "/trainee/certificates", label: "Certificates", icon: <Award size={15} /> },
   ],
 };
 
@@ -104,58 +103,19 @@ export default function AppShell({ children, role }: { children: ReactNode; role
     <div className="app-shell top-nav-layout">
       {/* Top Navbar Header */}
       <header className="top-navbar-container">
-        {/* Tier 1: Brand, Workflow indicators & Right Utilities */}
+        {/* Tier 1: Brand & Right Utilities */}
         <div className="top-navbar-main">
           {/* Brand Logo & Title */}
           <Link to={`/${role}`} className="top-navbar-brand-link">
-            <div className="brand-mark" title="SIH / Capacity Connect">S</div>
+            <div className="brand-mark" title="Capacity Connect">CC</div>
             <div className="brand-details">
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <strong className="brand-title">SIH 26075</strong>
-                <span className="brand-lms-pill">LMS+</span>
-              </div>
-              <span className="brand-subtext">Competency & Skill-Gap Engine</span>
+              <strong className="brand-title">CAPACITY CONNECT</strong>
+              <span className="brand-subtext">Operational Capacity & Learning Portal · Ministry of Earth Sciences (IMD)</span>
             </div>
           </Link>
 
-          {/* Center Badges (Flow & Engine Banner) */}
-          <div className="top-navbar-center-badges">
-            <div className="flow-step-badge">
-              {role === "trainee" ? "Trainee Flow (8 Steps)" : role === "trainer" ? "Trainer Flow (6 Steps)" : "Admin Command"}
-            </div>
-            <div className="engine-banner-text">
-              ★ Core Competency Mapping Engine
-            </div>
-          </div>
-
           {/* Right Utilities */}
           <div className="top-navbar-controls">
-            {/* Active Persona Switcher */}
-            <div className="persona-switcher-pill">
-              <span className="persona-label">Active Persona:</span>
-              <button
-                type="button"
-                className={`persona-btn ${role === "trainee" ? "active" : ""}`}
-                onClick={() => handlePersonaSwitch("trainee")}
-              >
-                Trainee
-              </button>
-              <button
-                type="button"
-                className={`persona-btn ${role === "trainer" ? "active" : ""}`}
-                onClick={() => handlePersonaSwitch("trainer")}
-              >
-                Trainer
-              </button>
-              <button
-                type="button"
-                className={`persona-btn ${role === "admin" ? "active" : ""}`}
-                onClick={() => handlePersonaSwitch("admin")}
-              >
-                Admin
-              </button>
-            </div>
-
             {/* Field Mode Toggle */}
             <button
               className={`lite-toggle ${lite ? "active" : ""}`}
@@ -163,8 +123,14 @@ export default function AppShell({ children, role }: { children: ReactNode; role
               title="Reduce visual load for field operations"
             >
               <WifiOff size={13} />
-              <span className="lite-text">{lite ? "Field" : "Field"}</span>
+              <span className="lite-text">Field Mode</span>
             </button>
+
+            {/* Portal Online Status Pill */}
+            <div className="system-status">
+              <i />
+              <span>Portal Online</span>
+            </div>
 
             {/* Circular Profile Avatar Button with Dropdown */}
             <div className="profile-menu-container" ref={profileMenuRef}>
@@ -174,15 +140,44 @@ export default function AppShell({ children, role }: { children: ReactNode; role
                 title="Profile and account options"
                 aria-expanded={profileOpen}
               >
-                <div className="avatar small">{currentUser?.name?.charAt(0) || role.charAt(0).toUpperCase()}</div>
+                <div className="avatar small">{currentUser?.name?.charAt(0) || "R"}</div>
               </button>
 
               {profileOpen && (
                 <div className="profile-dropdown">
                   <div className="profile-dropdown-header">
-                    <strong>{currentUser?.name}</strong>
-                    <span>{currentUser?.email}</span>
+                    <strong>{currentUser?.name || "Rahul Verma"}</strong>
+                    <span>{currentUser?.email || "trainee@test.com"}</span>
                     <span className="profile-dropdown-badge">{role.toUpperCase()}</span>
+                  </div>
+                  <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--border-clean)", fontSize: "12px", color: "var(--text-muted)" }}>
+                    <span style={{ display: "block", marginBottom: "6px", fontWeight: 600 }}>Switch Role:</span>
+                    <div style={{ display: "flex", gap: "4px" }}>
+                      <button
+                        type="button"
+                        className={`persona-btn ${role === "trainee" ? "active" : ""}`}
+                        style={{ color: role === "trainee" ? "#fff" : "var(--text-body)", background: role === "trainee" ? "#C1121F" : "#f1f5f9" }}
+                        onClick={() => handlePersonaSwitch("trainee")}
+                      >
+                        Trainee
+                      </button>
+                      <button
+                        type="button"
+                        className={`persona-btn ${role === "trainer" ? "active" : ""}`}
+                        style={{ color: role === "trainer" ? "#fff" : "var(--text-body)", background: role === "trainer" ? "#C1121F" : "#f1f5f9" }}
+                        onClick={() => handlePersonaSwitch("trainer")}
+                      >
+                        Trainer
+                      </button>
+                      <button
+                        type="button"
+                        className={`persona-btn ${role === "admin" ? "active" : ""}`}
+                        style={{ color: role === "admin" ? "#fff" : "var(--text-body)", background: role === "admin" ? "#C1121F" : "#f1f5f9" }}
+                        onClick={() => handlePersonaSwitch("admin")}
+                      >
+                        Admin
+                      </button>
+                    </div>
                   </div>
                   {profilePath && (
                     <Link

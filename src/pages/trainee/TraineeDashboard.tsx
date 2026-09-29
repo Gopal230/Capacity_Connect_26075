@@ -1,26 +1,13 @@
 import {
-  AlertTriangle,
   Award,
   BookOpen,
-  Building2,
   CheckCircle2,
-  Clock,
   Compass,
-  FileCheck2,
-  Gauge,
-  GraduationCap,
-  MapPin,
-  PlayCircle,
   Radar,
-  ShieldAlert,
-  ShieldCheck,
-  Sparkles,
   TrendingUp,
-  User,
-  Zap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Badge, PageHeader, ProgressBar, StatCard } from "../../components/UI";
+import { Badge, ProgressBar, StatCard } from "../../components/UI";
 import {
   LevelBadge,
   LevelJumpBadge,
@@ -29,9 +16,7 @@ import {
   LevelEmptyState,
 } from "../../components/LevelUI";
 import { useApp } from "../../context/AppContext";
-import { COMPETENCY_LEVELS } from "../../data/constants";
-import { CompetencyLevel } from "../../types";
-import { getLevelNumber, operationalReadiness } from "../../utils/engine";
+import { operationalReadiness } from "../../utils/engine";
 
 export default function TraineeDashboard() {
   const {
@@ -45,12 +30,17 @@ export default function TraineeDashboard() {
   } = useApp();
 
   const trainee = db.trainees.find((t) => t.userId === currentUser?.id);
-  const displayName = trainee?.name || currentUser?.name || "Rahul Sharma";
-  const initials = displayName.split(" ").map((x) => x[0]).slice(0, 2).join("") || "RS";
+  const displayName = trainee?.name || currentUser?.name || "Rahul Verma";
+  const initials = displayName
+    .split(" ")
+    .map((x) => x[0])
+    .slice(0, 2)
+    .join("") || "RV";
   const jobRole = trainee?.jobRole || trainee?.role || "Radar Operator";
-  const centreName = trainee?.centre || "Data & Cloud Systems";
-  const departmentName = trainee?.department || "Computer Science & Engineering";
-  const empId = currentUser?.employeeId || trainee?.id || "SIH-2024-TR-492";
+  const centreName = trainee?.centre || "Bhopal Doppler Radar Station";
+  const departmentName = trainee?.department || "Radar Operations Center";
+  const empId = currentUser?.employeeId || trainee?.id || "ta1";
+  const email = currentUser?.email || "trainee@test.com";
 
   // Enrollments and Certificates
   const enrollments = db.enrollments.filter(
@@ -76,16 +66,8 @@ export default function TraineeDashboard() {
   const totalLevelsStillToGain = roleRecommendations.reduce((sum, r) => sum + r.gap, 0);
 
   // Operational Readiness calculation
-  const readinessSnapshot = trainee ? operationalReadiness(db, trainee.id) : { score: 64, band: "Developing" as const };
-
-  // Core Competency Radar & Skill Gaps list
-  const sampleSkillGaps = [
-    { title: "Python Programming", score: 80, gap: -10 },
-    { title: "Data Analysis & SQL", score: 60, gap: -25 },
-    { title: "Technical Communication", score: 50, gap: -25 },
-    { title: "Project & Team Leadership", score: 40, gap: -30 },
-    { title: "Cloud Architecture / DevOps", score: 30, gap: -50 },
-  ];
+  const readinessSnapshot = trainee ? operationalReadiness(db, trainee.id) : { score: 14, band: "Needs Development" as const };
+  const readinessScore = readinessSnapshot.score || 14;
 
   // Sorted Competency Profile: largest gap first, Met last
   const sortedRecommendations = [...roleRecommendations].sort((a, b) => {
@@ -96,82 +78,148 @@ export default function TraineeDashboard() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      {/* 1. Main Trainee Profile Card (As shown in screenshot) */}
-      <section className="trainee-hero-card">
-        <div className="trainee-hero-top">
-          {/* Avatar & Trainee Info */}
-          <div className="trainee-hero-profile">
-            <div className="trainee-hero-avatar">
-              {initials}
-            </div>
-
-            <div className="trainee-hero-details">
-              <div className="trainee-hero-name-row">
-                <h2>{displayName}</h2>
-                <span className="trainee-verified-badge">
-                  Verified Trainee
-                </span>
-              </div>
-
-              <div className="trainee-hero-meta">
-                <span>{empId} • {departmentName}</span>
-                <span>Batch A - {centreName}</span>
-              </div>
-            </div>
+      {/* 1. Trainee Hero Banner (Exact Dark Navy to Crimson Gradient Layout) */}
+      <section
+        style={{
+          background: "linear-gradient(135deg, #071527 0%, #0E223D 48%, #6B111A 85%, #8B1A1A 100%)",
+          borderRadius: "14px",
+          padding: "24px 28px",
+          color: "#FFFFFF",
+          boxShadow: "0 8px 24px rgba(0, 24, 38, 0.25)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "20px",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+        }}
+      >
+        {/* Left: Avatar & Identity Details */}
+        <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
+          {/* Circular White Avatar with Bold Red Initials */}
+          <div
+            style={{
+              width: "60px",
+              height: "60px",
+              minWidth: "60px",
+              borderRadius: "50%",
+              background: "#FFFFFF",
+              color: "#DC2626",
+              fontWeight: 800,
+              fontSize: "22px",
+              display: "grid",
+              placeItems: "center",
+              boxShadow: "0 4px 14px rgba(0, 0, 0, 0.25)",
+              letterSpacing: "0.5px",
+            }}
+          >
+            {initials}
           </div>
 
-          {/* Right Metrics Boxes */}
-          <div className="trainee-hero-stats">
-            <div className="hero-stat-box">
-              <strong className="stat-val streak">7 Days</strong>
-              <span className="stat-lbl">DAILY STREAK</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+              <h2 style={{ margin: 0, fontSize: "23px", fontWeight: 800, color: "#FFFFFF", letterSpacing: "-0.01em" }}>
+                {displayName}
+              </h2>
+              <span
+                style={{
+                  background: "rgba(0, 0, 0, 0.4)",
+                  color: "#E2E8F0",
+                  padding: "2px 8px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  fontFamily: "monospace",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                }}
+              >
+                {empId}
+              </span>
+              <span
+                style={{
+                  background: "#10B981",
+                  color: "#FFFFFF",
+                  padding: "2px 10px",
+                  borderRadius: "9999px",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  boxShadow: "0 2px 6px rgba(16, 185, 129, 0.3)",
+                }}
+              >
+                Active Personnel
+              </span>
             </div>
-            <div className="hero-stat-box">
-              <strong className="stat-val benchmark">{readinessSnapshot.score || 64}%</strong>
-              <span className="stat-lbl">BENCHMARK MET</span>
+
+            <div style={{ fontSize: "12.5px", color: "rgba(255, 255, 255, 0.85)", fontWeight: 500 }}>
+              Role: {jobRole} • {centreName} • {departmentName} • {email}
             </div>
           </div>
         </div>
 
-        {/* 2. Trainee Competency Radar & Skill Gaps Section */}
-        <div className="trainee-skill-gaps-section">
-          <h3 className="skill-gaps-title">
-            TRAINEE COMPETENCY RADAR & SKILL GAPS
-          </h3>
-
-          <div className="skill-gaps-grid">
-            {sampleSkillGaps.map((skill, idx) => (
-              <div key={idx} className="skill-gap-item">
-                <div className="skill-gap-header">
-                  <span className="skill-name">{skill.title}</span>
-                  <div className="skill-score-group">
-                    <span className="skill-score">{skill.score}%</span>
-                    <span className="skill-gap-pill">Gap: {skill.gap}%</span>
-                  </div>
-                </div>
-                <div className="skill-progress-track">
-                  <div
-                    className="skill-progress-fill"
-                    style={{ width: `${skill.score}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+        {/* Right: Operational Readiness Glass Metric Card */}
+        <div
+          style={{
+            background: "rgba(0, 0, 0, 0.28)",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
+            borderRadius: "12px",
+            padding: "14px 22px",
+            textAlign: "right",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            gap: "5px",
+            minWidth: "175px",
+          }}
+        >
+          <span
+            style={{
+              background: "rgba(220, 38, 38, 0.35)",
+              color: "#FECACA",
+              border: "1px solid rgba(239, 68, 68, 0.45)",
+              fontSize: "10px",
+              fontWeight: 800,
+              letterSpacing: "0.6px",
+              padding: "2px 8px",
+              borderRadius: "9999px",
+              textTransform: "uppercase",
+            }}
+          >
+            Operational Readiness
+          </span>
+          <div style={{ fontSize: "32px", fontWeight: 900, color: "#FFFFFF", lineHeight: 1.1 }}>
+            {readinessScore}/100
           </div>
+          <span
+            style={{
+              background: "rgba(16, 185, 129, 0.18)",
+              border: "1px solid rgba(16, 185, 129, 0.4)",
+              color: "#A7F3D0",
+              fontSize: "11px",
+              fontWeight: 700,
+              padding: "2px 8px",
+              borderRadius: "9999px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#34D399" }} />
+            {readinessSnapshot.band || "Needs Development"}
+          </span>
         </div>
       </section>
 
-      {/* 3. Executive Stat Strip */}
+      {/* 2. Executive Metric Cards Strip */}
       <div className="stats-grid">
         <StatCard
           label="Competencies Met"
           value={`${competenciesMet} / ${roleRecommendations.length || 6}`}
           icon={<CheckCircle2 className="text-emerald-600" />}
-          caption={competenciesWithGap === 0 ? "All requirements satisfied" : `${competenciesWithGap} gap(s) remaining`}
+          caption={competenciesWithGap === 0 ? "All requirements satisfied" : `${competenciesWithGap || 6} gap(s) remaining`}
         />
         <StatCard
           label="Levels to Advance"
-          value={totalLevelsStillToGain || 4}
+          value={totalLevelsStillToGain || 9}
           icon={<TrendingUp className="text-blue-600" />}
           caption="Total competency milestones"
         />
@@ -183,46 +231,113 @@ export default function TraineeDashboard() {
         />
         <StatCard
           label="Verified Certificates"
-          value={userCerts.length || 1}
+          value={userCerts.length || 0}
           icon={<Award className="text-amber-600" />}
           caption="Digital credentials issued"
         />
       </div>
 
-      {/* 4. Priority Next Action Banner */}
+      {/* 3. Targeted Next Priority Action Box */}
       {nextStep && nextStep.recommendedCourse && (
         <section
           style={{
-            background: "linear-gradient(135deg, #FDF0D5 0%, #FFFFFF 100%)",
-            border: "1.5px solid #E5DCC5",
+            background: "#FFFFFF",
+            border: "1.5px solid #E2E8F0",
             borderRadius: "12px",
             padding: "20px 24px",
-            boxShadow: "0 2px 8px rgba(0, 48, 73, 0.05)",
+            boxShadow: "0 2px 8px rgba(0, 48, 73, 0.04)",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "12px",
+              flexWrap: "wrap",
+              gap: "8px",
+            }}
+          >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Compass size={18} color="#C1121F" />
-              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#C1121F" }}>
-                Targeted Next Priority Action
+              <Compass size={18} color="#DC2626" />
+              <span
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.6px",
+                  color: "#DC2626",
+                }}
+              >
+                🎯 Targeted Next Priority Action
               </span>
             </div>
-            <Badge tone="blue">Priority Gap: {nextStep.competency}</Badge>
+            <span
+              style={{
+                background: "#EFF6FF",
+                color: "#1D4ED8",
+                border: "1px solid #BFDBFE",
+                borderRadius: "9999px",
+                padding: "3px 12px",
+                fontSize: "11.5px",
+                fontWeight: 700,
+              }}
+            >
+              Priority Gap: {nextStep.competency}
+            </span>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "16px",
+            }}
+          >
             <div>
-              <h3 style={{ margin: "0 0 6px", fontSize: "17px", color: "#003049" }}>
+              <h3 style={{ margin: "0 0 6px", fontSize: "17.5px", color: "#0F172A", fontWeight: 700 }}>
                 {nextStep.recommendedCourse.title}
               </h3>
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", fontSize: "13px", color: "#5C768D" }}>
-                <LevelJumpBadge from={nextStep.recommendedCourse.entryLevel || "L1"} to={nextStep.recommendedCourse.targetLevel || "L2"} size="sm" />
-                <span>{nextStep.recommendedCourse.competency} · {nextStep.recommendedCourse.durationHours} hrs</span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  flexWrap: "wrap",
+                  fontSize: "13px",
+                  color: "#64748B",
+                }}
+              >
+                <LevelJumpBadge
+                  from={nextStep.recommendedCourse.entryLevel || "L1"}
+                  to={nextStep.recommendedCourse.targetLevel || "L2"}
+                  size="sm"
+                />
+                <span>
+                  {nextStep.recommendedCourse.competency} · {nextStep.recommendedCourse.durationHours} hrs
+                </span>
               </div>
             </div>
 
             <div>
-              <Link to="/trainee/learning" className="btn btn-primary" style={{ fontWeight: 600 }}>
+              <Link
+                to="/trainee/learning"
+                style={{
+                  background: "#0056D2",
+                  color: "#FFFFFF",
+                  padding: "9px 20px",
+                  borderRadius: "8px",
+                  fontSize: "13.5px",
+                  fontWeight: 700,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  textDecoration: "none",
+                  boxShadow: "0 2px 6px rgba(0, 86, 210, 0.3)",
+                }}
+              >
                 View in Courses →
               </Link>
             </div>
@@ -230,23 +345,66 @@ export default function TraineeDashboard() {
         </section>
       )}
 
-      {/* 5. Role Competency Benchmark & Level Progression Map */}
-      <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "22px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
+      {/* 4. Role Competency Benchmark Matrix */}
+      <section
+        className="panel"
+        style={{
+          background: "#FFFFFF",
+          border: "1.5px solid #E2E8F0",
+          borderRadius: "12px",
+          padding: "24px",
+          boxShadow: "0 2px 8px rgba(0, 48, 73, 0.04)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "18px",
+            flexWrap: "wrap",
+            gap: "12px",
+          }}
+        >
           <div>
-            <h3 style={{ margin: "0 0 4px", fontSize: "17.5px", color: "#003049" }}>
+            <h3 style={{ margin: "0 0 4px", fontSize: "18px", color: "#0F172A", fontWeight: 700 }}>
               Role Competency Benchmark Matrix ({jobRole})
             </h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "#5C768D" }}>
-              Real-time operational competency baseline verified against National Central Standards.
+            <p style={{ margin: 0, fontSize: "13px", color: "#64748B" }}>
+              Real-time operational competency baseline verified against IMD Central Directorate standards.
             </p>
           </div>
 
-          <div style={{ display: "flex", gap: "10px" }}>
-            <Link to="/trainee/competency" className="btn btn-secondary btn-sm">
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            <Link
+              to="/trainee/competency"
+              style={{
+                background: "#FFFFFF",
+                border: "1.5px solid #CBD5E1",
+                color: "#1E293B",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
+            >
               Take Competency Check
             </Link>
-            <Link to="/trainee/learning" className="btn btn-primary btn-sm">
+            <Link
+              to="/trainee/learning"
+              style={{
+                background: "#0056D2",
+                border: "1.5px solid #0056D2",
+                color: "#FFFFFF",
+                padding: "8px 18px",
+                borderRadius: "8px",
+                fontSize: "13px",
+                fontWeight: 700,
+                textDecoration: "none",
+                boxShadow: "0 2px 6px rgba(0, 86, 210, 0.25)",
+              }}
+            >
               Open Course Hub
             </Link>
           </div>
@@ -265,27 +423,36 @@ export default function TraineeDashboard() {
                 <div
                   key={item.competency}
                   style={{
-                    background: isMet ? "#FAF7EE" : "#FFFFFF",
-                    border: `1.5px solid ${isMet ? "#E5DCC5" : "#E5DCC5"}`,
-                    borderLeft: `5px solid ${isMet ? "#0D9488" : "#C1121F"}`,
+                    background: isMet ? "#F8FAFC" : "#FFFFFF",
+                    border: "1px solid #E2E8F0",
+                    borderLeft: `5px solid ${isMet ? "#10B981" : "#DC2626"}`,
                     borderRadius: "10px",
-                    padding: "14px 18px",
-                    boxShadow: "0 1px 3px rgba(0, 48, 73, 0.04)",
+                    padding: "16px 20px",
+                    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.03)",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      marginBottom: "12px",
+                    }}
+                  >
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <strong style={{ fontSize: "15px", color: "#003049" }}>{item.competency}</strong>
+                      <strong style={{ fontSize: "15px", color: "#0F172A" }}>{item.competency}</strong>
                       <StatusBadge status={item.status} size="sm" />
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
-                        <span style={{ color: "#5C768D" }}>Current:</span>
+                        <span style={{ color: "#64748B" }}>Current:</span>
                         <LevelBadge level={item.currentLevel} size="sm" />
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
-                        <span style={{ color: "#5C768D" }}>Required:</span>
+                        <span style={{ color: "#64748B" }}>Required:</span>
                         <LevelBadge level={item.requiredLevel} size="sm" />
                       </div>
                     </div>
@@ -303,15 +470,42 @@ export default function TraineeDashboard() {
         )}
       </section>
 
-      {/* 6. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
+      {/* 5. Two Column Grid: Active Course Progress & Practical Lab & Assessments */}
       <div className="dashboard-grid two">
         {/* Active Courses In Progress */}
-        <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E5DCC5", paddingBottom: "10px" }}>
-            <h3 style={{ margin: 0, fontSize: "16px", color: "#003049", display: "flex", alignItems: "center", gap: "6px" }}>
-              <BookOpen size={18} color="#C1121F" /> Active Course Progress
+        <section
+          className="panel"
+          style={{
+            background: "#FFFFFF",
+            border: "1.5px solid #E2E8F0",
+            borderRadius: "12px",
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "14px",
+              borderBottom: "1px solid #F1F5F9",
+              paddingBottom: "10px",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "16px",
+                color: "#0F172A",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                fontWeight: 700,
+              }}
+            >
+              <BookOpen size={18} color="#DC2626" /> Active Course Progress
             </h3>
-            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#C1121F", fontWeight: 600 }}>
+            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 700 }}>
               All Courses →
             </Link>
           </div>
@@ -321,15 +515,36 @@ export default function TraineeDashboard() {
               {enrollments.slice(0, 3).map((e) => {
                 const c = db.courses.find((x) => x.id === e.courseId);
                 return (
-                  <div key={e.id} style={{ borderBottom: "1px solid #FAF7EE", paddingBottom: "10px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-                      <strong style={{ fontSize: "14px", color: "#003049" }}>{c?.title || e.courseId}</strong>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#C1121F" }}>{e.progress}%</span>
+                  <div key={e.id} style={{ borderBottom: "1px solid #F8FAFC", paddingBottom: "10px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      <strong style={{ fontSize: "14px", color: "#0F172A" }}>{c?.title || e.courseId}</strong>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#DC2626" }}>{e.progress}%</span>
                     </div>
                     <ProgressBar value={e.progress} />
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px", fontSize: "11.5px", color: "#5C768D" }}>
-                      <span>{c?.competency} · {c?.durationHours}h</span>
-                      <Link to={`/trainee/learning/${e.courseId}`} style={{ color: "#C1121F", fontWeight: 600 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginTop: "6px",
+                        fontSize: "11.5px",
+                        color: "#64748B",
+                      }}
+                    >
+                      <span>
+                        {c?.competency} · {c?.durationHours}h
+                      </span>
+                      <Link
+                        to={`/trainee/learning/${e.courseId}`}
+                        style={{ color: "#0056D2", fontWeight: 700 }}
+                      >
                         Resume Lesson →
                       </Link>
                     </div>
@@ -338,7 +553,7 @@ export default function TraineeDashboard() {
               })}
             </div>
           ) : (
-            <div style={{ textAlign: "center", padding: "24px 10px", color: "#5C768D" }}>
+            <div style={{ textAlign: "center", padding: "24px 10px", color: "#64748B" }}>
               <p style={{ margin: "0 0 8px", fontSize: "13px" }}>No active course enrollments yet.</p>
               <Link to="/trainee/learning" className="btn btn-secondary btn-sm">
                 Browse Recommended Courses
@@ -347,13 +562,40 @@ export default function TraineeDashboard() {
           )}
         </section>
 
-        {/* Recent Performance & Practical Simulations */}
-        <section className="panel" style={{ border: "1.5px solid #E5DCC5", borderRadius: "12px", padding: "20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E5DCC5", paddingBottom: "10px" }}>
-            <h3 style={{ margin: 0, fontSize: "16px", color: "#003049", display: "flex", alignItems: "center", gap: "6px" }}>
-              <Radar size={18} color="#C1121F" /> Practical Lab & Assessments
+        {/* Practical Lab & Assessments */}
+        <section
+          className="panel"
+          style={{
+            background: "#FFFFFF",
+            border: "1.5px solid #E2E8F0",
+            borderRadius: "12px",
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "14px",
+              borderBottom: "1px solid #F1F5F9",
+              paddingBottom: "10px",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+                fontSize: "16px",
+                color: "#0F172A",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                fontWeight: 700,
+              }}
+            >
+              <Radar size={18} color="#DC2626" /> Practical Lab & Assessments
             </h3>
-            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#C1121F", fontWeight: 600 }}>
+            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 700 }}>
               View Exams →
             </Link>
           </div>
@@ -361,8 +603,8 @@ export default function TraineeDashboard() {
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <div
               style={{
-                background: "#FAF7EE",
-                border: "1px solid #E5DCC5",
+                background: "#F8FAFC",
+                border: "1px solid #E2E8F0",
                 borderRadius: "8px",
                 padding: "12px 14px",
                 display: "flex",
@@ -371,10 +613,10 @@ export default function TraineeDashboard() {
               }}
             >
               <div>
-                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#003049" }}>
+                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#0F172A" }}>
                   Operational Lab Simulations
                 </div>
-                <div style={{ fontSize: "12px", color: "#5C768D" }}>
+                <div style={{ fontSize: "12px", color: "#64748B" }}>
                   Severe Convection, Radar Diagnostics & Clutter
                 </div>
               </div>
@@ -385,8 +627,8 @@ export default function TraineeDashboard() {
 
             <div
               style={{
-                background: "#E6F6F4",
-                border: "1px solid #99E2D8",
+                background: "#F0FDF4",
+                border: "1px solid #BBF7D0",
                 borderRadius: "8px",
                 padding: "12px 14px",
                 display: "flex",
@@ -395,11 +637,11 @@ export default function TraineeDashboard() {
               }}
             >
               <div>
-                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#0F766E" }}>
+                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#166534" }}>
                   Verified Capability Passport
                 </div>
-                <div style={{ fontSize: "12px", color: "#0D9488" }}>
-                  {userCerts.length || 1} Certified Level Achievement(s)
+                <div style={{ fontSize: "12px", color: "#15803D" }}>
+                  {userCerts.length || 0} Certified Level Achievement(s)
                 </div>
               </div>
               <Link to="/trainee/passport" className="btn btn-secondary btn-sm">
