@@ -92,12 +92,12 @@ export default function TraineeDashboard() {
       {/* 1. Officer Profile & Station Command Header */}
       <section
         style={{
-          background: "linear-gradient(135deg, #081A2E 0%, #0F2A4A 100%)",
+          background: "linear-gradient(135deg, #003366 0%, #0056D2 100%)",
           borderRadius: "14px",
           padding: "24px 28px",
           color: "#FFFFFF",
           marginBottom: "24px",
-          boxShadow: "0 4px 16px rgba(8, 26, 46, 0.25)",
+          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
@@ -107,14 +107,14 @@ export default function TraineeDashboard() {
                 width: "56px",
                 height: "56px",
                 borderRadius: "50%",
-                background: "#DC2626",
-                color: "#FFFFFF",
+                background: "#FFFFFF",
+                color: "#0056D2",
                 display: "grid",
                 placeItems: "center",
                 fontWeight: 800,
                 fontSize: "20px",
                 flexShrink: 0,
-                boxShadow: "0 2px 8px rgba(220, 38, 38, 0.35)",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
               }}
             >
               {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
