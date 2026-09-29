@@ -2,14 +2,22 @@ import {
   AlertTriangle,
   Award,
   BookOpen,
+  Building2,
   CheckCircle2,
   Clock,
   Compass,
+  FileCheck2,
+  Gauge,
   GraduationCap,
-  Lock,
+  MapPin,
+  PlayCircle,
+  Radar,
+  ShieldAlert,
+  ShieldCheck,
   Sparkles,
   TrendingUp,
   User,
+  Zap,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge, PageHeader, ProgressBar, StatCard } from "../../components/UI";
@@ -22,8 +30,8 @@ import {
 } from "../../components/LevelUI";
 import { useApp } from "../../context/AppContext";
 import { COMPETENCY_LEVELS } from "../../data/constants";
-import { CompetencyLevel, Course } from "../../types";
-import { canEnroll, formatLevel, getLevelNumber } from "../../utils/engine";
+import { CompetencyLevel } from "../../types";
+import { getLevelNumber, operationalReadiness } from "../../utils/engine";
 
 export default function TraineeDashboard() {
   const {
@@ -34,228 +42,244 @@ export default function TraineeDashboard() {
     certificates,
     getRoleRecommendations,
     getNextStep,
-    getTraineeLevel,
-    requestEnrollment,
   } = useApp();
 
   const trainee = db.trainees.find((t) => t.userId === currentUser?.id);
   const jobRole = trainee?.jobRole || trainee?.role || "Radar Operator";
+  const centreName = trainee?.centre || "Bhopal Doppler Radar Station";
 
-  // Enrollments and Certificates (from KEYS.CERTIFICATES and db.certificates)
+  // Enrollments and Certificates
   const enrollments = db.enrollments.filter(
     (e) => e.traineeId === trainee?.id && e.status !== "rejected"
   );
+  const activeEnrollments = enrollments.filter((e) => e.status === "approved");
+  const completedEnrollments = enrollments.filter((e) => e.status === "completed");
+
   const allCerts = [...certificates, ...db.certificates];
-  const certs = allCerts.filter(
+  const userCerts = allCerts.filter(
     (c, index, self) =>
       c.traineeId === trainee?.id &&
       index === self.findIndex((t) => t.id === c.id || (t.courseId === c.courseId && t.levelAchieved === c.levelAchieved))
   );
 
-  // Recommendations and gaps from Phase 3 engine
+  // Recommendations and gaps from engine
   const roleRecommendations = getRoleRecommendations(trainee);
   const nextStep = getNextStep(trainee);
 
-  // 1. Summary Metrics
+  // Summary Metrics
   const competenciesMet = roleRecommendations.filter((r) => r.status === "Met").length;
   const competenciesWithGap = roleRecommendations.filter((r) => r.status === "Gap").length;
   const totalLevelsStillToGain = roleRecommendations.reduce((sum, r) => sum + r.gap, 0);
-  const enrolledCoursesCount = enrollments.length;
 
-  // 4. Sorted Competency Profile: largest gap first, Met last
+  // Operational Readiness calculation
+  const readinessSnapshot = trainee ? operationalReadiness(db, trainee.id) : { score: 45, band: "Developing" as const };
+
+  // Recent assessment attempts
+  const recentAttempts = db.attempts
+    .filter((a) => a.traineeId === trainee?.id)
+    .sort((a, b) => (b.attemptedAt || "").localeCompare(a.attemptedAt || ""))
+    .slice(0, 3);
+
+  // Sorted Competency Profile: largest gap first, Met last
   const sortedRecommendations = [...roleRecommendations].sort((a, b) => {
     if (a.status === "Gap" && b.status === "Met") return -1;
     if (a.status === "Met" && b.status === "Gap") return 1;
     return b.gap - a.gap;
   });
 
-  // 6. Available Courses grouping
-  const recommendedCoursesMap = new Map<string, Course>();
-  roleRecommendations.forEach((item) => {
-    if (item.status === "Gap" && item.recommendedCourse) {
-      recommendedCoursesMap.set(item.recommendedCourse.id, item.recommendedCourse);
-    }
-  });
-  const recommendedCourses = Array.from(recommendedCoursesMap.values());
-
-  const publishedCourses = db.courses.filter((c) => c.status === "published");
-  const otherCourses = publishedCourses.filter((c) => !recommendedCoursesMap.has(c.id));
-
   return (
     <>
-      {/* 1. Welcome Header: name, job role, and "X of Y competencies met" */}
-      <PageHeader
-        title={`Welcome, ${trainee?.name || currentUser?.name || "Trainee"}`}
-        subtitle={
-          roleRecommendations.length > 0
-            ? `Role: ${jobRole} · ${competenciesMet} of ${roleRecommendations.length} competencies met`
-            : `Role: ${jobRole || "Unassigned"}`
-        }
-      />
+      {/* 1. Officer Profile & Station Command Header */}
+      <section
+        style={{
+          background: "linear-gradient(135deg, #003366 0%, #0056D2 100%)",
+          borderRadius: "14px",
+          padding: "24px 28px",
+          color: "#FFFFFF",
+          marginBottom: "24px",
+          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
+            <div
+              style={{
+                width: "56px",
+                height: "56px",
+                borderRadius: "50%",
+                background: "#FFFFFF",
+                color: "#0056D2",
+                display: "grid",
+                placeItems: "center",
+                fontWeight: 800,
+                fontSize: "20px",
+                flexShrink: 0,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              }}
+            >
+              {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
+            </div>
 
-      {/* 2. Summary Strip: Competencies Met, With Gap, Levels Still To Gain, My Courses */}
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
+                <h2 style={{ margin: 0, fontSize: "22px", color: "#FFFFFF", fontWeight: 800 }}>
+                  {trainee?.name || currentUser?.name || "Operational Trainee"}
+                </h2>
+                <span
+                  style={{
+                    fontSize: "11.5px",
+                    background: "rgba(255, 255, 255, 0.2)",
+                    padding: "2px 8px",
+                    borderRadius: "9999px",
+                    fontWeight: 600,
+                    letterSpacing: "0.4px",
+                  }}
+                >
+                  {currentUser?.employeeId || trainee?.id || "IMD-STAFF"}
+                </span>
+                <span
+                  style={{
+                    fontSize: "11.5px",
+                    background: "#10B981",
+                    color: "#FFFFFF",
+                    padding: "2px 8px",
+                    borderRadius: "9999px",
+                    fontWeight: 700,
+                  }}
+                >
+                  Active Personnel
+                </span>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "13px", opacity: 0.9 }}>
+                <span><strong>Role:</strong> {jobRole}</span>
+                <span>•</span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                  <MapPin size={13} /> {centreName}
+                </span>
+                <span>•</span>
+                <span>{trainee?.department || "Radar Meteorology"}</span>
+                <span>•</span>
+                <span>{currentUser?.email}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Operational Readiness Meter */}
+          <div
+            style={{
+              background: "rgba(255, 255, 255, 0.12)",
+              backdropFilter: "blur(4px)",
+              border: "1px solid rgba(255, 255, 255, 0.25)",
+              borderRadius: "10px",
+              padding: "12px 18px",
+              textAlign: "right",
+              minWidth: "160px",
+            }}
+          >
+            <div style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.5px", opacity: 0.85, fontWeight: 600, marginBottom: "2px" }}>
+              Operational Readiness
+            </div>
+            <div style={{ fontSize: "24px", fontWeight: 900, color: "#FFFFFF", lineHeight: 1.1 }}>
+              {readinessSnapshot.score}<span style={{ fontSize: "14px", opacity: 0.8 }}>/100</span>
+            </div>
+            <div style={{ fontSize: "11.5px", color: "#86EFAC", fontWeight: 700, marginTop: "2px" }}>
+              ● {readinessSnapshot.band}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. Executive Stat Strip */}
       <div className="stats-grid" style={{ marginBottom: "24px" }}>
         <StatCard
           label="Competencies Met"
-          value={competenciesMet}
+          value={`${competenciesMet} / ${roleRecommendations.length}`}
           icon={<CheckCircle2 className="text-emerald-600" />}
-          caption={roleRecommendations.length > 0 ? `Out of ${roleRecommendations.length} required` : "No role assigned"}
+          caption={competenciesWithGap === 0 ? "All requirements satisfied" : `${competenciesWithGap} gap(s) remaining`}
         />
         <StatCard
-          label="With Gap"
-          value={competenciesWithGap}
-          icon={<AlertTriangle className="text-amber-600" />}
-          caption="Requires progressive training"
-        />
-        <StatCard
-          label="Levels Still To Gain"
+          label="Levels to Advance"
           value={totalLevelsStillToGain}
           icon={<TrendingUp className="text-blue-600" />}
-          caption="Steps to operational readiness"
+          caption="Total competency milestones"
         />
         <StatCard
-          label="My Courses"
-          value={enrolledCoursesCount}
-          icon={<GraduationCap className="text-blue-600" />}
-          caption="Enrolled or completed"
+          label="Enrolled Courses"
+          value={activeEnrollments.length}
+          icon={<BookOpen className="text-blue-600" />}
+          caption={`${completedEnrollments.length} course(s) completed`}
+        />
+        <StatCard
+          label="Verified Certificates"
+          value={userCerts.length}
+          icon={<Award className="text-amber-600" />}
+          caption="Digital credentials issued"
         />
       </div>
 
-      {/* 3. "Recommended Next Step" hero card */}
-      {roleRecommendations.length > 0 && competenciesWithGap === 0 ? (
+      {/* 3. Priority Next Action Banner (If applicable) */}
+      {nextStep && nextStep.recommendedCourse && (
         <section
-          className="card congratulations-hero"
           style={{
-            borderLeft: "6px solid #10B981",
-            background: "#F0FDF4",
-            padding: "24px",
+            background: "linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%)",
+            border: "1.5px solid #BFDBFE",
             borderRadius: "12px",
-            marginBottom: "28px",
-            boxShadow: "0 2px 8px rgba(16, 185, 129, 0.08)",
+            padding: "20px 24px",
+            marginBottom: "24px",
+            boxShadow: "0 2px 8px rgba(0, 86, 210, 0.06)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
-            <div
-              style={{
-                background: "#DCFCE7",
-                color: "#15803D",
-                width: "52px",
-                height: "52px",
-                borderRadius: "50%",
-                display: "grid",
-                placeItems: "center",
-                flexShrink: 0,
-              }}
-            >
-              <CheckCircle2 size={30} />
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", flexWrap: "wrap", gap: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Compass size={18} color="#0056D2" />
+              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#0056D2" }}>
+                Targeted Next Priority Action
+              </span>
             </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#15803D", background: "#DCFCE7", padding: "3px 8px", borderRadius: "9999px", marginBottom: "6px" }}>
-                Operational Readiness Achieved
-              </div>
-              <h3 style={{ margin: "0 0 4px", fontSize: "19px", color: "#14532D", fontWeight: 700 }}>
-                Congratulations! All Role Competencies Met
+            <Badge tone="blue">Priority Gap: {nextStep.competency}</Badge>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+            <div>
+              <h3 style={{ margin: "0 0 6px", fontSize: "17px", color: "#0F172A" }}>
+                {nextStep.recommendedCourse.title}
               </h3>
-              <p style={{ margin: 0, fontSize: "14px", color: "#166534", lineHeight: 1.5 }}>
-                You have reached or exceeded all required benchmark levels for <strong>{jobRole}</strong>. You are fully qualified for operational radar deployment and severe weather surveillance.
-              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", fontSize: "13px", color: "var(--text-muted)" }}>
+                <LevelJumpBadge from={nextStep.recommendedCourse.entryLevel || "L1"} to={nextStep.recommendedCourse.targetLevel || "L2"} size="sm" />
+                <span>{nextStep.recommendedCourse.competency} · {nextStep.recommendedCourse.durationHours} hrs</span>
+              </div>
             </div>
-            <Link to="/trainee/certificates" className="btn btn-secondary" style={{ whiteSpace: "nowrap" }}>
-              View Qualifications & Passport
-            </Link>
+
+            <div>
+              <Link to="/trainee/learning" className="btn btn-primary" style={{ fontWeight: 600 }}>
+                View in Courses →
+              </Link>
+            </div>
           </div>
         </section>
-      ) : nextStep && nextStep.recommendedCourse ? (
-        (() => {
-          const course = nextStep.recommendedCourse;
-          const isEnrolled = enrollments.some((e) => e.courseId === course.id);
-          const targetRank = getLevelNumber(course.targetLevel);
-          const remainingAfter = Math.max(0, nextStep.requiredRank - targetRank);
+      )}
 
-          return (
-            <section
-              className="card next-step-hero"
-              style={{
-                borderLeft: "6px solid #0056D2",
-                background: "#FFFFFF",
-                padding: "24px",
-                borderRadius: "12px",
-                marginBottom: "28px",
-                boxShadow: "0 4px 14px rgba(0, 86, 210, 0.08)",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px", marginBottom: "14px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Compass size={20} color="#0056D2" />
-                  <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#0056D2" }}>
-                    Recommended Next Step
-                  </span>
-                </div>
-                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                  <LevelJumpBadge from={course.entryLevel || "L1"} to={course.targetLevel || "L2"} />
-                  <Badge tone="blue">Priority Gap: {nextStep.competency}</Badge>
-                </div>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "20px" }}>
-                <div style={{ flex: 1, minWidth: "280px" }}>
-                  <span style={{ fontSize: "12px", color: "var(--text-muted)", display: "block", marginBottom: "4px" }}>
-                    Target Competency: <strong>{nextStep.competency}</strong>
-                  </span>
-                  <h3 style={{ fontSize: "1.25rem", margin: "0 0 8px", color: "var(--text-heading)", fontWeight: 700 }}>
-                    {course.title}
-                  </h3>
-                  <p style={{ fontSize: "13.5px", color: "var(--text-body)", margin: "0 0 12px", lineHeight: 1.5, maxWidth: "680px" }}>
-                    {course.description}
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", alignItems: "center", fontSize: "12.5px", color: "var(--text-muted)" }}>
-                    <span style={{ color: remainingAfter === 0 ? "#15803D" : "#C2410C", fontWeight: 600 }}>
-                      {remainingAfter === 0 ? (
-                        "✓ Reaches required role level upon completion!"
-                      ) : (
-                        `• ${remainingAfter} level${remainingAfter > 1 ? "s" : ""} to go after this to reach ${nextStep.requiredLevel}`
-                      )}
-                    </span>
-                    <span>· Duration: {course.durationHours} hrs</span>
-                    <span>· Trainer: {db.trainers.find((t) => t.id === course.trainerId)?.name || "IMD Faculty"}</span>
-                  </div>
-                </div>
-
-                <div>
-                  {isEnrolled ? (
-                    <Link
-                      to={`/trainee/learning/${course.id}`}
-                      className="btn btn-secondary btn-lg"
-                      style={{ padding: "12px 24px", fontSize: "15px", fontWeight: 700 }}
-                    >
-                      Continue Learning →
-                    </Link>
-                  ) : (
-                    <button
-                      onClick={() => requestEnrollment(course.id)}
-                      className="btn btn-primary btn-lg"
-                      style={{ padding: "12px 24px", fontSize: "15px", fontWeight: 700 }}
-                    >
-                      Enroll in Recommended Course
-                    </button>
-                  )}
-                </div>
-              </div>
-            </section>
-          );
-        })()
-      ) : null}
-
-      {/* 4. Competency Profile: competency cards with level path bar, sorted largest gap first, Met last */}
-      <section className="panel" style={{ marginBottom: "28px" }}>
-        <div className="panel-head">
+      {/* 4. Role Competency Benchmark & Level Progression Map */}
+      <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "22px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
           <div>
-            <h3>Competency Profile ({jobRole})</h3>
-            <p>Your current skill levels sorted by largest operational gap first</p>
+            <h3 style={{ margin: "0 0 4px", fontSize: "17.5px" }}>
+              Role Competency Benchmark Matrix ({jobRole})
+            </h3>
+            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
+              Real-time operational competency baseline verified against IMD Central Directorate standards.
+            </p>
           </div>
-          <Link to="/trainee/competency" className="text-link">
-            Self Assessment Check
-          </Link>
+
+          <div style={{ display: "flex", gap: "10px" }}>
+            <Link to="/trainee/competency" className="btn btn-secondary btn-sm">
+              Take Competency Check
+            </Link>
+            <Link to="/trainee/learning" className="btn btn-primary btn-sm">
+              Open Course Hub
+            </Link>
+          </div>
         </div>
 
         {roleRecommendations.length === 0 ? (
@@ -264,104 +288,44 @@ export default function TraineeDashboard() {
             message={`No role requirements set for "${jobRole}". Please contact your station training supervisor.`}
           />
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "12px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {sortedRecommendations.map((item) => {
               const isMet = item.status === "Met";
-              const course = item.recommendedCourse;
-              const hasNoCourse = item.status === "Gap" && !course;
-
               return (
                 <div
                   key={item.competency}
                   style={{
-                    background: "#FFFFFF",
+                    background: isMet ? "#F8FAFC" : "#FFFFFF",
                     border: `1.5px solid ${isMet ? "#E2E8F0" : "#CBD5E1"}`,
                     borderLeft: `5px solid ${isMet ? "#10B981" : "#EA580C"}`,
                     borderRadius: "10px",
-                    padding: "16px 20px",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+                    padding: "14px 18px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "12px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-                      <h4 style={{ margin: 0, fontSize: "16px", color: "var(--text-heading)", fontWeight: 700 }}>
-                        {item.competency}
-                      </h4>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px", marginBottom: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <strong style={{ fontSize: "15px", color: "var(--text-heading)" }}>{item.competency}</strong>
                       <StatusBadge status={item.status} size="sm" />
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>Current:</span>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
+                        <span style={{ color: "var(--text-muted)" }}>Current:</span>
                         <LevelBadge level={item.currentLevel} size="sm" />
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>Required:</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px" }}>
+                        <span style={{ color: "var(--text-muted)" }}>Required:</span>
                         <LevelBadge level={item.requiredLevel} size="sm" />
                       </div>
                     </div>
                   </div>
 
-                  <div style={{ marginBottom: "14px" }}>
-                    <LevelPathBar
-                      currentLevel={item.currentLevel}
-                      requiredLevel={item.requiredLevel}
-                      compact={false}
-                    />
-                  </div>
-
-                  {/* Recommended course link or No course empty state */}
-                  {item.status === "Gap" && course && (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        flexWrap: "wrap",
-                        gap: "10px",
-                        background: "#F8FAFC",
-                        border: "1px solid #E2E8F0",
-                        borderRadius: "8px",
-                        padding: "10px 14px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-                        <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600 }}>Recommended Course:</span>
-                        <strong style={{ fontSize: "13px", color: "var(--brand-primary)" }}>{course.title}</strong>
-                        <LevelJumpBadge from={course.entryLevel || "L1"} to={course.targetLevel || "L2"} size="sm" />
-                      </div>
-                      <div>
-                        {enrollments.some((e) => e.courseId === course.id) ? (
-                          <Link to={`/trainee/learning/${course.id}`} className="btn btn-secondary btn-sm">
-                            Continue Learning
-                          </Link>
-                        ) : (
-                          <button
-                            onClick={() => requestEnrollment(course.id)}
-                            className="btn btn-primary btn-sm"
-                          >
-                            Enroll in Course
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {hasNoCourse && (
-                    <div
-                      style={{
-                        background: "#F8FAFC",
-                        border: "1px dashed #CBD5E1",
-                        borderRadius: "8px",
-                        padding: "10px 14px",
-                        marginTop: "10px",
-                        fontSize: "12px",
-                        color: "var(--text-muted)",
-                      }}
-                    >
-                      No course available yet for this level gap. Central Training Directorate syllabus pending.
-                    </div>
-                  )}
+                  <LevelPathBar
+                    currentLevel={item.currentLevel}
+                    requiredLevel={item.requiredLevel}
+                    compact={true}
+                  />
                 </div>
               );
             })}
@@ -369,347 +333,112 @@ export default function TraineeDashboard() {
         )}
       </section>
 
-      {/* 5. My Courses: existing cards plus jump badge, competency label and progress */}
-      <section className="panel" style={{ marginBottom: "28px" }}>
-        <div className="panel-head">
-          <div>
-            <h3>My Courses</h3>
-            <p>Active course enrollments with level advancement milestones</p>
+      {/* 5. Two Column Grid: Active Learning Progress & Recent Assessment Records */}
+      <div className="dashboard-grid two">
+        {/* Active Courses In Progress */}
+        <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "10px" }}>
+            <h3 style={{ margin: 0, fontSize: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+              <BookOpen size={18} color="#0056D2" /> Active Course Progress
+            </h3>
+            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 600 }}>
+              All Courses →
+            </Link>
           </div>
-          <Link to="/trainee/learning" className="text-link">
-            Open Learning Hub
-          </Link>
-        </div>
 
-        {enrollments.length === 0 ? (
-          <div className="empty-inline" style={{ padding: "20px 0" }}>
-            <p>You have not enrolled in any courses yet.</p>
-            <p style={{ fontSize: "12.5px", color: "var(--text-muted)" }}>
-              Explore the recommended courses below to begin closing your operational gaps.
-            </p>
-          </div>
-        ) : (
-          <div className="progress-list">
-            {enrollments.map((e) => {
-              const course = db.courses.find((c) => c.id === e.courseId);
-              const trainer = db.trainers.find((t) => t.id === course?.trainerId);
-              const compName = course?.competency || course?.subject;
-
-              return (
-                <div
-                  key={e.id}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    padding: "16px 0",
-                    borderBottom: "1px solid var(--border-clean)",
-                  }}
-                >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
-                    <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "4px" }}>
-                        <strong style={{ fontSize: "15px", color: "var(--text-heading)" }}>{course?.title || e.courseId}</strong>
-                        {course?.entryLevel && course?.targetLevel ? (
-                          <LevelJumpBadge from={course.entryLevel} to={course.targetLevel} size="sm" />
-                        ) : (
-                          <Badge tone="gray">{course?.level || "General"}</Badge>
-                        )}
-                        <Badge tone={e.status === "completed" ? "green" : "blue"}>{e.status}</Badge>
-                      </div>
-                      <small style={{ color: "var(--text-muted)", fontSize: "12px" }}>
-                        <strong>Competency:</strong> {compName} · Trainer: {trainer?.name || "IMD Faculty"} · Code: {course?.code}
-                      </small>
+          {enrollments.length > 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {enrollments.slice(0, 3).map((e) => {
+                const c = db.courses.find((x) => x.id === e.courseId);
+                return (
+                  <div key={e.id} style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: "10px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                      <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>{c?.title || e.courseId}</strong>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#0056D2" }}>{e.progress}%</span>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                      <span style={{ fontSize: "14px", fontWeight: 700, color: "var(--text-heading)" }}>{e.progress}%</span>
-                      <Link to={`/trainee/learning/${e.courseId}`} className="btn btn-secondary btn-sm">
-                        Continue Learning
+                    <ProgressBar value={e.progress} />
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px", fontSize: "11.5px", color: "var(--text-muted)" }}>
+                      <span>{c?.competency} · {c?.durationHours}h</span>
+                      <Link to={`/trainee/learning/${e.courseId}`} style={{ color: "#0056D2", fontWeight: 600 }}>
+                        Resume Lesson →
                       </Link>
                     </div>
                   </div>
-                  <ProgressBar value={e.progress} />
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", padding: "24px 10px", color: "var(--text-muted)" }}>
+              <p style={{ margin: "0 0 8px", fontSize: "13px" }}>No active course enrollments yet.</p>
+              <Link to="/trainee/learning" className="btn btn-secondary btn-sm">
+                Browse Recommended Courses
+              </Link>
+            </div>
+          )}
+        </section>
+
+        {/* Recent Performance & Practical Simulations */}
+        <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "10px" }}>
+            <h3 style={{ margin: 0, fontSize: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
+              <Radar size={18} color="#0056D2" /> Practical Lab & Assessments
+            </h3>
+            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 600 }}>
+              View Exams →
+            </Link>
           </div>
-        )}
-      </section>
 
-      {/* 6. Courses catalog: "Recommended for your role" then "Other courses" */}
-      <section className="panel" style={{ marginBottom: "28px" }}>
-        <div className="panel-head">
-          <div>
-            <h3>Course Catalog & Level Prerequisites</h3>
-            <p>Targeted courses organized by role priority and qualification eligibility</p>
-          </div>
-        </div>
-
-        {/* 6A: Recommended for your role */}
-        <div className="section-divider-title" style={{ marginTop: 0 }}>
-          <div>
-            <h3>Recommended for your role</h3>
-            <p>Immediate next-level courses to address identified competency gaps</p>
-          </div>
-          <Badge tone="blue">{recommendedCourses.length} Recommended</Badge>
-        </div>
-
-        {recommendedCourses.length === 0 ? (
-          <div className="empty-inline" style={{ padding: "18px 0" }}>
-            <p>
-              {competenciesWithGap === 0
-                ? "No immediate course recommendations. All required competency levels are currently met!"
-                : "No courses are currently available for your immediate level gap."}
-            </p>
-          </div>
-        ) : (
-          <div className="course-grid-catalog">
-            {recommendedCourses.map((course) => {
-              const isEnrolled = enrollments.some((e) => e.courseId === course.id);
-              const trainer = db.trainers.find((t) => t.id === course.trainerId);
-              const compName = course.competency || course.subject;
-
-              return (
-                <div key={course.id} className="course-card-modern">
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
-                      <LevelJumpBadge from={course.entryLevel || "L1"} to={course.targetLevel || "L2"} size="sm" />
-                      <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 600 }}>
-                        {course.code}
-                      </span>
-                    </div>
-
-                    <h4 style={{ fontSize: "15px", margin: "0 0 6px", color: "var(--text-heading)", fontWeight: 700 }}>
-                      {course.title}
-                    </h4>
-
-                    <p style={{ fontSize: "12.5px", color: "var(--text-body)", margin: "0 0 10px", lineHeight: 1.4 }}>
-                      {course.description}
-                    </p>
-
-                    <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "14px" }}>
-                      <span><strong>Competency:</strong> {compName}</span>
-                      <br />
-                      <span>{course.durationHours} hrs · Trainer: {trainer?.name || "IMD Faculty"}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    {isEnrolled ? (
-                      <Link to={`/trainee/learning/${course.id}`} className="btn btn-secondary btn-block btn-sm">
-                        Continue Learning
-                      </Link>
-                    ) : (
-                      <button
-                        onClick={() => requestEnrollment(course.id)}
-                        className="btn btn-primary btn-block btn-sm"
-                      >
-                        Enroll in Course
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        {/* 6B: Other courses */}
-        <div className="section-divider-title" style={{ marginTop: "32px" }}>
-          <div>
-            <h3>Other courses</h3>
-            <p>Courses requiring higher prerequisite qualifications or alternative subjects</p>
-          </div>
-          <Badge tone="gray">{otherCourses.length} Courses</Badge>
-        </div>
-
-        {otherCourses.length === 0 ? (
-          <div className="empty-inline" style={{ padding: "18px 0" }}>
-            <p>No other courses available.</p>
-          </div>
-        ) : (
-          <div className="course-grid-catalog">
-            {otherCourses.map((course) => {
-              const isEnrolled = enrollments.some((e) => e.courseId === course.id);
-              const trainer = db.trainers.find((t) => t.id === course.trainerId);
-              const courseComp = course.competency || course.subject;
-              const currentLvl = courseComp ? getTraineeLevel(trainee?.id || "", courseComp) : "L1";
-
-              // Check canEnroll
-              const enrollCheck = canEnroll(trainee, course, currentLvl, traineeLevels);
-              const isLocked = !enrollCheck.canEnroll;
-
-              return (
-                <div
-                  key={course.id}
-                  className={`course-card-modern ${isLocked ? "locked" : ""}`}
-                  style={isLocked ? { background: "#F8FAFC", borderColor: "#E2E8F0", opacity: 0.85 } : {}}
-                >
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
-                      {course.entryLevel && course.targetLevel ? (
-                        <LevelJumpBadge from={course.entryLevel} to={course.targetLevel} size="sm" />
-                      ) : (
-                        <Badge tone={isLocked ? "gray" : "blue"}>{course.level}</Badge>
-                      )}
-
-                      {isLocked ? (
-                        <span className="locked-badge-pill" style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "11px", color: "#B45309", background: "#FEF3C7", padding: "2px 8px", borderRadius: "9999px", fontWeight: 600 }}>
-                          <Lock size={12} /> Prerequisite Locked
-                        </span>
-                      ) : (
-                        <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 600 }}>
-                          {course.code}
-                        </span>
-                      )}
-                    </div>
-
-                    <h4 style={{ fontSize: "15px", margin: "0 0 6px", color: isLocked ? "#64748B" : "var(--text-heading)", fontWeight: 700 }}>
-                      {course.title}
-                    </h4>
-
-                    <p style={{ fontSize: "12.5px", color: "var(--text-body)", margin: "0 0 10px", lineHeight: 1.4 }}>
-                      {course.description}
-                    </p>
-
-                    <div style={{ fontSize: "12px", color: "var(--text-muted)", marginBottom: "14px" }}>
-                      <span><strong>Competency:</strong> {courseComp}</span>
-                      <br />
-                      <span>{course.durationHours} hrs · Trainer: {trainer?.name || "IMD Faculty"}</span>
-                    </div>
-
-                    {isLocked && (
-                      <p style={{ fontSize: "11.5px", color: "#92400E", background: "#FEF3C7", padding: "6px 8px", borderRadius: "6px", margin: "0 0 12px", lineHeight: 1.3 }}>
-                        <Lock size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />
-                        {enrollCheck.reason || `Requires ${course.entryLevel} first.`}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    {isLocked ? (
-                      <button
-                        disabled
-                        className="btn btn-disabled btn-block btn-sm"
-                        title={enrollCheck.reason}
-                        style={{ cursor: "not-allowed" }}
-                      >
-                        <Lock size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />
-                        Locked ({course.entryLevel})
-                      </button>
-                    ) : isEnrolled ? (
-                      <Link to={`/trainee/learning/${course.id}`} className="btn btn-secondary btn-block btn-sm">
-                        Continue Learning
-                      </Link>
-                    ) : (
-                      <button
-                        onClick={() => requestEnrollment(course.id)}
-                        className="btn btn-primary btn-block btn-sm"
-                      >
-                        Enroll in Course
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {/* 7. Certificates and Verified Levels Section (Empty state for now, filled in later step) */}
-      <section className="panel" style={{ marginBottom: "28px" }}>
-        <div className="panel-head">
-          <div>
-            <h3>Certificates & Verified Levels</h3>
-            <p>Official records of achieved competency levels and operational qualifications</p>
-          </div>
-          <Link to="/trainee/certificates" className="text-link">
-            View Certificate Records
-          </Link>
-        </div>
-
-        {certs.length === 0 ? (
-          <div
-            style={{
-              background: "#F8FAFC",
-              border: "1.5px dashed #CBD5E1",
-              borderRadius: "10px",
-              padding: "32px 24px",
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <div
               style={{
-                width: "48px",
-                height: "48px",
-                borderRadius: "50%",
-                background: "#EFF6FF",
-                color: "#0056D2",
-                display: "grid",
-                placeItems: "center",
-                marginBottom: "12px",
+                background: "#F8FAFC",
+                border: "1px solid #E2E8F0",
+                borderRadius: "8px",
+                padding: "12px 14px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Award size={26} />
-            </div>
-            <h4 style={{ margin: "0 0 6px", fontSize: "16px", color: "var(--text-heading)", fontWeight: 700 }}>
-              No Verified Certificates Earned Yet
-            </h4>
-            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)", maxWidth: "480px", lineHeight: 1.5 }}>
-              Complete course modules and pass post-training assessments with 100% lesson completion to advance your competency levels and receive official IMD credentials.
-            </p>
-          </div>
-        ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: "16px", marginTop: "12px" }}>
-            {certs.map((c) => {
-              const course = db.courses.find((x) => x.id === c.courseId);
-              return (
-                <div
-                  key={c.id}
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #CBD5E1",
-                    borderRadius: "8px",
-                    padding: "16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
-                  }}
-                >
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
-                      <span style={{ fontSize: "11px", fontWeight: 700, color: "#0056D2", background: "#EFF6FF", padding: "2px 8px", borderRadius: "4px" }}>
-                        {c.certificateCode}
-                      </span>
-                      {c.levelAchieved && (
-                        <LevelBadge level={c.levelAchieved} size="sm" />
-                      )}
-                    </div>
-                    <h4 style={{ margin: "4px 0", fontSize: "15px", color: "var(--text-heading)" }}>
-                      {c.competency}
-                    </h4>
-                    <p style={{ margin: "0 0 8px", fontSize: "12.5px", color: "var(--text-muted)" }}>
-                      Course: {course?.title || c.courseId}
-                    </p>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #E2E8F0", paddingTop: "10px", marginTop: "8px", fontSize: "11.5px", color: "var(--text-muted)" }}>
-                    <span>Issued: {c.issuedAt}</span>
-                    <Link to="/trainee/certificates" className="btn btn-secondary btn-sm" style={{ padding: "4px 10px", fontSize: "11.5px" }}>
-                      View Certificate
-                    </Link>
-                  </div>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "var(--text-heading)" }}>
+                  Operational Lab Simulations
                 </div>
-              );
-            })}
+                <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+                  Severe Convection, Cyclone Landfall, AP Clutter
+                </div>
+              </div>
+              <Link to="/trainee/scenarios" className="btn btn-secondary btn-sm">
+                Launch Lab
+              </Link>
+            </div>
+
+            <div
+              style={{
+                background: "#F0FDF4",
+                border: "1px solid #BBF7D0",
+                borderRadius: "8px",
+                padding: "12px 14px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <div style={{ fontWeight: 700, fontSize: "13.5px", color: "#166534" }}>
+                  Verified Capability Passport
+                </div>
+                <div style={{ fontSize: "12px", color: "#15803D" }}>
+                  {userCerts.length} Certified Level Achievement(s)
+                </div>
+              </div>
+              <Link to="/trainee/passport" className="btn btn-secondary btn-sm">
+                View Passport
+              </Link>
+            </div>
           </div>
-        )}
-      </section>
+        </section>
+      </div>
     </>
   );
 }
