@@ -11,17 +11,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Primary Brand: Coursera Signature Royal Blue */
-  --brand-primary: #0056D2;
-  --brand-hover: #00419E;
-  --brand-accent: #2563EB;
-  --brand-soft: #EFF6FF;
-  --brand-border: #BFDBFE;
+  /* Primary Brand: IMD Crimson Red & Midnight Black */
+  --brand-primary: #DC2626;
+  --brand-hover: #B91C1C;
+  --brand-accent: #991B1B;
+  --brand-soft: #FEF2F2;
+  --brand-border: #FECACA;
 
   /* Surfaces & Backgrounds */
   --surface-base: #F8FAFC;
   --surface-card: #FFFFFF;
-  --surface-tint: #F0F5FF;
+  --surface-tint: #FEF2F2;
   --surface-alt: #F1F5F9;
 
   /* Clean Slate Dividers & Borders */
@@ -30,7 +30,7 @@
   --border-subtle: #F1F5F9;
 
   /* Typography Colors */
-  --text-heading: #0F172A;
+  --text-heading: #081A2E;
   --text-body: #334155;
   --text-muted: #64748B;
 
@@ -135,7 +135,7 @@ select, input, textarea {
 
 select:focus, input:focus, textarea:focus {
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(0, 86, 210, 0.15);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
 }
 
 label {
@@ -152,7 +152,7 @@ textarea {
 }
 
 /* =========================================================
-   BUTTON DESIGN LANGUAGE (Coursera Standard)
+   BUTTON DESIGN LANGUAGE (Crimson & Midnight Black)
    ========================================================= */
 .btn {
   border: 1px solid transparent;
@@ -172,13 +172,13 @@ textarea {
   background: var(--brand-primary);
   color: #FFFFFF;
   border-color: var(--brand-primary);
-  box-shadow: 0 1px 2px rgba(0, 86, 210, 0.15);
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
 }
 
 .btn-primary:hover {
   background: var(--brand-hover);
   border-color: var(--brand-hover);
-  box-shadow: 0 4px 10px rgba(0, 86, 210, 0.25);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
   transform: translateY(-1px);
 }
 

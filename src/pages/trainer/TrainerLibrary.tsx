@@ -76,7 +76,7 @@ function getMediaTypeColor(type: Resource["type"]) {
     case "PDF":
     case "Document":
     case "Presentation":
-      return { bg: "#EFF6FF", text: "#2563EB", border: "#BFDBFE", grad: "linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%)" };
+      return { bg: "#FEF2F2", text: "#DC2626", border: "#FECACA", grad: "linear-gradient(135deg, #081A2E 0%, #0F172A 100%)" };
     case "Audio":
       return { bg: "#FAF5FF", text: "#9333EA", border: "#E9D5FF", grad: "linear-gradient(135deg, #581C87 0%, #1E1B4B 100%)" };
     case "Dataset":
@@ -301,9 +301,9 @@ export default function TrainerLibrary() {
               width: "44px",
               height: "44px",
               borderRadius: "8px",
-              background: "#EFF6FF",
-              color: "#2563EB",
-              border: "1px solid #BFDBFE",
+              background: "#FEF2F2",
+              color: "#DC2626",
+              border: "1px solid #FECACA",
               display: "grid",
               placeItems: "center",
               flexShrink: 0,
@@ -315,7 +315,7 @@ export default function TrainerLibrary() {
             <span style={{ fontSize: "11.5px", color: "#64748B", fontWeight: 600, textTransform: "uppercase" }}>
               Technical Docs & PDFs
             </span>
-            <h3 style={{ margin: 0, fontSize: "20px", color: "#2563EB", fontWeight: 700 }}>
+            <h3 style={{ margin: 0, fontSize: "20px", color: "#DC2626", fontWeight: 700 }}>
               {docCount}
             </h3>
           </div>

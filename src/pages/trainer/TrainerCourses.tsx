@@ -425,8 +425,8 @@ export default function TrainerCourses() {
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
-                    color: "#0056D2",
-                    background: "#EFF6FF",
+                    color: "#DC2626",
+                    background: "#FEF2F2",
                     padding: "3px 8px",
                     borderRadius: "4px",
                   }}
@@ -457,8 +457,8 @@ export default function TrainerCourses() {
             {/* 1. Live Level Jump Badge Preview Banner (Prompt 1 #4) */}
             <div
               style={{
-                background: "linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%)",
-                border: "1.5px solid #BFDBFE",
+                background: "linear-gradient(135deg, #FEF2F2 0%, #F8FAFC 100%)",
+                border: "1.5px solid #FECACA",
                 borderRadius: "10px",
                 padding: "16px 20px",
                 display: "flex",
@@ -634,7 +634,7 @@ export default function TrainerCourses() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-                <Target size={18} color="#0056D2" />
+                <Target size={18} color="#DC2626" />
                 <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>
                   Learning Outcomes (3 Target Bullets)
                 </strong>
@@ -645,7 +645,7 @@ export default function TrainerCourses() {
 
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#0056D2", width: "20px" }}>1.</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", width: "20px" }}>1.</span>
                   <input
                     value={outcomes[0]}
                     onChange={(e) => setOutcomes([e.target.value, outcomes[1], outcomes[2]])}
@@ -654,7 +654,7 @@ export default function TrainerCourses() {
                   />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#0056D2", width: "20px" }}>2.</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", width: "20px" }}>2.</span>
                   <input
                     value={outcomes[1]}
                     onChange={(e) => setOutcomes([outcomes[0], e.target.value, outcomes[2]])}
@@ -663,7 +663,7 @@ export default function TrainerCourses() {
                   />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#0056D2", width: "20px" }}>3.</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", width: "20px" }}>3.</span>
                   <input
                     value={outcomes[2]}
                     onChange={(e) => setOutcomes([outcomes[0], outcomes[1], e.target.value])}
@@ -685,7 +685,7 @@ export default function TrainerCourses() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Layers size={18} color="#0056D2" />
+                  <Layers size={18} color="#DC2626" />
                   <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>
                     Course Lessons ({lessons.length} Modules)
                   </strong>
@@ -777,7 +777,7 @@ export default function TrainerCourses() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <HelpCircle size={18} color="#0056D2" />
+                  <HelpCircle size={18} color="#DC2626" />
                   <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>
                     Post-Training Assessment Questions ({questions.length} MCQs)
                   </strong>
@@ -804,7 +804,7 @@ export default function TrainerCourses() {
                     }}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                      <span style={{ fontSize: "12px", fontWeight: 700, color: "#0056D2" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626" }}>
                         Question {qIdx + 1}
                       </span>
                       <button

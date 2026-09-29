@@ -24,7 +24,7 @@ export function CompetencyChart(){
         <XAxis dataKey="name" stroke="#64748B" fontSize={12} tickLine={false} axisLine={{ stroke: "#E2E8F0" }} />
         <YAxis domain={[0, 100]} stroke="#64748B" fontSize={12} tickLine={false} axisLine={{ stroke: "#E2E8F0" }} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Line type="monotone" dataKey="score" stroke="#0056D2" strokeWidth={3} dot={{ fill: "#0056D2", r: 4 }} activeDot={{ r: 6, fill: "#00419E" }} />
+        <Line type="monotone" dataKey="score" stroke="#DC2626" strokeWidth={3} dot={{ fill: "#DC2626", r: 4 }} activeDot={{ r: 6, fill: "#B91C1C" }} />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -45,7 +45,7 @@ export function ParticipationChart(){
         <XAxis dataKey="name" stroke="#64748B" fontSize={12} tickLine={false} axisLine={{ stroke: "#E2E8F0" }} />
         <YAxis stroke="#64748B" fontSize={12} tickLine={false} axisLine={{ stroke: "#E2E8F0" }} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Bar dataKey="value" fill="#0056D2" radius={[6, 6, 0, 0]} />
+        <Bar dataKey="value" fill="#DC2626" radius={[6, 6, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
@@ -65,7 +65,7 @@ export function ProgressChart(){
         <XAxis dataKey="name" stroke="#64748B" fontSize={12} tickLine={false} axisLine={{ stroke: "#E2E8F0" }} />
         <YAxis domain={[0, 100]} stroke="#64748B" fontSize={12} tickLine={false} axisLine={{ stroke: "#E2E8F0" }} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Line type="monotone" dataKey="value" stroke="#2563EB" strokeWidth={3} dot={{ fill: "#2563EB", r: 4 }} activeDot={{ r: 6, fill: "#0056D2" }} />
+        <Line type="monotone" dataKey="value" stroke="#DC2626" strokeWidth={3} dot={{ fill: "#DC2626", r: 4 }} activeDot={{ r: 6, fill: "#DC2626" }} />
       </LineChart>
     </ResponsiveContainer>
   );

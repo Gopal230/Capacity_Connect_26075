@@ -175,9 +175,9 @@ export default function RegisterPage() {
                   style={{
                     padding: "8px 10px",
                     borderRadius: "8px",
-                    border: isSel ? "2px solid #0056D2" : "1.5px solid #CBD5E1",
-                    background: isSel ? "#EFF6FF" : "#F8FAFC",
-                    color: isSel ? "#0056D2" : "#334155",
+                    border: isSel ? "2px solid #DC2626" : "1.5px solid #CBD5E1",
+                    background: isSel ? "#FEF2F2" : "#F8FAFC",
+                    color: isSel ? "#DC2626" : "#334155",
                     fontSize: "12px",
                     fontWeight: isSel ? 700 : 500,
                     cursor: "pointer",
@@ -239,7 +239,7 @@ export default function RegisterPage() {
               style={{
                 fontSize: "11px",
                 fontWeight: 700,
-                color: "#0056D2",
+                color: "#DC2626",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 display: "block",

@@ -262,8 +262,8 @@ export default function AdminDashboard() {
               padding: "10px 18px",
               background: "none",
               border: "none",
-              borderBottom: activeTab === tab.key ? "2.5px solid #0056D2" : "2.5px solid transparent",
-              color: activeTab === tab.key ? "#0056D2" : "var(--text-muted)",
+              borderBottom: activeTab === tab.key ? "2.5px solid #DC2626" : "2.5px solid transparent",
+              color: activeTab === tab.key ? "#DC2626" : "var(--text-muted)",
               fontWeight: activeTab === tab.key ? 700 : 500,
               fontSize: "13.5px",
               cursor: "pointer",
@@ -279,12 +279,12 @@ export default function AdminDashboard() {
               <span
                 style={{
                   fontSize: "11px",
-                  background: activeTab === tab.key ? "#EFF6FF" : "#F1F5F9",
-                  color: activeTab === tab.key ? "#0056D2" : "#64748B",
+                  background: activeTab === tab.key ? "#FEF2F2" : "#F1F5F9",
+                  color: activeTab === tab.key ? "#DC2626" : "#64748B",
                   padding: "2px 7px",
                   borderRadius: "10px",
                   fontWeight: 700,
-                  border: activeTab === tab.key ? "1px solid #BFDBFE" : "1px solid #E2E8F0",
+                  border: activeTab === tab.key ? "1px solid #FECACA" : "1px solid #E2E8F0",
                 }}
               >
                 {tab.count}
@@ -391,7 +391,7 @@ export default function AdminDashboard() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "18px", flexWrap: "wrap", gap: "10px" }}>
             <div>
               <h3 style={{ margin: "0 0 4px", fontSize: "18px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <Clock size={20} color="#0056D2" /> Trainer Expertise Approvals
+                <Clock size={20} color="#DC2626" /> Trainer Expertise Approvals
               </h3>
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
                 Review trainer self-declared competency instructional authority (L3–L5). Approved expertise enables smart course matching.
@@ -563,7 +563,7 @@ export default function AdminDashboard() {
         <section style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
           <div style={{ border: "1.5px solid #CBD5E1", borderRadius: "10px", padding: "20px", background: "#FFFFFF" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-              <Building2 size={22} color="#0056D2" />
+              <Building2 size={22} color="#DC2626" />
               <h3 style={{ margin: 0, fontSize: "18px" }}>Radar Operational Centre Skill Gap Diagnostics</h3>
             </div>
             <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
@@ -590,7 +590,7 @@ export default function AdminDashboard() {
                   {/* Centre Header */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "12px" }}>
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#0056D2", fontWeight: 700, fontSize: "11.5px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#DC2626", fontWeight: 700, fontSize: "11.5px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                         <MapPin size={14} /> Regional Radar Centre
                       </div>
                       <h4 style={{ margin: "3px 0 2px", fontSize: "16.5px", color: "#0F172A" }}>{centre.centreName}</h4>
@@ -691,7 +691,7 @@ export default function AdminDashboard() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px", flexWrap: "wrap", gap: "12px" }}>
             <div>
               <h3 style={{ margin: "0 0 4px", fontSize: "18px", display: "flex", alignItems: "center", gap: "8px" }}>
-                <GraduationCap size={22} color="#0056D2" /> Trainee Competency Matrix & Verified Certificates
+                <GraduationCap size={22} color="#DC2626" /> Trainee Competency Matrix & Verified Certificates
               </h3>
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
                 Inspect real-time skill levels, role gap status, and verified digital certificates for operational personnel.
@@ -763,7 +763,7 @@ export default function AdminDashboard() {
                               width: "32px",
                               height: "32px",
                               borderRadius: "50%",
-                              background: "#0056D2",
+                              background: "#DC2626",
                               color: "#FFFFFF",
                               display: "grid",
                               placeItems: "center",
@@ -832,7 +832,7 @@ export default function AdminDashboard() {
                           style={{ fontSize: "12px", padding: "5px 10px", display: "inline-flex", alignItems: "center", gap: "5px" }}
                           onClick={() => setSelectedTraineeForCert(trainee)}
                         >
-                          <Award size={14} color="#0056D2" />
+                          <Award size={14} color="#DC2626" />
                           <span>{certs.length} Certificate(s)</span>
                         </button>
                       </td>
@@ -854,7 +854,7 @@ export default function AdminDashboard() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px", borderBottom: "1px solid #E2E8F0", paddingBottom: "12px" }}>
               <div>
                 <h3 style={{ margin: "0 0 4px", fontSize: "18px", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Award size={20} color="#0056D2" /> Verified Certificates & Credentials
+                  <Award size={20} color="#DC2626" /> Verified Certificates & Credentials
                 </h3>
                 <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
                   Trainee: <strong>{selectedTraineeForCert.name}</strong> ({selectedTraineeForCert.jobRole || selectedTraineeForCert.role}) · {selectedTraineeForCert.centre}

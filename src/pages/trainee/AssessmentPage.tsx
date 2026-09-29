@@ -181,7 +181,7 @@ export default function AssessmentPage() {
                   style={{
                     marginTop: "20px",
                     background: "#FFFFFF",
-                    border: "3px double #0056D2",
+                    border: "3px double #DC2626",
                     borderRadius: "12px",
                     padding: "24px 28px",
                     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
@@ -190,7 +190,7 @@ export default function AssessmentPage() {
                 >
                   <div style={{ borderBottom: "1.5px solid #E2E8F0", paddingBottom: "14px", marginBottom: "16px" }}>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                      <Award size={26} color="#0056D2" />
+                      <Award size={26} color="#DC2626" />
                       <strong style={{ fontSize: "16px", letterSpacing: "1.5px", color: "#0F172A" }}>
                         INDIA METEOROLOGICAL DEPARTMENT
                       </strong>
@@ -199,7 +199,7 @@ export default function AssessmentPage() {
                       Ministry of Earth Sciences · Government of India
                     </small>
                     <div style={{ marginTop: "8px" }}>
-                      <span style={{ background: "#EFF6FF", color: "#0056D2", border: "1px solid #BFDBFE", padding: "3px 12px", borderRadius: "9999px", fontSize: "11.5px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                      <span style={{ background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA", padding: "3px 12px", borderRadius: "9999px", fontSize: "11.5px", fontWeight: 700, letterSpacing: "0.5px" }}>
                         OFFICIAL CERTIFICATE OF OPERATIONAL COMPETENCY
                       </span>
                     </div>
@@ -214,7 +214,7 @@ export default function AssessmentPage() {
                   </p>
 
                   <div style={{ margin: "12px 0" }}>
-                    <h4 style={{ margin: "0 0 6px", fontSize: "18px", color: "#0056D2", fontWeight: 700 }}>
+                    <h4 style={{ margin: "0 0 6px", fontSize: "18px", color: "#DC2626", fontWeight: 700 }}>
                       {last.levelUpInfo.competency}
                     </h4>
                     <LevelBadge level={last.levelUpInfo.newLevel} />
@@ -390,8 +390,8 @@ export default function AssessmentPage() {
                         display: "inline-flex",
                         alignItems: "center",
                         gap: "6px",
-                        background: "#EFF6FF",
-                        border: "1px solid #BFDBFE",
+                        background: "#FEF2F2",
+                        border: "1px solid #FECACA",
                         padding: "3px 8px",
                         borderRadius: "6px",
                       }}

@@ -67,8 +67,8 @@ export default function Recommendations() {
         <section className="next-step-panel" style={{ marginBottom: "24px" }}>
           <div className="next-step-header">
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Compass size={20} color="#0056D2" />
-              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#0056D2" }}>
+              <Compass size={20} color="#DC2626" />
+              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#DC2626" }}>
                 Priority Recommendation
               </span>
             </div>
@@ -128,7 +128,7 @@ export default function Recommendations() {
                     <tr key={item.competency}>
                       <td><strong>{item.competency}</strong></td>
                       <td>
-                        <span style={{ fontWeight: 600, color: isMet ? "#047857" : "#0056D2" }}>
+                        <span style={{ fontWeight: 600, color: isMet ? "#047857" : "#DC2626" }}>
                           {item.currentLevel}
                         </span>
                       </td>
@@ -206,7 +206,7 @@ export default function Recommendations() {
                 <div
                   key={course.id}
                   className={`course-card-modern ${isLocked ? "locked" : ""}`}
-                  style={isRecommended ? { borderColor: "#BFDBFE", borderWidth: "2px" } : {}}
+                  style={isRecommended ? { borderColor: "#FECACA", borderWidth: "2px" } : {}}
                 >
                   <div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
@@ -237,15 +237,15 @@ export default function Recommendations() {
                     {hasLevels && trainee && (
                       <div style={{
                         fontSize: "12px",
-                        background: isLocked ? "#FEF3C7" : "#F0F5FF",
-                        border: `1px solid ${isLocked ? "#FDE68A" : "#BFDBFE"}`,
+                        background: isLocked ? "#FEF3C7" : "#FEF2F2",
+                        border: `1px solid ${isLocked ? "#FDE68A" : "#FECACA"}`,
                         borderRadius: "6px",
                         padding: "8px 10px",
                         marginBottom: "10px",
                       }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                           <span>Your level now:</span>
-                          <strong style={{ color: isLocked ? "#92400E" : "#0056D2" }}>{currentLvl}</strong>
+                          <strong style={{ color: isLocked ? "#92400E" : "#DC2626" }}>{currentLvl}</strong>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                           <span>This course takes you to:</span>

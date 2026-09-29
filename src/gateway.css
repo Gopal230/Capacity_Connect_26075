@@ -1,5 +1,5 @@
 /* =========================================================
-   CAPACITY CONNECT - COURSERA ACADEMIC ENTERPRISE DESIGN
+   CAPACITY CONNECT - CRIMSON RED & MIDNIGHT BLACK/NAVY THEME
    ========================================================= */
 
 .portal-gateway {
@@ -19,14 +19,14 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0056D2;
+  color: #DC2626;
   margin-bottom: 8px;
 }
 
 .gateway-title {
   font-size: 24px !important;
   font-weight: 700;
-  color: #0F172A;
+  color: #081A2E;
   margin: 0 0 10px;
   line-height: 1.35;
   letter-spacing: -0.015em;
@@ -91,11 +91,12 @@
   width: 38px;
   height: 38px;
   border-radius: 6px;
-  background: #EFF6FF;
-  color: #0056D2;
+  background: #FEF2F2;
+  color: #DC2626;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #FECACA;
 }
 
 .role-category-label {
@@ -103,16 +104,17 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #0056D2;
-  background: #F0F5FF;
+  color: #DC2626;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
   padding: 4px 8px;
   border-radius: 4px;
 }
 
 .part-header h2 {
   font-size: 18px;
-  font-weight: 600;
-  color: #0F172A;
+  font-weight: 700;
+  color: #081A2E;
   margin: 0 0 6px;
   letter-spacing: -0.01em;
 }
@@ -162,7 +164,7 @@
 }
 
 .part-checklist li .check-icon {
-  color: #0056D2;
+  color: #DC2626;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -177,7 +179,7 @@
 }
 
 .btn-role-primary {
-  background: #0056D2 !important;
+  background: #DC2626 !important;
   color: #FFFFFF !important;
   font-weight: 600;
   font-size: 13.5px;
@@ -189,16 +191,18 @@
   gap: 8px;
   text-decoration: none;
   border: none;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(220, 38, 38, 0.2);
 }
 
 .btn-role-primary:hover {
-  background: #00419E !important;
+  background: #B91C1C !important;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
 }
 
 .btn-role-demo {
   background: #F8FAFC !important;
-  color: #0F172A !important;
+  color: #081A2E !important;
   border: 1px solid #CBD5E1 !important;
   font-weight: 600;
   font-size: 12.5px;
@@ -213,22 +217,22 @@
 }
 
 .btn-role-demo:hover {
-  background: #F0F5FF !important;
-  border-color: #0056D2 !important;
-  color: #0056D2 !important;
+  background: #FEF2F2 !important;
+  border-color: #DC2626 !important;
+  color: #DC2626 !important;
 }
 
 .part-register-link {
   font-size: 12px;
-  font-weight: 500;
-  color: #0056D2;
+  font-weight: 600;
+  color: #DC2626;
   text-decoration: none;
   text-align: center;
   margin-top: 3px;
 }
 
 .part-register-link:hover {
-  color: #00419E;
+  color: #B91C1C;
   text-decoration: underline;
 }
 

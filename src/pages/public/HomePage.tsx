@@ -148,7 +148,7 @@ export default function HomePage() {
         </button>
 
         <nav className={menu ? "show" : ""}>
-          <Link to="/courses" onClick={() => setMenu(false)} style={{ color: "#0056D2", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "4px" }}>Course Catalog</Link>
+          <Link to="/courses" onClick={() => setMenu(false)} style={{ color: "#DC2626", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "4px" }}>Course Catalog</Link>
         </nav>
       </header>
 
@@ -156,7 +156,7 @@ export default function HomePage() {
       <main className="portal-gateway" style={{ maxWidth: "1280px", margin: "0 auto", padding: "36px 24px 60px" }}>
         {/* Gateway Hero */}
         <section className="gateway-hero" style={{ textAlign: "center", marginBottom: "36px" }}>
-          <div className="gateway-kicker" style={{ letterSpacing: "1px", fontWeight: 700, color: "#0056D2", fontSize: "12px" }}>
+          <div className="gateway-kicker" style={{ letterSpacing: "1px", fontWeight: 700, color: "#DC2626", fontSize: "12px" }}>
             MINISTRY OF EARTH SCIENCES · GOVERNMENT OF INDIA
           </div>
           <h1 className="gateway-title" style={{ fontSize: "32px", fontWeight: 800, color: "var(--text-heading)", margin: "12px 0 14px", lineHeight: "1.25" }}>
@@ -181,7 +181,7 @@ export default function HomePage() {
                   onClick={() => switchRole(r)}
                   style={{
                     background: isSelected ? "#FFFFFF" : "#F8FAFC",
-                    border: isSelected ? "2.5px solid #0056D2" : "1.5px solid #CBD5E1",
+                    border: isSelected ? "2.5px solid #DC2626" : "1.5px solid #CBD5E1",
                     borderRadius: "12px",
                     padding: "18px 20px",
                     textAlign: "left",
@@ -198,7 +198,7 @@ export default function HomePage() {
                       width: "42px",
                       height: "42px",
                       borderRadius: "10px",
-                      background: isSelected ? "#0056D2" : "#E2E8F0",
+                      background: isSelected ? "#DC2626" : "#E2E8F0",
                       color: isSelected ? "#FFFFFF" : "#475569",
                       display: "grid",
                       placeItems: "center",
@@ -208,7 +208,7 @@ export default function HomePage() {
                     <RIcon size={22} />
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "#0056D2" : "#64748B", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "#DC2626" : "#64748B", letterSpacing: "0.5px", textTransform: "uppercase" }}>
                       {r === "trainee" ? "LEARN" : r === "trainer" ? "TEACH" : "GOVERN"}
                     </span>
                     <h3 style={{ margin: "2px 0 4px", fontSize: "16px", color: isSelected ? "#0F172A" : "#334155" }}>
@@ -254,7 +254,7 @@ export default function HomePage() {
                     width: "36px",
                     height: "36px",
                     borderRadius: "8px",
-                    background: "#0056D2",
+                    background: "#DC2626",
                     color: "#FFFFFF",
                     display: "grid",
                     placeItems: "center",
@@ -263,7 +263,7 @@ export default function HomePage() {
                   <Icon size={20} />
                 </div>
                 <div>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#0056D2", letterSpacing: "0.5px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#DC2626", letterSpacing: "0.5px" }}>
                     {current.category}
                   </span>
                   <h2 style={{ margin: 0, fontSize: "20px", color: "#0F172A" }}>
@@ -283,7 +283,7 @@ export default function HomePage() {
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
                   {current.features.map((feat, idx) => (
                     <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", color: "#334155" }}>
-                      <CheckCircle2 size={16} color="#0056D2" style={{ marginTop: "2px", flexShrink: 0 }} />
+                      <CheckCircle2 size={16} color="#DC2626" style={{ marginTop: "2px", flexShrink: 0 }} />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -295,7 +295,7 @@ export default function HomePage() {
             <div
               style={{
                 background: "#FFFFFF",
-                border: "1.5px solid #BFDBFE",
+                border: "1.5px solid #FECACA",
                 borderRadius: "10px",
                 padding: "16px",
                 marginTop: "16px",
@@ -303,10 +303,10 @@ export default function HomePage() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#0056D2" />
-                  <strong style={{ fontSize: "13px", color: "#0056D2" }}>Instant 1-Click Demo Evaluation</strong>
+                  <Sparkles size={16} color="#DC2626" />
+                  <strong style={{ fontSize: "13px", color: "#DC2626" }}>Instant 1-Click Demo Evaluation</strong>
                 </div>
-                <span style={{ fontSize: "11px", color: "#64748B", background: "#EFF6FF", padding: "2px 8px", borderRadius: "4px" }}>
+                <span style={{ fontSize: "11px", color: "#64748B", background: "#FEF2F2", padding: "2px 8px", borderRadius: "4px" }}>
                   Pre-seeded
                 </span>
               </div>
