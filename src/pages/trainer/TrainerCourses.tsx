@@ -22,7 +22,7 @@ import { LevelBadge, LevelJumpBadge } from "../../components/LevelUI";
 import { useApp } from "../../context/AppContext";
 import { IMD_RADAR_COMPETENCIES, deriveDifficulty } from "../../data/constants";
 import { CompetencyLevel, Course, Lesson, Level, Question } from "../../types";
-import { formatLevel, getLevelNumber } from "../../utils/engine";
+import { canEnroll, formatLevel, getLevelNumber } from "../../utils/engine";
 
 interface LevelJumpPair {
   entryLevel: CompetencyLevel;
@@ -33,7 +33,7 @@ interface LevelJumpPair {
 }
 
 export default function TrainerCourses() {
-  const { db, currentUser, createCourse, updateCourse } = useApp();
+  const { db, currentUser, createCourse, updateCourse, traineeLevels } = useApp();
   const trainer = db.trainers.find((t) => t.userId === currentUser?.id);
   const myCourses = db.courses.filter((c) => c.trainerId === trainer?.id);
 
@@ -938,6 +938,63 @@ export default function TrainerCourses() {
                     <div style={{ fontSize: "11.5px", color: "var(--text-muted)", marginBottom: "8px" }}>
                       <strong>Competency:</strong> {comp} · {c.durationHours} hrs · {c.modules?.flatMap((m) => m.lessons).length || 0} lessons
                     </div>
+
+                    {/* Prompt 2 #2: Small stat per course: locked out (below entry level) vs eligible */}
+                    {(() => {
+                      const courseEnrollments = db.enrollments.filter(
+                        (e) => e.courseId === c.id && e.status !== "rejected"
+                      );
+                      let eligible = 0;
+                      let locked = 0;
+                      let completed = 0;
+
+                      courseEnrollments.forEach((e) => {
+                        if (e.progress === 100 || e.status === "completed") completed++;
+                        const trainee = db.trainees.find((t) => t.id === e.traineeId);
+                        if (trainee && c.entryLevel) {
+                          const access = canEnroll(trainee, c, undefined, traineeLevels);
+                          if (access.canEnroll) {
+                            eligible++;
+                          } else {
+                            locked++;
+                          }
+                        } else {
+                          eligible++;
+                        }
+                      });
+
+                      return (
+                        <div
+                          style={{
+                            background: "#F1F5F9",
+                            border: "1px solid #E2E8F0",
+                            borderRadius: "6px",
+                            padding: "6px 10px",
+                            margin: "8px 0",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            fontSize: "11.5px",
+                            flexWrap: "wrap",
+                            gap: "6px",
+                          }}
+                        >
+                          <span style={{ color: "#334155" }}>
+                            <strong>{courseEnrollments.length}</strong> Enrolled ({completed} Completed)
+                          </span>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <span style={{ color: "#166534", fontWeight: 600 }}>
+                              ✓ {eligible} Eligible
+                            </span>
+                            {locked > 0 && (
+                              <span style={{ color: "#B45309", fontWeight: 600 }}>
+                                🔒 {locked} Locked out
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })()}
 
                     {c.objectives && c.objectives.length > 0 && (
                       <ul style={{ margin: "4px 0 0", paddingLeft: "18px", fontSize: "12px", color: "#475569" }}>
