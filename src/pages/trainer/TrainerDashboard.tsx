@@ -2,7 +2,6 @@ import { Archive, BookOpen, CalendarClock, CheckCircle2, ClipboardCheck, FileChe
 import { Badge, PageHeader, ProgressBar, StatCard } from "../../components/UI";
 import { LevelBadge, LevelJumpBadge, StatusBadge } from "../../components/LevelUI";
 import { useApp } from "../../context/AppContext";
-import MeteorologyContext from "../../components/MeteorologyContext";
 import { canEnroll, getLevelNumber } from "../../utils/engine";
 
 export default function TrainerDashboard() {
@@ -23,7 +22,6 @@ export default function TrainerDashboard() {
         title="Trainer Operational Dashboard"
         subtitle="Manage training delivery, monitor learner progression through competency levels, and verify qualifications."
       />
-      <MeteorologyContext />
 
       <div className="stats-grid">
         <StatCard label="Assigned Courses" value={courses.length} icon={<BookOpen />} />

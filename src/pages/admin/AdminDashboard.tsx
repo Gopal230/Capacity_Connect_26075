@@ -3,7 +3,6 @@ import { CompetencyChart, ParticipationChart } from "../../components/Charts";
 import { Badge, ConfirmButton, PageHeader, StatCard } from "../../components/UI";
 import { useApp } from "../../context/AppContext";
 import { operationalReadiness, trainingImpact } from "../../utils/engine";
-import MeteorologyContext from "../../components/MeteorologyContext";
 
 export default function AdminDashboard(){
   const {db,resetDemo}=useApp();
@@ -26,7 +25,6 @@ export default function AdminDashboard(){
         }
       />
 
-      <MeteorologyContext/>
     <div className="stats-grid">
       <StatCard label="Total Trainees" value={db.trainees.length} icon={<GraduationCap/>} caption="Approved profiles"/>
       <StatCard label="Total Trainers" value={db.trainers.length} icon={<Users/>} caption={`${db.trainers.filter(t=>t.verified).length} verified`}/>
