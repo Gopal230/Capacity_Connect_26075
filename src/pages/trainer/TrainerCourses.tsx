@@ -411,9 +411,9 @@ export default function TrainerCourses() {
         subtitle="Author standardized competency ladder courses (L1 to L5) with practical lessons and assessment suites."
       />
 
-      <div className="dashboard-grid content-layout">
+      <div style={{ display: "flex", flexDirection: "column", gap: "28px", width: "100%" }}>
         {/* =========================================================
-            LEFT COLUMN: COURSE CREATION & EDITING FORM
+            TOP SECTION: COURSE CREATION & EDITING FORM
             ========================================================= */}
         <section className="panel" style={{ background: "#FFFFFF", borderRadius: "12px", border: "1.5px solid #CBD5E1", padding: "24px" }}>
           <div className="panel-head" style={{ borderBottom: "1.5px solid #E2E8F0", paddingBottom: "14px", marginBottom: "20px" }}>
@@ -425,8 +425,9 @@ export default function TrainerCourses() {
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
-                    color: "#0056D2",
-                    background: "#EFF6FF",
+                    color: "#DC2626",
+                    background: "#FEF2F2",
+                    border: "1px solid #FECACA",
                     padding: "3px 8px",
                     borderRadius: "4px",
                   }}
@@ -880,7 +881,7 @@ export default function TrainerCourses() {
         </section>
 
         {/* =========================================================
-            RIGHT COLUMN: MY COURSES LIST WITH LEVEL JUMPS & STATUS
+            BOTTOM SECTION: MY COURSES LIST WITH LEVEL JUMPS & STATUS
             ========================================================= */}
         <section className="panel" style={{ background: "#FFFFFF", borderRadius: "12px", border: "1.5px solid #CBD5E1", padding: "24px" }}>
           <div className="panel-head" style={{ borderBottom: "1.5px solid #E2E8F0", paddingBottom: "14px", marginBottom: "16px" }}>
@@ -892,7 +893,7 @@ export default function TrainerCourses() {
             </div>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "16px" }}>
             {myCourses.map((c) => {
               const comp = c.competency || c.subject;
               return (
@@ -1023,8 +1024,11 @@ export default function TrainerCourses() {
             })}
 
             {myCourses.length === 0 && (
-              <div style={{ padding: "30px", textAlign: "center", color: "#64748B" }}>
-                No courses created yet. Use the authoring form to submit your first course proposal.
+              <div style={{ gridColumn: "1 / -1", padding: "36px 20px", textAlign: "center", color: "#64748B" }}>
+                <BookOpen size={36} style={{ margin: "0 auto 12px", opacity: 0.35 }} />
+                <p style={{ margin: 0, fontSize: "14px" }}>
+                  No courses created yet. Use the authoring form above to submit your first course proposal.
+                </p>
               </div>
             )}
           </div>
