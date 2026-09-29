@@ -22,13 +22,13 @@ const modules = (prefix: string) => [
 
 export const seedDB: DB = {
   users: [
-    { id: "u-admin", name: "NEXUS-PRIME (Director AI)", email: "admin@capacityconnect.in", password: "Demo@123", role: "admin", status: "active", department: "Capacity Building Cell", designation: "Autonomous Programme Administrator", createdAt: "2026-08-01", profileComplete: true },
-    { id: "u-admin-test", name: "NEXUS-COMMAND-BOT", email: "admin@test.com", password: "123456", role: "admin", status: "active", department: "Capacity Building Cell", designation: "Autonomous System Administrator", createdAt: "2026-08-01", profileComplete: true },
-    { id: "u-tr1", name: "CYBER-INSTRUCTOR-09", email: "trainer@capacityconnect.in", password: "Demo@123", role: "trainer", status: "active", department: "Radar Meteorology Division", designation: "AI Neural Instructor / Senior Scientist", createdAt: "2026-08-03", profileComplete: true },
-    { id: "u-tr-test", name: "VECTOR-TRAINER-BOT", email: "trainer@test.com", password: "123456", role: "trainer", status: "active", department: "Radar Meteorology Division", designation: "Automated Radar Faculty Unit", createdAt: "2026-08-03", profileComplete: true },
+    { id: "u-admin", name: "Dr. Meera Nair", email: "admin@capacityconnect.in", password: "Demo@123", role: "admin", status: "active", department: "Capacity Building Cell", designation: "Programme Administrator", createdAt: "2026-08-01", profileComplete: true },
+    { id: "u-admin-test", name: "Admin User", email: "admin@test.com", password: "123456", role: "admin", status: "active", department: "Capacity Building Cell", designation: "System Administrator", createdAt: "2026-08-01", profileComplete: true },
+    { id: "u-tr1", name: "Dr. Arvind Rao", email: "trainer@capacityconnect.in", password: "Demo@123", role: "trainer", status: "active", department: "Radar Meteorology Division", designation: "Senior Scientist / Chief Radar Instructor", createdAt: "2026-08-03", profileComplete: true },
+    { id: "u-tr-test", name: "Trainer Test", email: "trainer@test.com", password: "123456", role: "trainer", status: "active", department: "Radar Meteorology Division", designation: "Senior Scientist", createdAt: "2026-08-03", profileComplete: true },
     {
       id: "u-tra1",
-      name: "RADAR-BOT-01 (Unit RV)",
+      name: "Rahul Verma",
       email: "trainee@test.com",
       password: "123456",
       role: "trainee",
@@ -41,7 +41,7 @@ export const seedDB: DB = {
     },
     {
       id: "u-tra1-alias",
-      name: "RADAR-BOT-01 (Alias)",
+      name: "Rahul Verma (Alias)",
       email: "trainee@capacityconnect.in",
       password: "Demo@123",
       role: "trainee",
@@ -54,7 +54,7 @@ export const seedDB: DB = {
     },
     {
       id: "u-tra2",
-      name: "METEO-BOT-02 (Unit AK)",
+      name: "Amit Kumar",
       email: "trainee2@test.com",
       password: "123456",
       role: "trainee",
@@ -67,7 +67,7 @@ export const seedDB: DB = {
     },
     {
       id: "u-tra3",
-      name: "STORM-BOT-03 (Unit PV)",
+      name: "Pooja Verma",
       email: "trainee3@test.com",
       password: "123456",
       role: "trainee",
@@ -83,7 +83,7 @@ export const seedDB: DB = {
     {
       id: "tr1",
       userId: "u-tr1",
-      name: "CYBER-INSTRUCTOR-09",
+      name: "Dr. Arvind Rao",
       department: "Radar Meteorology Division",
       qualification: "PhD Atmospheric Physics (Radar Meteorology)",
       experienceYears: 18,
@@ -101,12 +101,12 @@ export const seedDB: DB = {
       availability: "Available",
       verified: true,
       certifications: ["WMO Certified Radar Specialist", "IMD Senior Radar Trainer"],
-      bio: "Automated neural instructor for IMD Doppler Weather Radar network with 18+ years of operational and training leadership."
+      bio: "Chief instructor for IMD Doppler Weather Radar network with 18+ years of operational and training leadership."
     },
     {
       id: "tr2",
       userId: "u-tr-test",
-      name: "VECTOR-TRAINER-BOT",
+      name: "Trainer Test",
       department: "Radar Meteorology Division",
       qualification: "MSc Atmospheric Science",
       experienceYears: 8,
@@ -121,14 +121,14 @@ export const seedDB: DB = {
       availability: "Available",
       verified: true,
       certifications: ["IMD Radar Trainer"],
-      bio: "Automated test trainer unit for simulation and cohort evaluation."
+      bio: "Test trainer account for demo and evaluation purposes."
     }
   ],
   trainees: [
     {
       id: "ta1",
       userId: "u-tra1",
-      name: "RADAR-BOT-01 (Unit RV)",
+      name: "Rahul Verma",
       role: "Radar Operator",
       jobRole: "Radar Operator",
       centre: "Bhopal Doppler Radar Station",
@@ -151,7 +151,7 @@ export const seedDB: DB = {
     {
       id: "ta2",
       userId: "u-tra2",
-      name: "METEO-BOT-02 (Unit AK)",
+      name: "Amit Kumar",
       role: "Radar Operator",
       jobRole: "Radar Operator",
       centre: "Patna Doppler Radar Station",
@@ -174,7 +174,7 @@ export const seedDB: DB = {
     {
       id: "ta3",
       userId: "u-tra3",
-      name: "STORM-BOT-03 (Unit PV)",
+      name: "Pooja Verma",
       role: "Radar Operator",
       jobRole: "Radar Operator",
       centre: "Visakhapatnam Cyclone Radar Station",
