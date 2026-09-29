@@ -12,7 +12,6 @@ import {
   User,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import MeteorologyContext from "../../components/MeteorologyContext";
 import { Badge, PageHeader, ProgressBar, StatCard } from "../../components/UI";
 import {
   LevelBadge,
@@ -93,8 +92,6 @@ export default function TraineeDashboard() {
             : `Role: ${jobRole || "Unassigned"}`
         }
       />
-
-      <MeteorologyContext />
 
       {/* 2. Summary Strip: Competencies Met, With Gap, Levels Still To Gain, My Courses */}
       <div className="stats-grid" style={{ marginBottom: "24px" }}>

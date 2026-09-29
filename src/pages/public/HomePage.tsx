@@ -93,7 +93,7 @@ export default function HomePage() {
       ],
     },
     trainer: {
-      title: "Accredited Faculty & Trainer Workspace",
+      title: "Trainer Workspace",
       category: "FACULTY & DOMAIN INSTRUCTORS",
       subtitle: "Senior Meteorologists, Radar Specialists, and Regional Training Centre Faculty.",
       icon: Users,
@@ -219,10 +219,10 @@ export default function HomePage() {
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
                     <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "#0056D2" : "#64748B", letterSpacing: "0.5px", textTransform: "uppercase" }}>
-                      {r === "trainee" ? "ROLE 01 · LEARN" : r === "trainer" ? "ROLE 02 · TEACH" : "ROLE 03 · GOVERN"}
+                      {r === "trainee" ? "LEARN" : r === "trainer" ? "TEACH" : "GOVERN"}
                     </span>
                     <h3 style={{ margin: "2px 0 4px", fontSize: "16px", color: isSelected ? "#0F172A" : "#334155" }}>
-                      {r === "trainee" ? "Operational Trainee" : r === "trainer" ? "Accredited Faculty" : "Portal Administrator"}
+                      {r === "trainee" ? "Operational Trainee" : r === "trainer" ? "Trainer" : "Portal Administrator"}
                     </h3>
                     <p style={{ margin: 0, fontSize: "12px", color: "#64748B", lineHeight: "1.4" }}>
                       {r === "trainee" ? "Competency progression & certification" : r === "trainer" ? "Curriculum authoring & evidence review" : "Clearance, ORI & system command"}

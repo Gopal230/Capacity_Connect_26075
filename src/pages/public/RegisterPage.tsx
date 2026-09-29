@@ -112,7 +112,7 @@ export default function RegisterPage() {
       icon: GraduationCap,
     },
     trainer: {
-      title: "Accredited Faculty Registration",
+      title: "Trainer Registration",
       badge: "INSTRUCTOR & SCIENTIST ACCREDITATION",
       subtitle: "Submit academic qualifications and syllabus domain for curriculum authoring privileges.",
       icon: Users,
@@ -185,7 +185,7 @@ export default function RegisterPage() {
                     transition: "all 0.15s ease",
                   }}
                 >
-                  {r === "trainee" ? "Operational Trainee" : r === "trainer" ? "Accredited Faculty" : "Administrator"}
+                  {r === "trainee" ? "Operational Trainee" : r === "trainer" ? "Trainer" : "Administrator"}
                 </button>
               );
             })}
@@ -249,7 +249,7 @@ export default function RegisterPage() {
               {activeRole === "trainee"
                 ? "Trainee-Specific Operational Inputs"
                 : activeRole === "trainer"
-                ? "Faculty-Specific Accreditation Inputs"
+                ? "Trainer-Specific Accreditation Inputs"
                 : "Administrator-Specific Governance Inputs"}
             </span>
 
@@ -304,9 +304,9 @@ export default function RegisterPage() {
                     onChange={(e) => setTraineeFields({ ...traineeFields, experienceYears: e.target.value })}
                   >
                     <option value="< 1 Year">Less than 1 Year (Induction / Probation)</option>
-                    <option value="1-3 Years">1 - 3 Years Operational</option>
-                    <option value="3-5 Years">3 - 5 Years Operational</option>
-                    <option value="5+ Years">Over 5 Years Operational</option>
+                    <option value="1 Year">1 Year</option>
+                    <option value="2 Years">2 Years</option>
+                    <option value="3 Years">3 Years (Max for Trainee Cadre)</option>
                   </select>
                 </label>
 
