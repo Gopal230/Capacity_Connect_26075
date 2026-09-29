@@ -219,7 +219,7 @@ export default function TraineeDashboard() {
         />
       </div>
 
-      {/* 3. Role Competency Benchmark & Priority Recommendations Matrix */}
+      {/* 3. Role Competency Benchmark & Recommendations Matrix */}
       <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "24px", marginBottom: "24px", background: "#FFFFFF" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px", flexWrap: "wrap", gap: "12px" }}>
           <div>
