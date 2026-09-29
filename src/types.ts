@@ -114,10 +114,8 @@ export interface Course {
   title: string;
   code: string;
   competency?: string;
-  competencyId?: string;
   entryLevel?: CompetencyLevel;
   targetLevel?: CompetencyLevel;
-  outcomes?: string[];
   prerequisiteCourseId?: string | null;
   duration?: string;
   department: string;

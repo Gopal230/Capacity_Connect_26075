@@ -30,7 +30,9 @@ export default function TraineeDashboard() {
   const {
     db,
     currentUser,
+    roleRequirements,
     traineeLevels,
+    certificates,
     getRoleRecommendations,
     getNextStep,
     getTraineeLevel,
@@ -40,11 +42,16 @@ export default function TraineeDashboard() {
   const trainee = db.trainees.find((t) => t.userId === currentUser?.id);
   const jobRole = trainee?.jobRole || trainee?.role || "Radar Operator";
 
-  // Enrollments and Certificates
+  // Enrollments and Certificates (from KEYS.CERTIFICATES and db.certificates)
   const enrollments = db.enrollments.filter(
     (e) => e.traineeId === trainee?.id && e.status !== "rejected"
   );
-  const certs = db.certificates.filter((c) => c.traineeId === trainee?.id);
+  const allCerts = [...certificates, ...db.certificates];
+  const certs = allCerts.filter(
+    (c, index, self) =>
+      c.traineeId === trainee?.id &&
+      index === self.findIndex((t) => t.id === c.id || (t.courseId === c.courseId && t.levelAchieved === c.levelAchieved))
+  );
 
   // Recommendations and gaps from Phase 3 engine
   const roleRecommendations = getRoleRecommendations(trainee);

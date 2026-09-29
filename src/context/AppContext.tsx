@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
 import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
-import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation, canEnroll } from "../utils/engine";
+import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
 
 type Toast = { id: number; message: string; tone: "success" | "error" | "info" };
 
@@ -12,6 +12,7 @@ interface AppContextType {
   toast: Toast | null;
   roleRequirements: RoleRequirementsMap;
   traineeLevels: TraineeLevelsMap;
+  certificates: Certificate[];
   login: (email: string, password: string) => { ok: boolean; message: string; role?: Role };
   logout: () => void;
   register: (input: { name: string; email: string; password: string; role: Role; department: string; designation: string; jobRole?: string }) => { ok: boolean; message: string };
@@ -154,6 +155,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   });
 
+  const [certificates, setCertificates] = useState<Certificate[]>(() => {
+    try {
+      const raw = localStorage.getItem(KEYS.CERTIFICATES);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+
   const [sessionId, setSessionId] = useState<string | null>(() => {
     const sid = localStorage.getItem(KEYS.SESSION);
     // Keep currently logged-in session sensible (log out if user no longer exists)
@@ -177,6 +187,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem(KEYS.TRAINEE_LEVELS, JSON.stringify(traineeLevels));
   }, [traineeLevels]);
+
+  useEffect(() => {
+    localStorage.setItem(KEYS.CERTIFICATES, JSON.stringify(certificates));
+  }, [certificates]);
 
   useEffect(() => {
     if (sessionId) {
@@ -413,22 +427,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const requestEnrollment = (courseId: string) => {
     const traineeId = currentTraineeId();
     if (!traineeId) return notify("Trainee profile not found", "error");
-    const course = db.courses.find(c => c.id === courseId);
-    if (!course) return notify("Course not found", "error");
-
-    const trainee = db.trainees.find(t => t.id === traineeId || t.userId === currentUser?.id);
-    const courseComp = course.competency || course.subject;
-    const currentLvl = courseComp ? getTraineeLevel(traineeId, courseComp) : "L1";
-
-    const check = canEnroll(trainee, course, currentLvl, traineeLevels);
-    if (!check.canEnroll) {
-      notify(check.reason || `Enrollment blocked: Prerequisite level ${course.entryLevel} not met.`, "error");
-      return;
-    }
-
-    if (db.enrollments.some(e => e.traineeId === traineeId && e.courseId === courseId && e.status !== "rejected")) {
-      return notify("Enrollment already exists", "info");
-    }
+    if (db.enrollments.some(e => e.traineeId === traineeId && e.courseId === courseId && e.status !== "rejected")) return notify("Enrollment already exists", "info");
     setDb(prev => ({ ...prev, enrollments: [{ id: `e-${Date.now()}`, traineeId, courseId, status: "approved", progress: 0, completedLessonIds: [], requestedAt: new Date().toISOString().slice(0, 10) }, ...prev.enrollments] }));
     notify("Enrollment successful");
   };
@@ -545,6 +544,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           certificate,
         };
 
+        // Save to certificates state (synced with KEYS.CERTIFICATES in localStorage)
+        setCertificates(prev => {
+          const alreadyHasCert = prev.some(
+            c => c.traineeId === traineeId && c.courseId === course.id && c.levelAchieved === course.targetLevel
+          );
+          return alreadyHasCert ? prev : [certificate, ...prev];
+        });
+
         // Add certificate to db.certificates (preventing duplicate certificates if retaken)
         setDb(prev => {
           const alreadyHasCert = prev.certificates.some(
@@ -557,7 +564,14 @@ export function AppProvider({ children }: { children: ReactNode }) {
           };
         });
 
-        notify(`Level Updated: ${newLevel}! Certificate issued.`, "success");
+        addNotification({
+          title: `Competency Level Upgraded: ${newLevel}`,
+          body: `Congratulations! You advanced from ${formatLevel(previousRank)} to ${newLevel} in ${competencyName}. Official certificate ${certCode} issued.`,
+          type: "achievement",
+          audience: "trainee",
+        });
+
+        notify(`Level Updated: ${formatLevel(previousRank)} → ${newLevel}! Certificate issued.`, "success");
         return attempt;
       } else {
         // Passed but already at or above target level (retake): no change
@@ -718,9 +732,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(KEYS.DB);
     localStorage.removeItem(KEYS.ROLE_REQUIREMENTS);
     localStorage.removeItem(KEYS.TRAINEE_LEVELS);
+    localStorage.removeItem(KEYS.CERTIFICATES);
     localStorage.setItem(KEYS.SCHEMA_VERSION, CURRENT_SCHEMA_VERSION);
     setRoleRequirements(DEFAULT_ROLE_REQUIREMENTS);
     setTraineeLevels(getDefaultTraineeLevels());
+    setCertificates([]);
     setDb(cloneSeed());
     setSessionId(null);
     notify("Demo data reset to Phase 1 data foundation", "info");
@@ -734,6 +750,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         toast,
         roleRequirements,
         traineeLevels,
+        certificates,
         login,
         logout,
         register,
