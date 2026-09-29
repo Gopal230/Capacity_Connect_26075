@@ -229,38 +229,6 @@ export function getNextStepRecommendation(gapItems: RoleCompetencyGapItem[]): Ro
   return eligible[0];
 }
 
-/**
- * Checks whether a user can enroll in a course.
- * Returns false if course entryLevel is above the user's current level in that competency, with a reason string.
- */
-export function canEnroll(
-  user: { id?: string; userId?: string; role?: string; jobRole?: string } | null | undefined,
-  course: Course | null | undefined,
-  currentLevelStr?: string
-): { canEnroll: boolean; reason?: string } {
-  if (!user) {
-    return { canEnroll: false, reason: "User authentication required." };
-  }
-  if (!course) {
-    return { canEnroll: false, reason: "Course not found." };
-  }
-  if (!course.entryLevel) {
-    return { canEnroll: true };
-  }
-
-  const entryRank = getLevelNumber(course.entryLevel);
-  const currentRank = getLevelNumber(currentLevelStr || "L1");
-
-  if (entryRank > currentRank) {
-    return {
-      canEnroll: false,
-      reason: `Locked: Requires entry level ${course.entryLevel} in ${course.competency || "competency"}. Your current level is ${formatLevel(currentRank)}.`
-    };
-  }
-
-  return { canEnroll: true };
-}
-
 export function recommend(db: DB, subject: string, current: Level, required: Level): Recommendation[] {
   const courses = db.courses.filter(c => c.status === "published" && (c.subject === subject || c.competency === subject));
   return courses.map(course => {

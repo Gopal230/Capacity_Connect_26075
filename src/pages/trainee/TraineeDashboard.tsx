@@ -18,6 +18,14 @@ import { useApp } from "../../context/AppContext";
 import { COMPETENCY_LEVELS } from "../../data/constants";
 import { CompetencyLevel, Course } from "../../types";
 import { formatLevel, getLevelNumber } from "../../utils/engine";
+import {
+  LevelBadge,
+  LevelJumpBadge,
+  LevelPathBar,
+  StatusBadge,
+  CompetencyCardRow,
+  LevelEmptyState,
+} from "../../components/LevelUI";
 
 export default function TraineeDashboard() {
   const {
@@ -76,6 +84,161 @@ export default function TraineeDashboard() {
       />
 
       <MeteorologyContext />
+
+      {/* ========================================================
+          TEMPORARY UI KIT TEST SHOWCASE (PROMPT 4)
+          Will be removed in Prompt 5
+          ======================================================== */}
+      <section
+        className="card"
+        style={{
+          marginBottom: "2rem",
+          border: "2px dashed #0056D2",
+          background: "#FFFFFF",
+          padding: "1.75rem",
+          borderRadius: "12px",
+          boxShadow: "0 4px 14px rgba(0, 86, 210, 0.08)",
+        }}
+      >
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-start", gap: "10px", marginBottom: "1.5rem", borderBottom: "1px solid #E2E8F0", paddingBottom: "1rem" }}>
+          <div>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "#0056D2", background: "#EFF6FF", border: "1px solid #BFDBFE", padding: "3px 8px", borderRadius: "9999px" }}>
+              Prompt 4 Test Showcase · Temporary
+            </div>
+            <h2 style={{ fontSize: "1.35rem", fontWeight: 700, margin: "8px 0 4px", color: "var(--text-heading)" }}>
+              Level-Based Competency UI Kit
+            </h2>
+            <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
+              Standardized components designed for Trainee, Trainer, and Admin views with strict accessibility (numbers + names alongside color tokens).
+            </p>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
+          {/* Component 1: Level Badges */}
+          <div>
+            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "8px", fontWeight: 700 }}>
+              1. Level Badges (Normal & Small)
+            </h4>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center", marginBottom: "8px" }}>
+              <span style={{ fontSize: "12px", color: "#64748B", minWidth: "60px" }}>Normal:</span>
+              <LevelBadge level="L1" />
+              <LevelBadge level="L2" />
+              <LevelBadge level="L3" />
+              <LevelBadge level="L4" />
+              <LevelBadge level="L5" />
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+              <span style={{ fontSize: "12px", color: "#64748B", minWidth: "60px" }}>Small:</span>
+              <LevelBadge level={1} size="sm" />
+              <LevelBadge level={2} size="sm" />
+              <LevelBadge level={3} size="sm" />
+              <LevelBadge level={4} size="sm" />
+              <LevelBadge level={5} size="sm" />
+            </div>
+          </div>
+
+          {/* Component 2: Level Jump Badges */}
+          <div>
+            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "8px", fontWeight: 700 }}>
+              2. Level Jump Badges (With Arrow)
+            </h4>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+              <LevelJumpBadge from="L1" to="L2" />
+              <LevelJumpBadge from="L2" to="L3" />
+              <LevelJumpBadge from="L1" to="L3" />
+              <LevelJumpBadge from={1} to={2} size="sm" />
+              <LevelJumpBadge from={2} to={3} size="sm" />
+            </div>
+          </div>
+
+          {/* Component 3: Level Path Bar */}
+          <div>
+            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "8px", fontWeight: 700 }}>
+              3. Level Path Bar (Connected Steps, Required Marker, L4/L5 Coming Soon)
+            </h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div>
+                <p style={{ margin: "0 0 6px", fontSize: "12px", color: "#475569", fontWeight: 600 }}>
+                  Standard Full Width (Current: L2 Working · Target: L3 Proficient)
+                </p>
+                <LevelPathBar currentLevel="L2" requiredLevel="L3" />
+              </div>
+              <div>
+                <p style={{ margin: "0 0 6px", fontSize: "12px", color: "#475569", fontWeight: 600 }}>
+                  Standard Full Width (Current: L3 Proficient · Target: L3 Proficient [Met])
+                </p>
+                <LevelPathBar currentLevel="L3" requiredLevel="L3" />
+              </div>
+              <div>
+                <p style={{ margin: "0 0 6px", fontSize: "12px", color: "#475569", fontWeight: 600 }}>
+                  Compact Table Row Version (Current: L1 · Target: L2)
+                </p>
+                <div style={{ maxWidth: "260px" }}>
+                  <LevelPathBar currentLevel="L1" requiredLevel="L2" compact={true} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Component 4: Status Badges */}
+          <div>
+            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "8px", fontWeight: 700 }}>
+              4. Status Badges
+            </h4>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", alignItems: "center" }}>
+              <StatusBadge status="Met" />
+              <StatusBadge status="Gap" />
+              <StatusBadge status="no-course" />
+              <StatusBadge status="locked" />
+              <StatusBadge status="Met" size="sm" />
+              <StatusBadge status="Gap" size="sm" />
+              <StatusBadge status="no-course" size="sm" />
+              <StatusBadge status="locked" size="sm" />
+            </div>
+          </div>
+
+          {/* Component 5: Competency Card / Row */}
+          <div>
+            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "8px", fontWeight: 700 }}>
+              5. Competency Card / Row
+            </h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <CompetencyCardRow
+                name="Doppler Radar Operations"
+                currentLevel="L2"
+                requiredLevel="L3"
+                status="Gap"
+                recommendedCourseTitle="Advanced Radar Scanning Strategies"
+              />
+              <CompetencyCardRow
+                name="Basic Meteorology"
+                currentLevel="L2"
+                requiredLevel="L2"
+                status="Met"
+              />
+              <CompetencyCardRow
+                name="Numerical Weather Prediction Assimilation"
+                currentLevel="L1"
+                requiredLevel="L2"
+                status="no-course"
+              />
+            </div>
+          </div>
+
+          {/* Component 6: Empty / Message States */}
+          <div>
+            <h4 style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "8px", fontWeight: 700 }}>
+              6. Empty / Message States
+            </h4>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px" }}>
+              <LevelEmptyState type="all-met" />
+              <LevelEmptyState type="no-course" />
+              <LevelEmptyState type="no-requirements" />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* 1. Four Stat Cards */}
       <div className="stats-grid">
