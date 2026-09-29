@@ -377,10 +377,10 @@ export default function AssessmentPage() {
           const compName = course?.competency || a.subject;
 
           return (
-            <article key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
+            <article key={a.id} className="assessment-card-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", border: "1.5px solid #CBD5E1", borderRadius: "10px", padding: "18px 20px", background: "#FFFFFF", marginBottom: "14px", boxShadow: "0 2px 6px rgba(0,0,0,0.04)" }}>
               <div>
                 {/* 1. Show level jump at the top ("Passing this moves you from L1 to L2") */}
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "8px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "nowrap", marginBottom: "8px" }}>
                   <Badge tone={a.type === "post" ? "blue" : "gray"}>
                     {a.type === "pre" ? "Pre-Assessment" : "Post-Assessment"}
                   </Badge>
@@ -389,14 +389,18 @@ export default function AssessmentPage() {
                       style={{
                         display: "inline-flex",
                         alignItems: "center",
+                        flexDirection: "row",
+                        flexWrap: "nowrap",
+                        whiteSpace: "nowrap",
                         gap: "6px",
                         background: "#EFF6FF",
                         border: "1px solid #BFDBFE",
-                        padding: "3px 8px",
+                        padding: "3px 10px",
                         borderRadius: "6px",
+                        flexShrink: 0,
                       }}
                     >
-                      <span style={{ fontSize: "11.5px", color: "#1E40AF", fontWeight: 600 }}>
+                      <span style={{ fontSize: "11.5px", color: "#1E40AF", fontWeight: 600, whiteSpace: "nowrap" }}>
                         Passing this moves you:
                       </span>
                       <LevelJumpBadge from={course.entryLevel} to={course.targetLevel} size="sm" />
@@ -412,7 +416,7 @@ export default function AssessmentPage() {
                 </p>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", flexShrink: 0 }}>
                 {best !== null && (
                   <Badge tone={best >= a.passingPercentage ? "green" : "red"}>
                     Best: {best}% {best >= a.passingPercentage ? "(Passed)" : ""}
@@ -447,7 +451,7 @@ export default function AssessmentPage() {
           ========================================================= */}
       {active && (
         <div className="modal-backdrop">
-          <form className="modal-card assessment-modal" onSubmit={submit} style={{ maxWidth: "720px", maxHeight: "90vh", overflowY: "auto" }}>
+          <form className="modal-card assessment-modal" onSubmit={submit} style={{ maxWidth: "720px", maxHeight: "90vh", overflowY: "auto", border: "1.5px solid #CBD5E1", borderRadius: "12px" }}>
             <div className="panel-head" style={{ borderBottom: "1px solid #E2E8F0", paddingBottom: "14px", marginBottom: "16px" }}>
               <div>
                 <h3 style={{ margin: "0 0 4px", fontSize: "19px" }}>{active.title}</h3>
@@ -469,28 +473,30 @@ export default function AssessmentPage() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  flexWrap: "wrap",
+                  flexWrap: "nowrap",
                   gap: "10px",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Compass size={18} color="#0056D2" />
+                  <Compass size={18} color="#0056D2" style={{ flexShrink: 0 }} />
                   <span style={{ fontSize: "13px", color: "#1E40AF" }}>
                     Passing this moves you from <strong>{activeCourse.entryLevel}</strong> to <strong>{activeCourse.targetLevel}</strong> in {activeCourse.competency}
                   </span>
                 </div>
-                <LevelJumpBadge from={activeCourse.entryLevel} to={activeCourse.targetLevel} size="sm" />
+                <div style={{ flexShrink: 0 }}>
+                  <LevelJumpBadge from={activeCourse.entryLevel} to={activeCourse.targetLevel} size="sm" />
+                </div>
               </div>
             )}
 
             {/* Assessment Questions (4-5 IMD-style MCQs) */}
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {active.questions.map((q, i) => (
-                <fieldset className="question-card compact-q" key={q.id} style={{ border: "1px solid #E2E8F0", borderRadius: "8px", padding: "14px" }}>
-                  <legend style={{ fontWeight: 600, color: "var(--text-heading)", padding: "0 6px" }}>
+                <fieldset className="question-card compact-q" key={q.id} style={{ border: "1.5px solid #CBD5E1", borderRadius: "10px", padding: "16px", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+                  <legend style={{ fontWeight: 700, color: "var(--text-heading)", padding: "0 8px", fontSize: "14.5px" }}>
                     Question {i + 1} of {active.questions.length}: {q.text}
                   </legend>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
                     {q.options.map((o, j) => (
                       <label
                         className={answers[i] === j ? "selected" : ""}
@@ -498,13 +504,15 @@ export default function AssessmentPage() {
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          gap: "10px",
-                          padding: "8px 12px",
-                          borderRadius: "6px",
-                          border: `1.5px solid ${answers[i] === j ? "#0056D2" : "#E2E8F0"}`,
+                          gap: "12px",
+                          padding: "12px 14px",
+                          borderRadius: "8px",
+                          border: `1.5px solid ${answers[i] === j ? "#0056D2" : "#CBD5E1"}`,
                           background: answers[i] === j ? "#EFF6FF" : "#F8FAFC",
                           cursor: "pointer",
                           fontSize: "13.5px",
+                          fontWeight: answers[i] === j ? 600 : 400,
+                          transition: "all 0.15s ease",
                         }}
                       >
                         <input
@@ -517,9 +525,9 @@ export default function AssessmentPage() {
                             setAnswers(a);
                           }}
                           required
-                          style={{ accentColor: "#0056D2" }}
+                          style={{ accentColor: "#0056D2", width: "16px", height: "16px", flexShrink: 0 }}
                         />
-                        <span>{o}</span>
+                        <span style={{ color: "var(--text-heading)" }}>{o}</span>
                       </label>
                     ))}
                   </div>

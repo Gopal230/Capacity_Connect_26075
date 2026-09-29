@@ -30,16 +30,28 @@ export function LevelBadge({
   const sizeClass = size === "sm" ? "level-badge-sm" : "level-badge-normal";
 
   return (
-    <span className={`level-badge level-badge-${lvl.toLowerCase()} ${sizeClass} ${className}`}>
-      <span className="level-code">{lvl}</span>
-      <span className="level-name">{def.name}</span>
+    <span
+      className={`level-badge level-badge-${lvl.toLowerCase()} ${sizeClass} ${className}`}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        whiteSpace: "nowrap",
+        gap: "5px",
+        flexShrink: 0,
+        lineHeight: 1,
+      }}
+    >
+      <span className="level-code" style={{ whiteSpace: "nowrap", fontWeight: 700 }}>{lvl}</span>
+      <span className="level-name" style={{ whiteSpace: "nowrap" }}>{def.name}</span>
     </span>
   );
 }
 
 /* =========================================================
    2. LEVEL JUMP BADGE
-   "L1 to L2" with an arrow
+   "L1 to L2" with an arrow - ALWAYS strictly horizontal single line
    ========================================================= */
 export function LevelJumpBadge({
   from,
@@ -57,10 +69,22 @@ export function LevelJumpBadge({
   const sizeClass = size === "sm" ? "level-jump-sm" : "level-jump-normal";
 
   return (
-    <span className={`level-jump-badge ${sizeClass} ${className}`}>
-      <span className="jump-from">{fromLvl}</span>
-      <ArrowRight size={size === "sm" ? 12 : 14} className="jump-arrow" />
-      <span className="jump-to">{toLvl}</span>
+    <span
+      className={`level-jump-badge ${sizeClass} ${className}`}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        flexDirection: "row",
+        flexWrap: "nowrap",
+        whiteSpace: "nowrap",
+        gap: "4px",
+        flexShrink: 0,
+        lineHeight: 1,
+      }}
+    >
+      <span className="jump-from" style={{ whiteSpace: "nowrap", fontWeight: 700 }}>{fromLvl}</span>
+      <ArrowRight size={size === "sm" ? 12 : 14} className="jump-arrow" style={{ flexShrink: 0, display: "inline-block" }} />
+      <span className="jump-to" style={{ whiteSpace: "nowrap", fontWeight: 700 }}>{toLvl}</span>
     </span>
   );
 }
