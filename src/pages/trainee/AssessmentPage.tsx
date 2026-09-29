@@ -461,11 +461,11 @@ export default function AssessmentPage() {
             {activeCourse?.entryLevel && activeCourse?.targetLevel && (
               <div
                 style={{
-                  background: "#EFF6FF",
-                  border: "1.5px solid #BFDBFE",
-                  borderRadius: "8px",
-                  padding: "10px 14px",
-                  marginBottom: "18px",
+                  background: "#FEF2F2",
+                  border: "1.5px solid #FECACA",
+                  borderRadius: "10px",
+                  padding: "12px 16px",
+                  marginBottom: "20px",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -474,8 +474,8 @@ export default function AssessmentPage() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Compass size={18} color="#0056D2" />
-                  <span style={{ fontSize: "13px", color: "#1E40AF" }}>
+                  <Compass size={18} color="#DC2626" />
+                  <span style={{ fontSize: "13px", color: "#991B1B", fontWeight: 600 }}>
                     Passing this moves you from <strong>{activeCourse.entryLevel}</strong> to <strong>{activeCourse.targetLevel}</strong> in {activeCourse.competency}
                   </span>
                 </div>
@@ -483,57 +483,144 @@ export default function AssessmentPage() {
               </div>
             )}
 
-            {/* Assessment Questions (4-5 IMD-style MCQs) */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {/* Assessment Questions (IMD-style Modern MCQs) */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {active.questions.map((q, i) => (
-                <fieldset className="question-card compact-q" key={q.id} style={{ border: "1px solid #E2E8F0", borderRadius: "8px", padding: "14px" }}>
-                  <legend style={{ fontWeight: 600, color: "var(--text-heading)", padding: "0 6px" }}>
-                    Question {i + 1} of {active.questions.length}: {q.text}
-                  </legend>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
-                    {q.options.map((o, j) => (
-                      <label
-                        className={answers[i] === j ? "selected" : ""}
-                        key={o}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          padding: "8px 12px",
-                          borderRadius: "6px",
-                          border: `1.5px solid ${answers[i] === j ? "#0056D2" : "#E2E8F0"}`,
-                          background: answers[i] === j ? "#EFF6FF" : "#F8FAFC",
-                          cursor: "pointer",
-                          fontSize: "13.5px",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name={q.id}
-                          checked={answers[i] === j}
-                          onChange={() => {
+                <div
+                  key={q.id}
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1.5px solid #CBD5E1",
+                    borderRadius: "10px",
+                    padding: "18px 20px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
+                  }}
+                >
+                  <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", marginBottom: "14px" }}>
+                    <div
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "6px",
+                        background: "#081A2E",
+                        color: "#FFFFFF",
+                        display: "grid",
+                        placeItems: "center",
+                        fontWeight: 800,
+                        fontSize: "12px",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {i + 1}
+                    </div>
+                    <h4 style={{ margin: 0, fontSize: "15px", color: "#0F172A", fontWeight: 700, lineHeight: 1.45 }}>
+                      {q.text}
+                    </h4>
+                  </div>
+
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {q.options.map((o, j) => {
+                      const isSelected = answers[i] === j;
+                      const letter = String.fromCharCode(65 + j);
+
+                      return (
+                        <div
+                          key={o}
+                          onClick={() => {
                             const a = [...answers];
                             a[i] = j;
                             setAnswers(a);
                           }}
-                          required
-                          style={{ accentColor: "#0056D2" }}
-                        />
-                        <span>{o}</span>
-                      </label>
-                    ))}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            border: `2px solid ${isSelected ? "#DC2626" : "#E2E8F0"}`,
+                            background: isSelected ? "#FEF2F2" : "#F8FAFC",
+                            cursor: "pointer",
+                            transition: "all 0.15s ease",
+                          }}
+                        >
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div
+                              style={{
+                                width: "26px",
+                                height: "26px",
+                                borderRadius: "50%",
+                                background: isSelected ? "#DC2626" : "#FFFFFF",
+                                color: isSelected ? "#FFFFFF" : "#64748B",
+                                border: `1.5px solid ${isSelected ? "#DC2626" : "#CBD5E1"}`,
+                                display: "grid",
+                                placeItems: "center",
+                                fontWeight: 800,
+                                fontSize: "11.5px",
+                                flexShrink: 0,
+                              }}
+                            >
+                              {letter}
+                            </div>
+                            <span
+                              style={{
+                                fontSize: "13.5px",
+                                color: isSelected ? "#991B1B" : "#1E293B",
+                                fontWeight: isSelected ? 700 : 500,
+                              }}
+                            >
+                              {o}
+                            </span>
+                          </div>
+
+                          <div
+                            style={{
+                              width: "18px",
+                              height: "18px",
+                              borderRadius: "50%",
+                              border: `2px solid ${isSelected ? "#DC2626" : "#CBD5E1"}`,
+                              display: "grid",
+                              placeItems: "center",
+                              flexShrink: 0,
+                              background: "#FFFFFF",
+                            }}
+                          >
+                            {isSelected && (
+                              <div
+                                style={{
+                                  width: "8px",
+                                  height: "8px",
+                                  borderRadius: "50%",
+                                  background: "#DC2626",
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                </fieldset>
+                </div>
               ))}
             </div>
 
-            <div className="modal-actions" style={{ marginTop: "20px", display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-              <button type="button" className="btn btn-secondary" onClick={() => setActive(null)}>
-                Cancel
-              </button>
-              <button className="btn btn-primary" type="submit">
-                Submit Assessment
-              </button>
+            <div className="modal-actions" style={{ marginTop: "24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: "12.5px", color: "#64748B", fontWeight: 600 }}>
+                Answered: {answers.filter((x) => x !== undefined).length} / {active.questions.length}
+              </span>
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setActive(null)}>
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={answers.filter((x) => x !== undefined).length < active.questions.length}
+                  style={{ fontWeight: 700, padding: "8px 22px" }}
+                >
+                  Submit Assessment →
+                </button>
+              </div>
             </div>
           </form>
         </div>
