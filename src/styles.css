@@ -11,47 +11,47 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Primary Brand: Sophisticated Crimson / Garnet Red */
+  /* Primary Brand: Sophisticated Crimson / Garnet Red (Deep & Balanced, Not Over-Bright) */
   --brand-primary: #991B1B;
   --brand-hover: #7F1D1D;
   --brand-accent: #B91C1C;
-  --brand-soft: #FEF2F2;
-  --brand-border: #FECACA;
+  --brand-soft: #241114;
+  --brand-border: #4C1D24;
 
-  /* Surfaces & Backgrounds: Clean Light Slate/White with Dark Nav/Sidebar Headers */
-  --surface-base: #F8FAFC;
-  --surface-card: #FFFFFF;
-  --surface-tint: #FEF2F2;
-  --surface-alt: #F1F5F9;
+  /* Dark Blackish-Blue Surfaces & Backgrounds */
+  --surface-base: #080E18;
+  --surface-card: #0E1726;
+  --surface-tint: #142034;
+  --surface-alt: #0B1320;
 
-  /* Clean Slate Dividers & Borders */
-  --border-clean: #E2E8F0;
-  --border-hover: #CBD5E1;
-  --border-subtle: #F1F5F9;
+  /* Dark Slate Dividers & Borders */
+  --border-clean: #1B2A44;
+  --border-hover: #293E64;
+  --border-subtle: #121E33;
 
-  /* Typography: Deep Midnight Navy Heading & Clean Slate Body */
-  --text-heading: #081A2E;
-  --text-body: #334155;
-  --text-muted: #64748B;
+  /* Typography Colors for Dark Blackish-Blue Theme */
+  --text-heading: #F8FAFC;
+  --text-body: #CBD5E1;
+  --text-muted: #8394AC;
 
-  /* Badges, Ratings & Accents */
-  --badge-gold: #D97706;
-  --badge-gold-bg: #FFFBEB;
-  --badge-gold-border: #FDE68A;
+  /* Badges, Ratings & Accents in Dark Theme */
+  --badge-gold: #FBBF24;
+  --badge-gold-bg: #261D0C;
+  --badge-gold-border: #543E19;
 
-  --badge-emerald: #059669;
-  --badge-emerald-bg: #ECFDF5;
-  --badge-emerald-border: #A7F3D0;
+  --badge-emerald: #34D399;
+  --badge-emerald-bg: #0C2417;
+  --badge-emerald-border: #164E33;
 
-  --badge-red: #991B1B;
-  --badge-red-bg: #FEF2F2;
-  --badge-red-border: #FECACA;
+  --badge-red: #F87171;
+  --badge-red-bg: #241114;
+  --badge-red-border: #4C1D24;
 
   /* High-Trust Subtle Shadows */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-card: 0 2px 8px rgba(8, 26, 46, 0.06);
-  --shadow-hover: 0 6px 16px rgba(8, 26, 46, 0.1);
-  --shadow-dropdown: 0 8px 24px rgba(8, 26, 46, 0.15);
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-dropdown: 0 8px 28px rgba(0, 0, 0, 0.65);
 
   /* Legacy variable mapping for full codebase compatibility */
   --blue: var(--brand-primary);
@@ -135,7 +135,7 @@ select, input, textarea {
 
 select:focus, input:focus, textarea:focus {
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(153, 27, 27, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 86, 210, 0.15);
 }
 
 label {
