@@ -11,47 +11,47 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Primary Brand: Coursera Signature Royal Blue */
-  --brand-primary: #0056D2;
-  --brand-hover: #00419E;
-  --brand-accent: #2563EB;
-  --brand-soft: #EFF6FF;
-  --brand-border: #BFDBFE;
+  /* Primary Brand: Sophisticated Crimson / Garnet Red (Deep & Balanced, Not Over-Bright) */
+  --brand-primary: #991B1B;
+  --brand-hover: #7F1D1D;
+  --brand-accent: #B91C1C;
+  --brand-soft: #241114;
+  --brand-border: #4C1D24;
 
-  /* Surfaces & Backgrounds */
-  --surface-base: #F8FAFC;
-  --surface-card: #FFFFFF;
-  --surface-tint: #F0F5FF;
-  --surface-alt: #F1F5F9;
+  /* Dark Blackish-Blue Surfaces & Backgrounds */
+  --surface-base: #080E18;
+  --surface-card: #0E1726;
+  --surface-tint: #142034;
+  --surface-alt: #0B1320;
 
-  /* Clean Slate Dividers & Borders */
-  --border-clean: #E2E8F0;
-  --border-hover: #CBD5E1;
-  --border-subtle: #F1F5F9;
+  /* Dark Slate Dividers & Borders */
+  --border-clean: #1B2A44;
+  --border-hover: #293E64;
+  --border-subtle: #121E33;
 
-  /* Typography Colors */
-  --text-heading: #0F172A;
-  --text-body: #334155;
-  --text-muted: #64748B;
+  /* Typography Colors for Dark Blackish-Blue Theme */
+  --text-heading: #F8FAFC;
+  --text-body: #CBD5E1;
+  --text-muted: #8394AC;
 
-  /* Badges, Ratings & Accents */
-  --badge-gold: #F59E0B;
-  --badge-gold-bg: #FFFBEB;
-  --badge-gold-border: #FDE68A;
+  /* Badges, Ratings & Accents in Dark Theme */
+  --badge-gold: #FBBF24;
+  --badge-gold-bg: #261D0C;
+  --badge-gold-border: #543E19;
 
-  --badge-emerald: #10B981;
-  --badge-emerald-bg: #ECFDF5;
-  --badge-emerald-border: #A7F3D0;
+  --badge-emerald: #34D399;
+  --badge-emerald-bg: #0C2417;
+  --badge-emerald-border: #164E33;
 
-  --badge-red: #EF4444;
-  --badge-red-bg: #FEF2F2;
-  --badge-red-border: #FECACA;
+  --badge-red: #F87171;
+  --badge-red-bg: #241114;
+  --badge-red-border: #4C1D24;
 
   /* High-Trust Subtle Shadows */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.08);
-  --shadow-dropdown: 0 4px 14px rgba(0, 0, 0, 0.1);
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-dropdown: 0 8px 28px rgba(0, 0, 0, 0.65);
 
   /* Legacy variable mapping for full codebase compatibility */
   --blue: var(--brand-primary);
@@ -391,9 +391,9 @@ textarea {
   top: 0;
   z-index: 50;
   width: 100%;
-  background: #081A2E;
-  border-bottom: 1px solid #1E293B;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  background: #060D17;
+  border-bottom: 1px solid #142034;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .top-navbar-main {
@@ -402,7 +402,7 @@ textarea {
   justify-content: space-between;
   gap: 16px;
   padding: 10px 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .top-navbar-brand-link {
@@ -421,13 +421,13 @@ textarea {
   min-height: 36px;
   display: grid;
   place-items: center;
-  background: #DC2626;
+  background: #991B1B;
   color: #FFFFFF;
   border-radius: 8px;
   font-weight: 800;
   font-size: 14px;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.45);
+  box-shadow: 0 2px 8px rgba(153, 27, 27, 0.45);
   flex-shrink: 0;
 }
 
@@ -447,7 +447,7 @@ textarea {
 
 .brand-subtext {
   font-size: 11px;
-  color: #94A3B8;
+  color: #8899B0;
 }
 
 /* Controls & Right Utilities */
@@ -475,7 +475,7 @@ textarea {
 
 /* Horizontal Left-to-Right Navigation Bar */
 .top-navbar-links-bar {
-  background: #0A192F;
+  background: #08111D;
   padding: 0 28px;
   display: flex;
   align-items: center;
@@ -503,7 +503,7 @@ textarea {
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 500;
-  color: #CBD5E1;
+  color: #8899B0;
   border-radius: 6px;
   text-decoration: none;
   white-space: nowrap;
@@ -528,9 +528,9 @@ textarea {
 .top-nav-btn.active {
   color: #FFFFFF;
   font-weight: 700;
-  background: #DC2626;
-  border-color: #DC2626;
-  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+  background: #991B1B;
+  border-color: #991B1B;
+  box-shadow: 0 2px 6px rgba(153, 27, 27, 0.4);
 }
 
 .top-nav-btn.active .nav-btn-icon {
@@ -541,8 +541,8 @@ textarea {
 .mobile-nav-drawer {
   display: flex;
   flex-direction: column;
-  background: #081A2E;
-  border-top: 1px solid #1E293B;
+  background: #060D17;
+  border-top: 1px solid #142034;
   padding: 14px 18px 20px;
   gap: 8px;
 }
@@ -559,7 +559,7 @@ textarea {
   gap: 10px;
   padding: 10px 14px;
   border-radius: 6px;
-  color: #CBD5E1;
+  color: #8899B0;
   font-size: 13.5px;
   font-weight: 500;
   text-decoration: none;
@@ -572,7 +572,7 @@ textarea {
 }
 
 .mobile-nav-item.active {
-  background: #DC2626;
+  background: #991B1B;
   color: #FFFFFF;
   font-weight: 700;
 }
@@ -1474,7 +1474,7 @@ tr:hover td {
 }
 
 .gap-banner {
-  background: linear-gradient(135deg, #0A192F 0%, #00419E 60%, #0056D2 100%);
+  background: linear-gradient(135deg, #060D17 0%, #0E1726 60%, #241114 100%);
   color: #FFFFFF;
   border-radius: 8px;
   padding: 20px 24px;
@@ -1647,7 +1647,7 @@ tr:hover td {
 
 .learning-cover {
   height: 120px;
-  background: linear-gradient(135deg, #0A192F 0%, #00419E 60%, #0056D2 100%);
+  background: linear-gradient(135deg, #060D17 0%, #0E1726 60%, #241114 100%);
   display: grid;
   place-items: center;
   color: #FFFFFF;
@@ -1678,7 +1678,7 @@ tr:hover td {
 }
 
 .course-hero {
-  background: linear-gradient(135deg, #0A192F 0%, #00419E 60%, #0056D2 100%);
+  background: linear-gradient(135deg, #060D17 0%, #0E1726 60%, #241114 100%);
   color: #FFFFFF;
   border-radius: 8px;
   padding: 24px;
@@ -2532,7 +2532,7 @@ tr:hover td {
 }
 
 .auth-side {
-  background: linear-gradient(135deg, #0A192F 0%, #00419E 60%, #0056D2 100%);
+  background: linear-gradient(135deg, #060D17 0%, #0E1726 60%, #241114 100%);
   color: #FFFFFF;
   padding: 48px max(4vw, 40px);
   display: flex;
@@ -2690,7 +2690,7 @@ tr:hover td {
   grid-template-columns: 1fr auto;
   gap: 28px;
   align-items: center;
-  background: linear-gradient(135deg, #0A192F 0%, #00419E 60%, #0056D2 100%);
+  background: linear-gradient(135deg, #060D17 0%, #0E1726 60%, #241114 100%);
   color: #FFFFFF;
   border-radius: 8px;
   padding: 26px 30px;
@@ -2988,7 +2988,7 @@ tr:hover td {
    ========================================================= */
 .welcome-hero-section {
   padding: 56px 24px 44px;
-  background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%);
+  background: linear-gradient(180deg, #F8FAFC 0%, #142034 100%);
   border-bottom: 1px solid var(--border-clean);
   text-align: center;
 }
@@ -3130,7 +3130,7 @@ tr:hover td {
 }
 
 .trainee-card .role-card-badge {
-  background: #EEF2FF;
+  background: #142034;
   color: #4F46E5;
 }
 
@@ -3155,7 +3155,7 @@ tr:hover td {
 }
 
 .trainee-card .role-card-icon-wrap {
-  background: #EEF2FF;
+  background: #142034;
   color: #4F46E5;
 }
 
@@ -3268,7 +3268,7 @@ tr:hover td {
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 9999px;
-  background: #EEF2FF;
+  background: #142034;
   color: var(--brand-primary);
   border: 1px solid #C7D2FE;
 }
@@ -3397,7 +3397,7 @@ tr:hover td {
 }
 
 .switch-pill:hover {
-  background: #EEF2FF;
+  background: #142034;
   color: var(--brand-primary);
   border-color: #C7D2FE;
 }
@@ -3514,7 +3514,7 @@ tr:hover td {
 }
 
 .next-step-panel {
-  background: linear-gradient(135deg, #F0F5FF 0%, #FFFFFF 100%);
+  background: linear-gradient(135deg, #0E1726 0%, #FFFFFF 100%);
   border: 1.5px solid #BFDBFE;
   border-radius: 8px;
   padding: 24px;

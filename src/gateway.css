@@ -1,10 +1,10 @@
 /* =========================================================
-   CAPACITY CONNECT - COURSERA ACADEMIC ENTERPRISE DESIGN
+   CAPACITY CONNECT - DARK BLACKISH-BLUE & DEEP GARNET/CRIMSON RED
    ========================================================= */
 
 .portal-gateway {
   min-height: calc(100vh - 140px);
-  background: #F8FAFC;
+  background: #080E18;
   padding: 44px 24px 64px;
 }
 
@@ -19,14 +19,14 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0056D2;
+  color: #F87171;
   margin-bottom: 8px;
 }
 
 .gateway-title {
-  font-size: 24px !important;
-  font-weight: 700;
-  color: #0F172A;
+  font-size: 26px !important;
+  font-weight: 800;
+  color: #F8FAFC;
   margin: 0 0 10px;
   line-height: 1.35;
   letter-spacing: -0.015em;
@@ -35,7 +35,7 @@
 .gateway-desc {
   font-size: 14.5px;
   line-height: 1.6;
-  color: #475569;
+  color: #8899B0;
   max-width: 760px;
   margin: 0 auto;
 }
@@ -60,20 +60,21 @@
 }
 
 .role-part-column {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
+  background: #0E1726;
+  border: 1px solid #1B2A44;
+  border-radius: 10px;
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .role-part-column:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: #991B1B;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
 }
 
 .part-header {
@@ -88,14 +89,15 @@
 }
 
 .part-icon-wrap {
-  width: 38px;
-  height: 38px;
-  border-radius: 6px;
-  background: #EFF6FF;
-  color: #0056D2;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #241114;
+  color: #F87171;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #4C1D24;
 }
 
 .role-category-label {
@@ -103,23 +105,24 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #0056D2;
-  background: #F0F5FF;
+  color: #F87171;
+  background: #241114;
+  border: 1px solid #4C1D24;
   padding: 4px 8px;
   border-radius: 4px;
 }
 
 .part-header h2 {
   font-size: 18px;
-  font-weight: 600;
-  color: #0F172A;
+  font-weight: 700;
+  color: #F8FAFC;
   margin: 0 0 6px;
   letter-spacing: -0.01em;
 }
 
 .part-audience {
   font-size: 12.5px;
-  color: #64748B;
+  color: #8899B0;
   line-height: 1.45;
   margin: 0;
   min-height: 36px;
@@ -127,7 +130,7 @@
 
 /* Checklist */
 .part-body {
-  border-top: 1px solid #F1F5F9;
+  border-top: 1px solid #1B2A44;
   padding-top: 16px;
   margin-bottom: 20px;
   flex: 1;
@@ -138,7 +141,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #475569;
+  color: #8899B0;
   display: block;
   margin-bottom: 12px;
 }
@@ -157,12 +160,12 @@
   align-items: flex-start;
   gap: 9px;
   font-size: 13px;
-  color: #334155;
+  color: #CBD5E1;
   line-height: 1.45;
 }
 
 .part-checklist li .check-icon {
-  color: #0056D2;
+  color: #F87171;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -172,12 +175,12 @@
   display: flex;
   flex-direction: column;
   gap: 9px;
-  border-top: 1px solid #F1F5F9;
+  border-top: 1px solid #1B2A44;
   padding-top: 18px;
 }
 
 .btn-role-primary {
-  background: #0056D2 !important;
+  background: #991B1B !important;
   color: #FFFFFF !important;
   font-weight: 600;
   font-size: 13.5px;
@@ -189,17 +192,19 @@
   gap: 8px;
   text-decoration: none;
   border: none;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 3px rgba(153, 27, 27, 0.4);
 }
 
 .btn-role-primary:hover {
-  background: #00419E !important;
+  background: #7F1D1D !important;
+  box-shadow: 0 4px 10px rgba(153, 27, 27, 0.6);
 }
 
 .btn-role-demo {
-  background: #F8FAFC !important;
-  color: #0F172A !important;
-  border: 1px solid #CBD5E1 !important;
+  background: #142034 !important;
+  color: #F1F5F9 !important;
+  border: 1px solid #1B2A44 !important;
   font-weight: 600;
   font-size: 12.5px;
   padding: 9px 16px;
@@ -213,28 +218,28 @@
 }
 
 .btn-role-demo:hover {
-  background: #F0F5FF !important;
-  border-color: #0056D2 !important;
-  color: #0056D2 !important;
+  background: #241114 !important;
+  border-color: #991B1B !important;
+  color: #FFFFFF !important;
 }
 
 .part-register-link {
   font-size: 12px;
-  font-weight: 500;
-  color: #0056D2;
+  font-weight: 600;
+  color: #F87171;
   text-decoration: none;
   text-align: center;
   margin-top: 3px;
 }
 
 .part-register-link:hover {
-  color: #00419E;
+  color: #FCA5A5;
   text-decoration: underline;
 }
 
 .part-admin-notice {
   font-size: 11.5px;
-  color: #64748B;
+  color: #8899B0;
   text-align: center;
   margin-top: 3px;
   line-height: 1.4;
