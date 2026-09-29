@@ -5,6 +5,7 @@ import AppShell from "./layouts/AppShell";
 import HomePage from "./pages/public/HomePage";
 import LoginPage from "./pages/public/LoginPage";
 import RegisterPage from "./pages/public/RegisterPage";
+import CoursesPage from "./pages/public/CoursesPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminTrainers from "./pages/admin/AdminTrainers";
@@ -13,7 +14,6 @@ import AdminCompetencies from "./pages/admin/AdminCompetencies";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminContent from "./pages/admin/AdminContent";
 import AdminReadiness from "./pages/admin/AdminReadiness";
-import AdminKnowledge from "./pages/admin/AdminKnowledge";
 import AdminMedia from "./pages/admin/AdminMedia";
 import TrainerDashboard from "./pages/trainer/TrainerDashboard";
 import TrainerProfile from "./pages/trainer/TrainerProfile";
@@ -21,8 +21,6 @@ import TrainerCourses from "./pages/trainer/TrainerCourses";
 import TrainerLibrary from "./pages/trainer/TrainerLibrary";
 import TrainerAssessments from "./pages/trainer/TrainerAssessments";
 import TrainerTrainees from "./pages/trainer/TrainerTrainees";
-import TrainerEvidence from "./pages/trainer/TrainerEvidence";
-import TrainerKnowledge from "./pages/trainer/TrainerKnowledge";
 import TraineeDashboard from "./pages/trainee/TraineeDashboard";
 import TraineeProfile from "./pages/trainee/TraineeProfile";
 import CompetencyCheck from "./pages/trainee/CompetencyCheck";
@@ -40,8 +38,6 @@ function Protected({role,children}:{role:Role;children:React.ReactNode}){
   return <AppShell role={role}>{children}</AppShell>;
 }
 
-import CoursesPage from "./pages/public/CoursesPage";
-
 export default function App(){
   return <Routes>
     <Route path="/" element={<HomePage/>}/>
@@ -58,7 +54,6 @@ export default function App(){
     <Route path="/admin/reports" element={<Protected role="admin"><AdminReports/></Protected>}/>
     <Route path="/admin/content" element={<Protected role="admin"><AdminContent/></Protected>}/>
     <Route path="/admin/readiness" element={<Protected role="admin"><AdminReadiness/></Protected>}/>
-    <Route path="/admin/knowledge" element={<Protected role="admin"><AdminKnowledge/></Protected>}/>
 
     <Route path="/trainer" element={<Protected role="trainer"><TrainerDashboard/></Protected>}/>
     <Route path="/trainer/profile" element={<Protected role="trainer"><TrainerProfile/></Protected>}/>
@@ -66,8 +61,6 @@ export default function App(){
     <Route path="/trainer/library" element={<Protected role="trainer"><TrainerLibrary/></Protected>}/>
     <Route path="/trainer/assessments" element={<Protected role="trainer"><TrainerAssessments/></Protected>}/>
     <Route path="/trainer/trainees" element={<Protected role="trainer"><TrainerTrainees/></Protected>}/>
-    <Route path="/trainer/evidence" element={<Protected role="trainer"><TrainerEvidence/></Protected>}/>
-    <Route path="/trainer/knowledge" element={<Protected role="trainer"><TrainerKnowledge/></Protected>}/>
 
     <Route path="/trainee" element={<Protected role="trainee"><TraineeDashboard/></Protected>}/>
     <Route path="/trainee/profile" element={<Protected role="trainee"><TraineeProfile/></Protected>}/>
