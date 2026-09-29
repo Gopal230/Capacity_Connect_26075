@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
-import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, IMD_RADAR_COMPETENCIES, KEYS, sanitizeLevel } from "../data/constants";
+import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
 import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
 import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
@@ -124,7 +124,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
           }
         });
         localStorage.setItem(KEYS.SCHEMA_VERSION, CURRENT_SCHEMA_VERSION);
-        localStorage.setItem(KEYS.COMPETENCIES, JSON.stringify(IMD_RADAR_COMPETENCIES));
         localStorage.setItem(KEYS.ROLE_REQUIREMENTS, JSON.stringify(DEFAULT_ROLE_REQUIREMENTS));
         localStorage.setItem(KEYS.TRAINEE_LEVELS, JSON.stringify(getDefaultTraineeLevels()));
         return cloneSeed();
@@ -178,12 +177,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem(KEYS.TRAINEE_LEVELS, JSON.stringify(traineeLevels));
   }, [traineeLevels]);
-
-  useEffect(() => {
-    if (!localStorage.getItem(KEYS.COMPETENCIES)) {
-      localStorage.setItem(KEYS.COMPETENCIES, JSON.stringify(IMD_RADAR_COMPETENCIES));
-    }
-  }, []);
 
   useEffect(() => {
     if (sessionId) {
@@ -710,9 +703,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem(KEYS.DB);
     localStorage.removeItem(KEYS.ROLE_REQUIREMENTS);
     localStorage.removeItem(KEYS.TRAINEE_LEVELS);
-    localStorage.removeItem(KEYS.COMPETENCIES);
     localStorage.setItem(KEYS.SCHEMA_VERSION, CURRENT_SCHEMA_VERSION);
-    localStorage.setItem(KEYS.COMPETENCIES, JSON.stringify(IMD_RADAR_COMPETENCIES));
     setRoleRequirements(DEFAULT_ROLE_REQUIREMENTS);
     setTraineeLevels(getDefaultTraineeLevels());
     setDb(cloneSeed());

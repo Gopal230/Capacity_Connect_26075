@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { Role } from "../../types";
+import PublicFooter from "../../components/PublicFooter";
 
 export default function HomePage() {
   const { login } = useApp();
@@ -487,20 +488,7 @@ export default function HomePage() {
       </main>
 
       {/* Institutional Footer */}
-      <footer className="public-footer">
-        <div>
-          <strong>CAPACITY CONNECT</strong>
-          <p>Digital Capacity Building & Operational Readiness Portal</p>
-          <small>© {new Date().getFullYear()} India Meteorological Department · Ministry of Earth Sciences</small>
-        </div>
-        <div className="footer-links">
-          <Link to="/courses">Course Catalog</Link>
-          <Link to="/?role=trainee">Trainee Workspace</Link>
-          <Link to="/?role=trainer">Faculty Portal</Link>
-          <Link to="/?role=admin">Admin Command</Link>
-          <Link to="/register">Account Clearance</Link>
-        </div>
-      </footer>
+      <PublicFooter />
     </div>
   );
 }
