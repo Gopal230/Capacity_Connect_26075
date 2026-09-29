@@ -7,6 +7,7 @@ export const KEYS = {
   ROLE_REQUIREMENTS: "cc_role_requirements",
   TRAINEE_LEVELS: "cc_trainee_levels",
   CERTIFICATES: "cc_certificates_v1",
+  TRAINER_EXPERTISE: "cc_trainer_expertise_v1",
 };
 
 export const CURRENT_SCHEMA_VERSION = "7.0.0";

@@ -50,6 +50,13 @@ export interface Trainer {
   bio: string;
 }
 
+export interface TrainerExpertiseItem {
+  competencyId: string;
+  expertiseLevel: "L3" | "L4" | "L5";
+}
+
+export type TrainerExpertiseMap = Record<string, TrainerExpertiseItem[]>;
+
 export interface TraineeCompetency {
   name: string;
   currentLevel: CompetencyLevel;

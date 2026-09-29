@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
 import { seedDB } from "../data/seed";
-import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, User } from "../types";
+import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, TrainerExpertiseItem, TrainerExpertiseMap, User } from "../types";
 import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
 
 type Toast = { id: number; message: string; tone: "success" | "error" | "info" };
@@ -13,6 +13,7 @@ interface AppContextType {
   roleRequirements: RoleRequirementsMap;
   traineeLevels: TraineeLevelsMap;
   certificates: Certificate[];
+  trainerExpertise: TrainerExpertiseMap;
   login: (email: string, password: string) => { ok: boolean; message: string; role?: Role };
   logout: () => void;
   register: (input: { name: string; email: string; password: string; role: Role; department: string; designation: string; jobRole?: string }) => { ok: boolean; message: string };
@@ -51,6 +52,8 @@ interface AppContextType {
   getRoleRequirements: (roleName: string) => Record<string, CompetencyLevel>;
   getRoleRecommendations: (trainee?: Trainee) => RoleCompetencyGapItem[];
   getNextStep: (trainee?: Trainee) => RoleCompetencyGapItem | null;
+  getTrainerExpertise: (trainerId: string) => TrainerExpertiseItem[];
+  setTrainerExpertise: (trainerId: string, items: TrainerExpertiseItem[]) => void;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -112,6 +115,19 @@ function getDefaultTraineeLevels(): TraineeLevelsMap {
   };
 }
 
+export function getDefaultTrainerExpertise(): TrainerExpertiseMap {
+  return {
+    "tr1": [
+      { competencyId: "doppler-radar-operations", expertiseLevel: "L5" },
+      { competencyId: "radar-data-interpretation", expertiseLevel: "L5" },
+      { competencyId: "severe-weather-detection", expertiseLevel: "L4" },
+      { competencyId: "basic-meteorology", expertiseLevel: "L4" },
+      { competencyId: "radar-quality-control-and-maintenance", expertiseLevel: "L4" },
+      { competencyId: "warning-communication", expertiseLevel: "L3" },
+    ],
+  };
+}
+
 export function AppProvider({ children }: { children: ReactNode }) {
   // 8. DATA VERSIONING & SAFE RE-SEEDING
   const [db, setDb] = useState<DB>(() => {
@@ -127,6 +143,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         localStorage.setItem(KEYS.SCHEMA_VERSION, CURRENT_SCHEMA_VERSION);
         localStorage.setItem(KEYS.ROLE_REQUIREMENTS, JSON.stringify(DEFAULT_ROLE_REQUIREMENTS));
         localStorage.setItem(KEYS.TRAINEE_LEVELS, JSON.stringify(getDefaultTraineeLevels()));
+        localStorage.setItem(KEYS.TRAINER_EXPERTISE, JSON.stringify(getDefaultTrainerExpertise()));
         return cloneSeed();
       }
 
@@ -164,6 +181,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   });
 
+  const [trainerExpertise, setTrainerExpertiseState] = useState<TrainerExpertiseMap>(() => {
+    try {
+      const raw = localStorage.getItem(KEYS.TRAINER_EXPERTISE);
+      return raw ? JSON.parse(raw) : getDefaultTrainerExpertise();
+    } catch {
+      return getDefaultTrainerExpertise();
+    }
+  });
+
   const [sessionId, setSessionId] = useState<string | null>(() => {
     const sid = localStorage.getItem(KEYS.SESSION);
     // Keep currently logged-in session sensible (log out if user no longer exists)
@@ -191,6 +217,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem(KEYS.CERTIFICATES, JSON.stringify(certificates));
   }, [certificates]);
+
+  useEffect(() => {
+    localStorage.setItem(KEYS.TRAINER_EXPERTISE, JSON.stringify(trainerExpertise));
+  }, [trainerExpertise]);
 
   useEffect(() => {
     if (sessionId) {
@@ -728,15 +758,32 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return getNextStepRecommendation(items);
   };
 
+  const getTrainerExpertise = (trainerId: string): TrainerExpertiseItem[] => {
+    return trainerExpertise[trainerId] || getDefaultTrainerExpertise()[trainerId] || [];
+  };
+
+  const setTrainerExpertise = (trainerId: string, items: TrainerExpertiseItem[]) => {
+    setTrainerExpertiseState(prev => {
+      const updated = {
+        ...prev,
+        [trainerId]: items,
+      };
+      return updated;
+    });
+    notify("Trainer competency expertise updated");
+  };
+
   const resetDemo = () => {
     localStorage.removeItem(KEYS.DB);
     localStorage.removeItem(KEYS.ROLE_REQUIREMENTS);
     localStorage.removeItem(KEYS.TRAINEE_LEVELS);
     localStorage.removeItem(KEYS.CERTIFICATES);
+    localStorage.removeItem(KEYS.TRAINER_EXPERTISE);
     localStorage.setItem(KEYS.SCHEMA_VERSION, CURRENT_SCHEMA_VERSION);
     setRoleRequirements(DEFAULT_ROLE_REQUIREMENTS);
     setTraineeLevels(getDefaultTraineeLevels());
     setCertificates([]);
+    setTrainerExpertiseState(getDefaultTrainerExpertise());
     setDb(cloneSeed());
     setSessionId(null);
     notify("Demo data reset to Phase 1 data foundation", "info");
@@ -751,6 +798,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         roleRequirements,
         traineeLevels,
         certificates,
+        trainerExpertise,
         login,
         logout,
         register,
@@ -789,6 +837,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
         getRoleRequirements,
         getRoleRecommendations,
         getNextStep,
+        getTrainerExpertise,
+        setTrainerExpertise,
       }}
     >
       {children}
