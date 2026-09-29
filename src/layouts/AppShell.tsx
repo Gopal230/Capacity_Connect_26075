@@ -30,7 +30,7 @@ const nav: Record<Role,{to:string;label:string;icon:ReactNode}[]> = {
     {to:"/trainee",label:"Dashboard",icon:<Home/>},
     {to:"/trainee/competency",label:"Competency Check",icon:<BrainCircuit/>},
     {to:"/trainee/recommendations",label:"Recommendations",icon:<Settings2/>},
-    {to:"/trainee/learning",label:"My Learning",icon:<GraduationCap/>},
+    {to:"/trainee/learning",label:"Courses",icon:<GraduationCap/>},
     {to:"/trainee/assessments",label:"Assessments",icon:<ClipboardCheck/>},
     {to:"/trainee/scenarios",label:"Practical Lab Assessment",icon:<Radar/>},
     {to:"/trainee/passport",label:"Capability Passport",icon:<ShieldCheck/>},
@@ -94,16 +94,6 @@ export default function AppShell({children,role}:{children:ReactNode;role:Role})
         ))}
       </nav>
 
-      <div className="sidebar-footer">
-        <div className="mini-user" title={minimized?`${currentUser?.name} (${role.toUpperCase()})`:undefined}>
-          <div className="avatar">{currentUser?.name.split(" ").map(x=>x[0]).slice(0,2).join("")}</div>
-          {!minimized&&<div><strong>{currentUser?.name}</strong><span>{role.toUpperCase()}</span></div>}
-        </div>
-        <button className="logout-btn" onClick={()=>{logout();navigate("/login")}} title="Sign out">
-          <LogOut size={18}/>
-          {!minimized&&<span>Sign out</span>}
-        </button>
-      </div>
     </aside>
 
     <div className={`main-wrap ${minimized?"minimized":""}`}>

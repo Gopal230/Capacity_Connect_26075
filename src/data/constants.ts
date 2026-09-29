@@ -10,7 +10,7 @@ export const KEYS = {
   TRAINER_EXPERTISE: "cc_trainer_expertise_v1",
 };
 
-export const CURRENT_SCHEMA_VERSION = "7.0.0";
+export const CURRENT_SCHEMA_VERSION = "8.0.0";
 
 export const COMPETENCY_LEVELS: Record<CompetencyLevel, LevelDefinition> = {
   L1: { level: "L1", code: "L1", name: "Awareness", fullName: "L1 Awareness", rank: 1 },

@@ -135,7 +135,7 @@ export default function HomePage() {
           <span className="public-brand-mark">CC</span>
           <div>
             <strong>CAPACITY CONNECT</strong>
-            <small>India Meteorological Department · Ministry of Earth Sciences</small>
+            <small style={{ display: "block", fontSize: "10px", lineHeight: "1.3", marginTop: "2px" }}>India Meteorological Department<br/>Ministry of Earth Sciences</small>
           </div>
         </Link>
 
@@ -148,17 +148,7 @@ export default function HomePage() {
         </button>
 
         <nav className={menu ? "show" : ""}>
-          <Link to="/courses" onClick={() => setMenu(false)}>Course Catalog</Link>
-          <Link to={`/register?role=${activeRole}`} className="btn btn-secondary btn-sm" onClick={() => setMenu(false)}>
-            Request Clearance / Register
-          </Link>
-          <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            onClick={() => quickDemoLogin(current.demoEmail)}
-          >
-            Instant Demo ({activeRole.toUpperCase()})
-          </button>
+          <Link to="/courses" onClick={() => setMenu(false)} style={{ color: "#0056D2", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "4px" }}>Course Catalog</Link>
         </nav>
       </header>
 

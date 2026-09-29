@@ -125,6 +125,11 @@ export function getDefaultTrainerExpertise(): TrainerExpertiseMap {
       { competencyId: "radar-quality-control-and-maintenance", expertiseLevel: "L4" },
       { competencyId: "warning-communication", expertiseLevel: "L3" },
     ],
+    "tr2": [
+      { competencyId: "basic-meteorology", expertiseLevel: "L4" },
+      { competencyId: "doppler-radar-operations", expertiseLevel: "L4" },
+      { competencyId: "radar-data-interpretation", expertiseLevel: "L3" },
+    ],
   };
 }
 

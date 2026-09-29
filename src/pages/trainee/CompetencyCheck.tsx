@@ -5,7 +5,7 @@ import { useApp } from "../../context/AppContext";
 
 export default function CompetencyCheck(){
   const {db,currentUser,runCompetencyCheck}=useApp();const nav=useNavigate();const trainee=db.trainees.find(t=>t.userId===currentUser?.id);
-  const competencyAssessments=db.assessments.filter(a=>a.type==="competency");
+  const competencyAssessments=db.assessments.filter(a=>a.type==="competency"||a.type==="post");
   const [assessmentId,setAssessmentId]=useState(competencyAssessments[0]?.id||"");const assessment=db.assessments.find(a=>a.id===assessmentId);
   const [answers,setAnswers]=useState<number[]>([]);const [result,setResult]=useState<any>(null);
   const submit=(e:FormEvent)=>{e.preventDefault();if(!assessment||!trainee)return;const correct=assessment.questions.reduce((s,q,i)=>s+(answers[i]===q.answer?1:0),0);const score=Math.round(correct/assessment.questions.length*100);const missed=assessment.questions.filter((q,i)=>answers[i]!==q.answer).map(q=>q.competency);const r=runCompetencyCheck(trainee.designation,assessment.subject,score,[...new Set(missed)]);setResult(r)};

@@ -102,6 +102,26 @@ export const seedDB: DB = {
       verified: true,
       certifications: ["WMO Certified Radar Specialist", "IMD Senior Radar Trainer"],
       bio: "Chief instructor for IMD Doppler Weather Radar network with 18+ years of operational and training leadership."
+    },
+    {
+      id: "tr2",
+      userId: "u-tr-test",
+      name: "Trainer Test",
+      department: "Radar Meteorology Division",
+      qualification: "MSc Atmospheric Science",
+      experienceYears: 8,
+      subjects: [
+        "Basic Meteorology",
+        "Doppler Radar Operations",
+        "Radar Data Interpretation"
+      ],
+      skills: ["Doppler Weather Radar (DWR)", "Nowcasting", "Quality Control"],
+      level: "Intermediate",
+      rating: 4.5,
+      availability: "Available",
+      verified: true,
+      certifications: ["IMD Radar Trainer"],
+      bio: "Test trainer account for demo and evaluation purposes."
     }
   ],
   trainees: [
