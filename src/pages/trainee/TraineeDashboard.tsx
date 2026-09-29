@@ -92,12 +92,12 @@ export default function TraineeDashboard() {
       {/* 1. Officer Profile & Station Command Header */}
       <section
         style={{
-          background: "linear-gradient(135deg, #003366 0%, #0056D2 100%)",
+          background: "linear-gradient(135deg, #081A2E 0%, #0F2A4A 100%)",
           borderRadius: "14px",
           padding: "24px 28px",
           color: "#FFFFFF",
           marginBottom: "24px",
-          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
+          boxShadow: "0 4px 16px rgba(8, 26, 46, 0.25)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
@@ -107,14 +107,14 @@ export default function TraineeDashboard() {
                 width: "56px",
                 height: "56px",
                 borderRadius: "50%",
-                background: "#FFFFFF",
-                color: "#0056D2",
+                background: "#DC2626",
+                color: "#FFFFFF",
                 display: "grid",
                 placeItems: "center",
                 fontWeight: 800,
                 fontSize: "20px",
                 flexShrink: 0,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                boxShadow: "0 2px 8px rgba(220, 38, 38, 0.45)",
               }}
             >
               {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
@@ -339,9 +339,9 @@ export default function TraineeDashboard() {
         <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "10px" }}>
             <h3 style={{ margin: 0, fontSize: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-              <BookOpen size={18} color="#0056D2" /> Active Course Progress
+              <BookOpen size={18} color="#081A2E" /> Active Course Progress
             </h3>
-            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 600 }}>
+            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#DC2626", fontWeight: 600 }}>
               All Courses →
             </Link>
           </div>
@@ -354,12 +354,12 @@ export default function TraineeDashboard() {
                   <div key={e.id} style={{ borderBottom: "1px solid #F1F5F9", paddingBottom: "10px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
                       <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>{c?.title || e.courseId}</strong>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#0056D2" }}>{e.progress}%</span>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#081A2E" }}>{e.progress}%</span>
                     </div>
                     <ProgressBar value={e.progress} />
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "6px", fontSize: "11.5px", color: "var(--text-muted)" }}>
                       <span>{c?.competency} · {c?.durationHours}h</span>
-                      <Link to={`/trainee/learning/${e.courseId}`} style={{ color: "#0056D2", fontWeight: 600 }}>
+                      <Link to={`/trainee/learning/${e.courseId}`} style={{ color: "#081A2E", fontWeight: 600 }}>
                         Resume Lesson →
                       </Link>
                     </div>
@@ -381,9 +381,9 @@ export default function TraineeDashboard() {
         <section className="panel" style={{ border: "1.5px solid #CBD5E1", borderRadius: "12px", padding: "20px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", borderBottom: "1px solid #E2E8F0", paddingBottom: "10px" }}>
             <h3 style={{ margin: 0, fontSize: "16px", display: "flex", alignItems: "center", gap: "6px" }}>
-              <Radar size={18} color="#0056D2" /> Practical Lab & Assessments
+              <Radar size={18} color="#081A2E" /> Practical Lab & Assessments
             </h3>
-            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 600 }}>
+            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#DC2626", fontWeight: 600 }}>
               View Exams →
             </Link>
           </div>

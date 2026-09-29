@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    CAPACITY CONNECT - COURSERA ACADEMIC ENTERPRISE DESIGN
    ========================================================= */
 
@@ -19,7 +19,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #0056D2;
+  color: #DC2626;
   margin-bottom: 8px;
 }
 
@@ -213,22 +213,22 @@
 }
 
 .btn-role-demo:hover {
-  background: #F0F5FF !important;
-  border-color: #0056D2 !important;
-  color: #0056D2 !important;
+  background: #FEF2F2 !important;
+  border-color: #DC2626 !important;
+  color: #DC2626 !important;
 }
 
 .part-register-link {
   font-size: 12px;
   font-weight: 500;
-  color: #0056D2;
+  color: #081A2E;
   text-decoration: none;
   text-align: center;
   margin-top: 3px;
 }
 
 .part-register-link:hover {
-  color: #00419E;
+  color: #DC2626;
   text-decoration: underline;
 }
 
