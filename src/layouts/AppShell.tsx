@@ -29,36 +29,36 @@ import { useApp } from "../context/AppContext";
 import { Role } from "../types";
 
 const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
-  admin: [
-    { to: "/admin", label: "Dashboard", icon: <Home size={16} /> },
-    { to: "/admin/users", label: "User Approval", icon: <UserCheck size={16} /> },
-    { to: "/admin/trainers", label: "Trainer Management", icon: <Users size={16} /> },
-    { to: "/admin/courses", label: "Course Management", icon: <BookOpen size={16} /> },
-    { to: "/admin/media", label: "Media Governance", icon: <Library size={16} /> },
-    { to: "/admin/competencies", label: "Competencies", icon: <BrainCircuit size={16} /> },
-    { to: "/admin/reports", label: "Reports & Analytics", icon: <BarChart3 size={16} /> },
-    { to: "/admin/readiness", label: "Readiness Command", icon: <Gauge size={16} /> },
-    { to: "/admin/knowledge", label: "Knowledge Continuity", icon: <Archive size={16} /> },
-    { to: "/admin/content", label: "Content & Notifications", icon: <Bell size={16} /> }
+  trainee: [
+    { to: "/trainee", label: "1. Profile", icon: <User size={15} /> },
+    { to: "/trainee/learning", label: "2. Browse Courses", icon: <BookOpen size={15} /> },
+    { to: "/trainee/competency", label: "3. Competency Check", icon: <BrainCircuit size={15} /> },
+    { to: "/trainee/recommendations", label: "4. Recommendations", icon: <Settings2 size={15} /> },
+    { to: "/trainee/assessments", label: "5. Assessments", icon: <ClipboardCheck size={15} /> },
+    { to: "/trainee/scenarios", label: "6. Practical Lab Assessment", icon: <Radar size={15} /> },
+    { to: "/trainee/passport", label: "7. Capability Passport", icon: <ShieldCheck size={15} /> },
+    { to: "/trainee/certificates", label: "8. Certificates", icon: <Award size={15} /> }
   ],
   trainer: [
-    { to: "/trainer", label: "Dashboard", icon: <Home size={16} /> },
-    { to: "/trainer/courses", label: "Courses & Content", icon: <BookOpen size={16} /> },
-    { to: "/trainer/library", label: "Trainer Library", icon: <Library size={16} /> },
-    { to: "/trainer/assessments", label: "Assessments", icon: <ClipboardCheck size={16} /> },
-    { to: "/trainer/trainees", label: "Trainee Monitoring", icon: <Users size={16} /> },
-    { to: "/trainer/evidence", label: "Evidence Review", icon: <FileCheck2 size={16} /> },
-    { to: "/trainer/knowledge", label: "Knowledge Capture", icon: <Archive size={16} /> }
+    { to: "/trainer", label: "1. Dashboard", icon: <Home size={15} /> },
+    { to: "/trainer/courses", label: "2. Courses & Content", icon: <BookOpen size={15} /> },
+    { to: "/trainer/library", label: "3. Trainer Library", icon: <Library size={15} /> },
+    { to: "/trainer/assessments", label: "4. Assessments", icon: <ClipboardCheck size={15} /> },
+    { to: "/trainer/trainees", label: "5. Trainee Monitoring", icon: <Users size={15} /> },
+    { to: "/trainer/evidence", label: "6. Evidence Review", icon: <FileCheck2 size={15} /> },
+    { to: "/trainer/knowledge", label: "7. Knowledge Capture", icon: <Archive size={15} /> }
   ],
-  trainee: [
-    { to: "/trainee", label: "Dashboard", icon: <Home size={16} /> },
-    { to: "/trainee/competency", label: "Competency Check", icon: <BrainCircuit size={16} /> },
-    { to: "/trainee/recommendations", label: "Recommendations", icon: <Settings2 size={16} /> },
-    { to: "/trainee/learning", label: "Courses", icon: <GraduationCap size={16} /> },
-    { to: "/trainee/assessments", label: "Assessments", icon: <ClipboardCheck size={16} /> },
-    { to: "/trainee/scenarios", label: "Practical Lab Assessment", icon: <Radar size={16} /> },
-    { to: "/trainee/passport", label: "Capability Passport", icon: <ShieldCheck size={16} /> },
-    { to: "/trainee/certificates", label: "Certificates", icon: <Award size={16} /> }
+  admin: [
+    { to: "/admin", label: "1. Dashboard", icon: <Home size={15} /> },
+    { to: "/admin/users", label: "2. User Approval", icon: <UserCheck size={15} /> },
+    { to: "/admin/trainers", label: "3. Trainer Management", icon: <Users size={15} /> },
+    { to: "/admin/courses", label: "4. Course Management", icon: <BookOpen size={15} /> },
+    { to: "/admin/media", label: "5. Media Governance", icon: <Library size={15} /> },
+    { to: "/admin/competencies", label: "6. Competencies", icon: <BrainCircuit size={15} /> },
+    { to: "/admin/reports", label: "7. Reports & Analytics", icon: <BarChart3 size={15} /> },
+    { to: "/admin/readiness", label: "8. Readiness Command", icon: <Gauge size={15} /> },
+    { to: "/admin/knowledge", label: "9. Knowledge Continuity", icon: <Archive size={15} /> },
+    { to: "/admin/content", label: "10. Content & Notifications", icon: <Bell size={15} /> }
   ]
 };
 
@@ -121,33 +121,32 @@ export default function AppShell({ children, role }: { children: ReactNode; role
     <div className="app-shell top-nav-layout">
       {/* Top Navbar Header */}
       <header className="top-navbar-container">
-        {/* Tier 1: Brand, Engine Tagline, Persona Switcher & Account Utilities */}
+        {/* Tier 1: Brand, Tagline, Persona Switcher & Controls */}
         <div className="top-navbar-main">
           {/* Left: Brand Identity */}
           <div className="top-navbar-brand-col">
             <Link to={`/${role}`} className="top-navbar-brand-link">
               <div className="brand-mark" title="Capacity Connect">CC</div>
               <div className="brand-details">
-                <div className="brand-title-row">
-                  <strong className="brand-title">CAPACITY CONNECT</strong>
-                  <span className="brand-flow-pill">{FLOW_STEPS[role]}</span>
-                </div>
-                <div className="brand-subtitle-row">
-                  <span className="brand-subtext">Ministry of Earth Sciences · India Meteorological Department</span>
-                  <span className="brand-engine-star">
-                    <Sparkles size={11} className="inline mr-1" />
-                    Core Competency Mapping Engine
-                  </span>
-                </div>
+                <strong className="brand-title">Capacity Connect</strong>
+                <span className="brand-subtext">Learning Management System · IMD</span>
               </div>
             </Link>
+
+            {/* Flow Badge */}
+            <span className="brand-flow-pill">{FLOW_STEPS[role]}</span>
+
+            {/* Gold Star Tagline */}
+            <span className="brand-engine-star">
+              ★ Core Competency Mapping Engine
+            </span>
           </div>
 
           {/* Right: Quick Persona Switcher & Utilities */}
           <div className="top-navbar-controls">
             {/* Quick Persona Switcher */}
             <div className="persona-switcher-strip">
-              <span className="persona-label">Persona:</span>
+              <span className="persona-label">Active Persona:</span>
               <div className="persona-btn-group">
                 <button
                   type="button"
@@ -182,11 +181,6 @@ export default function AppShell({ children, role }: { children: ReactNode; role
               <WifiOff size={14} />
               <span className="lite-text">{lite ? "Field Mode ON" : "Field Mode"}</span>
             </button>
-
-            {/* System Status */}
-            <span className="system-status">
-              <i /> Portal Online
-            </span>
 
             {/* Circular Profile Avatar Button with Dropdown */}
             <div className="profile-menu-container" ref={profileMenuRef}>
@@ -243,24 +237,6 @@ export default function AppShell({ children, role }: { children: ReactNode; role
           </div>
         </div>
 
-        {/* Tier 2: Horizontal Left-to-Right Navigation Buttons */}
-        <nav className="top-navbar-links-bar">
-          <div className="top-navbar-links-scroll">
-            {nav[role].map(item => (
-              <NavLink
-                end={item.to === `/${role}`}
-                key={item.to}
-                to={item.to}
-                onClick={() => setMobileNavOpen(false)}
-                className={({ isActive }) => `top-nav-btn ${isActive ? "active" : ""}`}
-              >
-                <span className="nav-btn-icon">{item.icon}</span>
-                <span className="nav-btn-label">{item.label}</span>
-              </NavLink>
-            ))}
-          </div>
-        </nav>
-
         {/* Mobile Navigation Drawer Dropdown */}
         {mobileNavOpen && (
           <div className="mobile-nav-drawer">
@@ -278,37 +254,26 @@ export default function AppShell({ children, role }: { children: ReactNode; role
                 </NavLink>
               ))}
             </div>
-            <div className="mobile-nav-footer">
-              <div className="mobile-persona-selector">
-                <span>Switch Role:</span>
-                <div className="persona-btn-group">
-                  <button
-                    type="button"
-                    onClick={() => handleQuickPersonaSwitch("trainee")}
-                    className={`persona-pill ${role === "trainee" ? "active" : ""}`}
-                  >
-                    Trainee
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickPersonaSwitch("trainer")}
-                    className={`persona-pill ${role === "trainer" ? "active" : ""}`}
-                  >
-                    Trainer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleQuickPersonaSwitch("admin")}
-                    className={`persona-pill ${role === "admin" ? "active" : ""}`}
-                  >
-                    Admin
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </header>
+
+      {/* Tier 2: Floating Horizontal Navigation Ribbon */}
+      <div className="top-nav-ribbon-container">
+        <nav className="top-nav-ribbon">
+          {nav[role].map(item => (
+            <NavLink
+              end={item.to === `/${role}`}
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => `top-nav-ribbon-btn ${isActive ? "active" : ""}`}
+            >
+              <span className="nav-btn-icon">{item.icon}</span>
+              <span className="nav-btn-label">{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+      </div>
 
       {/* Main Full-Width Content Container */}
       <div className="main-wrap-full">

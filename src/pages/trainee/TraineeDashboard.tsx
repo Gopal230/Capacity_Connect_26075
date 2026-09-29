@@ -89,103 +89,185 @@ export default function TraineeDashboard() {
 
   return (
     <>
-      {/* 1. Officer Profile & Station Command Header */}
+      {/* 1. Trainee Profile Card & Competency Radar (Matching Reference Palette) */}
       <section
         style={{
-          background: "linear-gradient(135deg, #003366 0%, #0056D2 100%)",
-          borderRadius: "14px",
-          padding: "24px 28px",
-          color: "#FFFFFF",
+          background: "#FFFFFF",
+          borderRadius: "16px",
+          border: "1px solid #E2E8F0",
+          padding: "26px 28px",
           marginBottom: "24px",
-          boxShadow: "0 4px 16px rgba(0, 51, 102, 0.15)",
+          boxShadow: "0 1px 4px rgba(0, 0, 0, 0.04)",
         }}
       >
+        {/* Header Row: Officer Avatar, Info & KPIs */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "20px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
             <div
               style={{
                 width: "56px",
                 height: "56px",
-                borderRadius: "50%",
-                background: "#FFFFFF",
-                color: "#0056D2",
+                borderRadius: "12px",
+                background: "#081A2E",
+                color: "#FFFFFF",
                 display: "grid",
                 placeItems: "center",
                 fontWeight: 800,
                 fontSize: "20px",
                 flexShrink: 0,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                boxShadow: "0 2px 6px rgba(8, 26, 46, 0.3)",
               }}
             >
-              {(trainee?.name || currentUser?.name || "T").split(" ").map((x) => x[0]).slice(0, 2).join("")}
+              {(trainee?.name || currentUser?.name || "RS").split(" ").map((x) => x[0]).slice(0, 2).join("")}
             </div>
 
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", marginBottom: "4px" }}>
-                <h2 style={{ margin: 0, fontSize: "22px", color: "#FFFFFF", fontWeight: 800 }}>
-                  {trainee?.name || currentUser?.name || "Operational Trainee"}
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "3px" }}>
+                <h2 style={{ margin: 0, fontSize: "22px", color: "#0F172A", fontWeight: 800 }}>
+                  {trainee?.name || currentUser?.name || "Rahul Sharma"}
                 </h2>
                 <span
                   style={{
                     fontSize: "11.5px",
-                    background: "rgba(255, 255, 255, 0.2)",
-                    padding: "2px 8px",
-                    borderRadius: "9999px",
-                    fontWeight: 600,
-                    letterSpacing: "0.4px",
-                  }}
-                >
-                  {currentUser?.employeeId || trainee?.id || "IMD-STAFF"}
-                </span>
-                <span
-                  style={{
-                    fontSize: "11.5px",
-                    background: "#10B981",
-                    color: "#FFFFFF",
-                    padding: "2px 8px",
+                    background: "#DCFCE7",
+                    color: "#15803D",
+                    border: "1px solid #86EFAC",
+                    padding: "2px 10px",
                     borderRadius: "9999px",
                     fontWeight: 700,
                   }}
                 >
-                  Active Personnel
+                  Verified Trainee
                 </span>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap", fontSize: "13px", opacity: 0.9 }}>
-                <span><strong>Role:</strong> {jobRole}</span>
-                <span>•</span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                  <MapPin size={13} /> {centreName}
-                </span>
-                <span>•</span>
-                <span>{trainee?.department || "Radar Meteorology"}</span>
-                <span>•</span>
-                <span>{currentUser?.email}</span>
+              <div style={{ fontSize: "13px", color: "#64748B", marginBottom: "3px" }}>
+                <span>{currentUser?.employeeId || trainee?.id || "SB-2024-TR-492"}</span>
+                <span style={{ margin: "0 6px" }}>•</span>
+                <span>{jobRole}</span>
+              </div>
+
+              <div style={{ fontSize: "12.5px", color: "#2563EB", fontWeight: 600 }}>
+                Batch A - {centreName}
               </div>
             </div>
           </div>
 
-          {/* Operational Readiness Meter */}
-          <div
+          {/* Right KPIs: Streak and Benchmark */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+            <div
+              style={{
+                background: "#FFFBEB",
+                border: "1px solid #FEF08A",
+                borderRadius: "10px",
+                padding: "10px 20px",
+                textAlign: "center",
+                minWidth: "110px",
+              }}
+            >
+              <div style={{ fontSize: "22px", fontWeight: 800, color: "#0F172A", lineHeight: 1.1 }}>
+                7 Days
+              </div>
+              <div style={{ fontSize: "10px", color: "#64748B", fontWeight: 700, letterSpacing: "0.5px", marginTop: "2px" }}>
+                DAILY STREAK
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: "#FFFBEB",
+                border: "1px solid #FEF08A",
+                borderRadius: "10px",
+                padding: "10px 20px",
+                textAlign: "center",
+                minWidth: "120px",
+              }}
+            >
+              <div style={{ fontSize: "22px", fontWeight: 800, color: "#DC2626", lineHeight: 1.1 }}>
+                {Math.round((competenciesMet / (roleRecommendations.length || 1)) * 100)}%
+              </div>
+              <div style={{ fontSize: "10px", color: "#64748B", fontWeight: 700, letterSpacing: "0.5px", marginTop: "2px" }}>
+                BENCHMARK MET
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* TRAINEE COMPETENCY RADAR & SKILL GAPS */}
+        <div style={{ marginTop: "30px" }}>
+          <h3
             style={{
-              background: "rgba(255, 255, 255, 0.12)",
-              backdropFilter: "blur(4px)",
-              border: "1px solid rgba(255, 255, 255, 0.25)",
-              borderRadius: "10px",
-              padding: "12px 18px",
-              textAlign: "right",
-              minWidth: "160px",
+              fontSize: "13.5px",
+              fontWeight: 800,
+              color: "#0F172A",
+              letterSpacing: "0.6px",
+              textTransform: "uppercase",
+              margin: "0 0 16px",
             }}
           >
-            <div style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.5px", opacity: 0.85, fontWeight: 600, marginBottom: "2px" }}>
-              Operational Readiness
-            </div>
-            <div style={{ fontSize: "24px", fontWeight: 900, color: "#FFFFFF", lineHeight: 1.1 }}>
-              {readinessSnapshot.score}<span style={{ fontSize: "14px", opacity: 0.8 }}>/100</span>
-            </div>
-            <div style={{ fontSize: "11.5px", color: "#86EFAC", fontWeight: 700, marginTop: "2px" }}>
-              ● {readinessSnapshot.band}
-            </div>
+            TRAINEE COMPETENCY RADAR & SKILL GAPS
+          </h3>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+              gap: "16px",
+            }}
+          >
+            {sortedRecommendations.map((item) => {
+              const currentLvlNum = getLevelNumber(item.currentLevel);
+              const reqLvlNum = getLevelNumber(item.requiredLevel);
+              const percentage = Math.min(100, Math.round((currentLvlNum / Math.max(reqLvlNum, 1)) * 100));
+              const gapPercentage = percentage - 100;
+              const isMet = item.status === "Met";
+
+              return (
+                <div
+                  key={item.competency}
+                  style={{
+                    background: "#FFFFFF",
+                    border: "1px solid #E2E8F0",
+                    borderRadius: "10px",
+                    padding: "14px 18px",
+                    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.02)",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                    <span style={{ fontSize: "14px", fontWeight: 700, color: "#0F172A" }}>
+                      {item.competency}
+                    </span>
+                    <div style={{ fontSize: "13px", fontWeight: 700 }}>
+                      <span style={{ color: "#0F172A" }}>{percentage}%</span>
+                      {isMet ? (
+                        <span style={{ color: "#059669", marginLeft: "6px" }}>Met</span>
+                      ) : (
+                        <span style={{ color: "#DC2626", marginLeft: "6px" }}>Gap: {gapPercentage}%</span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      background: "#EDF2F7",
+                      height: "8px",
+                      borderRadius: "9999px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "#081A2E",
+                        height: "100%",
+                        borderRadius: "9999px",
+                        width: `${percentage}%`,
+                        transition: "width 0.4s ease",
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
