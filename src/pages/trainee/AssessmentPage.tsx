@@ -7,6 +7,7 @@ import {
   BookOpen,
   CheckCircle2,
   Compass,
+  Lock,
   Printer,
   RotateCcw,
   Sparkles,
@@ -48,6 +49,9 @@ export default function AssessmentPage() {
   };
 
   const handleRetake = (assessment: Assessment) => {
+    const enrollment = enrolled.find((e) => e.courseId === assessment.courseId);
+    const isCompleted = enrollment ? (enrollment.progress >= 100 || enrollment.status === "completed") : false;
+    if (!isCompleted) return;
     setLast(null);
     setActive(assessment);
     setAnswers([]);
@@ -375,6 +379,8 @@ export default function AssessmentPage() {
           const best = attempts.length ? Math.max(...attempts.map((x) => x.score)) : null;
           const course = db.courses.find((c) => c.id === a.courseId);
           const compName = course?.competency || a.subject;
+          const enrollment = enrolled.find((e) => e.courseId === a.courseId);
+          const isCompleted = enrollment ? (enrollment.progress >= 100 || enrollment.status === "completed") : false;
 
           return (
             <article key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
@@ -412,22 +418,53 @@ export default function AssessmentPage() {
                 </p>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
                 {best !== null && (
                   <Badge tone={best >= a.passingPercentage ? "green" : "red"}>
                     Best: {best}% {best >= a.passingPercentage ? "(Passed)" : ""}
                   </Badge>
                 )}
-                <button
-                  className="btn btn-primary"
-                  onClick={() => {
-                    setLast(null);
-                    setActive(a);
-                    setAnswers([]);
-                  }}
-                >
-                  {attempts.length ? "Retake Assessment" : "Attempt Assessment"}
-                </button>
+
+                {isCompleted ? (
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setLast(null);
+                      setActive(a);
+                      setAnswers([]);
+                    }}
+                  >
+                    {attempts.length ? "Retake Assessment" : "Attempt Assessment"}
+                  </button>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        padding: "5px 10px",
+                        borderRadius: "6px",
+                        background: "#FEF3C7",
+                        color: "#92400E",
+                        border: "1px solid #FDE68A",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                      }}
+                      title="Complete all course lessons to unlock this assessment"
+                    >
+                      <Lock size={13} />
+                      Course Incomplete ({enrollment?.progress || 0}%)
+                    </span>
+                    <Link
+                      to={`/trainee/learning/${a.courseId}`}
+                      className="btn btn-secondary btn-sm"
+                      style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontWeight: 600 }}
+                    >
+                      <BookOpen size={14} /> Finish Lessons →
+                    </Link>
+                  </div>
+                )}
               </div>
             </article>
           );

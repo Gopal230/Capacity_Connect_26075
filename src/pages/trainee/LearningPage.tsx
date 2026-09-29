@@ -1,4 +1,4 @@
-import { BookOpen, CheckCircle2, FileText, PlayCircle, ShieldCheck, Compass } from "lucide-react";
+import { BookOpen, CheckCircle2, FileText, PlayCircle, ShieldCheck, Compass, Lock } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import { EvidenceItem } from "../../types";
@@ -128,8 +128,21 @@ export default function LearningPage() {
             <h3>Course progress</h3>
             <div className="big-progress">{enrollment.progress}%</div>
             <ProgressBar value={enrollment.progress} />
-            <p>Complete all lessons, then pass the post-training assessment before competency verification.</p>
-            <Link className="btn btn-primary btn-block" to="/trainee/assessments">Go to assessments</Link>
+            <p>Complete all lessons (100%), then pass the post-training assessment for competency verification.</p>
+            {enrollment.progress >= 100 || enrollment.status === "completed" ? (
+              <Link className="btn btn-primary btn-block" to="/trainee/assessments">
+                Take Final Assessment →
+              </Link>
+            ) : (
+              <Link
+                className="btn btn-secondary btn-block"
+                to="/trainee/assessments"
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
+                title="Complete 100% of lessons to unlock assessment"
+              >
+                <Lock size={14} /> Assessment (Locked · {enrollment.progress}%)
+              </Link>
+            )}
             <div className="capability-evidence-box">
               <div className="evidence-title">
                 <ShieldCheck size={18} />
