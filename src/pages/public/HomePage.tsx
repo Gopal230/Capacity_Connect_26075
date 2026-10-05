@@ -132,7 +132,9 @@ export default function HomePage() {
       {/* Top Navbar */}
       <header className="public-nav">
         <Link to="/" className="public-brand">
-          <span className="public-brand-mark">CC</span>
+          <div className="public-brand-logo" title="Capacity Connect">
+            <img src="/logo.png" alt="Capacity Connect Logo" className="brand-logo-img" />
+          </div>
           <div>
             <strong>CAPACITY CONNECT</strong>
             <small style={{ display: "block", fontSize: "10px", lineHeight: "1.3", marginTop: "2px" }}>India Meteorological Department<br/>Ministry of Earth Sciences</small>

@@ -93,7 +93,9 @@ export default function AppShell({ children, role }: { children: ReactNode; role
         <div className="top-navbar-main">
           {/* Brand Logo & Title */}
           <Link to={`/${role}`} className="top-navbar-brand-link">
-            <div className="brand-mark" title="Capacity Connect">CC</div>
+            <div className="brand-mark-logo" title="Capacity Connect">
+              <img src="/logo.png" alt="Capacity Connect Logo" className="brand-logo-img" />
+            </div>
             <div className="brand-details">
               <strong className="brand-title">CAPACITY CONNECT</strong>
               <span className="brand-subtext">Operational Capacity & Learning Portal · Ministry of Earth Sciences (IMD)</span>
