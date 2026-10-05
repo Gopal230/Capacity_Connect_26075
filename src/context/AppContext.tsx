@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
 import { CURRENT_SCHEMA_VERSION, DEFAULT_ROLE_REQUIREMENTS, KEYS, sanitizeLevel } from "../data/constants";
-import { seedDB } from "../data/seed";
+import { PRACTICAL_LAB_SCENARIO, seedDB } from "../data/seed";
 import { Assessment, AssessmentAttempt, Certificate, CompetencyLevel, CompetencyResult, Course, CourseFeedback, DB, EvidenceItem, EvidenceStatus, KnowledgeAsset, NotificationItem, Resource, Role, RoleCompetencyGapItem, RoleRequirementsMap, ScenarioAttempt, Trainee, TraineeLevelsMap, Trainer, TrainerExpertiseItem, TrainerExpertiseMap, User } from "../types";
 import { formatLevel, gapText, getLevelNumber, levelFromScore, recommend, getRoleCompetencyRecommendations, getNextStepRecommendation } from "../utils/engine";
 
@@ -687,7 +687,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const submitScenario = (scenarioId: string, answers: number[]) => {
     const traineeId = currentTraineeId();
-    const scenario = db.scenarios.find(s => s.id === scenarioId);
+    const scenario = db.scenarios.find(s => s.id === scenarioId) ??
+      (scenarioId === PRACTICAL_LAB_SCENARIO.id ? PRACTICAL_LAB_SCENARIO : undefined);
     if (!traineeId || !scenario) return null;
     const correct = scenario.steps.reduce((sum, s, i) => sum + (answers[i] === s.answer ? 1 : 0), 0);
     const score = Math.round((correct / scenario.steps.length) * 100);

@@ -81,7 +81,7 @@ export default function TraineeDashboard() {
       {/* 1. Trainee Hero Banner (Exact Dark Navy to Crimson Gradient Layout) */}
       <section
         style={{
-          background: "linear-gradient(135deg, #071527 0%, #0E223D 48%, #6B111A 85%, #8B1A1A 100%)",
+          background: "linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-dark) 48%, var(--brand-hover) 85%, var(--brand-hover) 100%)",
           borderRadius: "14px",
           padding: "24px 28px",
           color: "#FFFFFF",
@@ -104,7 +104,7 @@ export default function TraineeDashboard() {
               minWidth: "60px",
               borderRadius: "50%",
               background: "#FFFFFF",
-              color: "#DC2626",
+              color: "var(--brand-primary)",
               fontWeight: 800,
               fontSize: "22px",
               display: "grid",
@@ -220,13 +220,13 @@ export default function TraineeDashboard() {
         <StatCard
           label="Levels to Advance"
           value={totalLevelsStillToGain || 9}
-          icon={<TrendingUp className="text-blue-600" />}
+          icon={<TrendingUp style={{ color: "var(--brand-accent)" }} />}
           caption="Total competency milestones"
         />
         <StatCard
           label="Enrolled Courses"
           value={activeEnrollments.length || 2}
-          icon={<BookOpen className="text-blue-600" />}
+          icon={<BookOpen style={{ color: "var(--brand-accent)" }} />}
           caption={`${completedEnrollments.length} course(s) completed`}
         />
         <StatCard
@@ -259,14 +259,14 @@ export default function TraineeDashboard() {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Compass size={18} color="#DC2626" />
+              <Compass size={18} color="var(--brand-primary)" />
               <span
                 style={{
                   fontSize: "12px",
                   fontWeight: 800,
                   textTransform: "uppercase",
                   letterSpacing: "0.6px",
-                  color: "#DC2626",
+                  color: "var(--brand-primary)",
                 }}
               >
                 🎯 Targeted Next Priority Action
@@ -274,9 +274,9 @@ export default function TraineeDashboard() {
             </div>
             <span
               style={{
-                background: "#EFF6FF",
-                color: "#1D4ED8",
-                border: "1px solid #BFDBFE",
+                background: "var(--surface-tint)",
+                color: "var(--brand-dark)",
+                border: "1px solid var(--border-clean)",
                 borderRadius: "9999px",
                 padding: "3px 12px",
                 fontSize: "11.5px",
@@ -325,7 +325,7 @@ export default function TraineeDashboard() {
               <Link
                 to="/trainee/learning"
                 style={{
-                  background: "#0056D2",
+                  background: "var(--brand-primary)",
                   color: "#FFFFFF",
                   padding: "9px 20px",
                   borderRadius: "8px",
@@ -335,7 +335,7 @@ export default function TraineeDashboard() {
                   alignItems: "center",
                   gap: "6px",
                   textDecoration: "none",
-                  boxShadow: "0 2px 6px rgba(0, 86, 210, 0.3)",
+                  boxShadow: "0 2px 6px rgba(193, 18, 31, 0.3)",
                 }}
               >
                 View in Courses →
@@ -394,15 +394,15 @@ export default function TraineeDashboard() {
             <Link
               to="/trainee/learning"
               style={{
-                background: "#0056D2",
-                border: "1.5px solid #0056D2",
+                background: "var(--brand-primary)",
+                border: "1.5px solid var(--brand-primary)",
                 color: "#FFFFFF",
                 padding: "8px 18px",
                 borderRadius: "8px",
                 fontSize: "13px",
                 fontWeight: 700,
                 textDecoration: "none",
-                boxShadow: "0 2px 6px rgba(0, 86, 210, 0.25)",
+                boxShadow: "0 2px 6px rgba(193, 18, 31, 0.25)",
               }}
             >
               Open Course Hub
@@ -425,7 +425,7 @@ export default function TraineeDashboard() {
                   style={{
                     background: isMet ? "#F8FAFC" : "#FFFFFF",
                     border: "1px solid #E2E8F0",
-                    borderLeft: `5px solid ${isMet ? "#10B981" : "#DC2626"}`,
+                    borderLeft: `5px solid ${isMet ? "#10B981" : "var(--brand-primary)"}`,
                     borderRadius: "10px",
                     padding: "16px 20px",
                     boxShadow: "0 1px 3px rgba(0, 0, 0, 0.03)",
@@ -503,9 +503,9 @@ export default function TraineeDashboard() {
                 fontWeight: 700,
               }}
             >
-              <BookOpen size={18} color="#DC2626" /> Active Course Progress
+              <BookOpen size={18} color="var(--brand-primary)" /> Active Course Progress
             </h3>
-            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 700 }}>
+            <Link to="/trainee/learning" style={{ fontSize: "12.5px", color: "var(--brand-primary)", fontWeight: 700 }}>
               All Courses →
             </Link>
           </div>
@@ -525,7 +525,7 @@ export default function TraineeDashboard() {
                       }}
                     >
                       <strong style={{ fontSize: "14px", color: "#0F172A" }}>{c?.title || e.courseId}</strong>
-                      <span style={{ fontSize: "13px", fontWeight: 700, color: "#DC2626" }}>{e.progress}%</span>
+                      <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--brand-primary)" }}>{e.progress}%</span>
                     </div>
                     <ProgressBar value={e.progress} />
                     <div
@@ -543,7 +543,7 @@ export default function TraineeDashboard() {
                       </span>
                       <Link
                         to={`/trainee/learning/${e.courseId}`}
-                        style={{ color: "#0056D2", fontWeight: 700 }}
+                        style={{ color: "var(--brand-primary)", fontWeight: 700 }}
                       >
                         Resume Lesson →
                       </Link>
@@ -593,9 +593,9 @@ export default function TraineeDashboard() {
                 fontWeight: 700,
               }}
             >
-              <Radar size={18} color="#DC2626" /> Practical Lab & Assessments
+              <Radar size={18} color="var(--brand-primary)" /> Practical Lab & Assessments
             </h3>
-            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "#0056D2", fontWeight: 700 }}>
+            <Link to="/trainee/assessments" style={{ fontSize: "12.5px", color: "var(--brand-primary)", fontWeight: 700 }}>
               View Exams →
             </Link>
           </div>

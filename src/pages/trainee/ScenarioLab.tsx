@@ -1,17 +1,200 @@
-import { FormEvent, useState } from "react";
-import { Badge, PageHeader } from "../../components/UI";
+import { useState } from "react";
+import { Activity, ArrowLeft, ArrowRight, CheckCircle2, Clock3, CloudLightning, RotateCcw, Target, XCircle } from "lucide-react";
 import { useApp } from "../../context/AppContext";
-import { OperationalScenario } from "../../types";
+import { PRACTICAL_LAB_SCENARIO } from "../../data/seed";
+import type { OperationalScenario } from "../../types";
 
-export default function ScenarioLab(){
-  const {db,currentUser,submitScenario}=useApp();
-  const trainee=db.trainees.find(t=>t.userId===currentUser?.id);
-  const scenarios=db.scenarios.filter(s=>s.role===trainee?.designation||s.subject===Object.keys(trainee?.skills||{})[0]||true);
-  const [active,setActive]=useState<OperationalScenario|null>(null);const [answers,setAnswers]=useState<number[]>([]);const [result,setResult]=useState<{score:number;band:string}|null>(null);
-  const submit=(e:FormEvent)=>{e.preventDefault();if(!active)return;const r=submitScenario(active.id,answers);if(r)setResult({score:r.score,band:r.readinessBand});setActive(null);setAnswers([])};
-  return <><PageHeader title="Operational Scenario Lab" subtitle="Practice job-relevant decisions under realistic constraints. Scenario performance contributes to your Operational Readiness Index."/>
-    {result&&<div className={result.score>=70?"success-banner":"warning-banner"}><strong>Scenario readiness: {result.score}% — {result.band}</strong><span>The result is saved in your capability record and readiness profile.</span></div>}
-    <div className="scenario-grid">{scenarios.map(s=>{const attempts=db.scenarioAttempts.filter(a=>a.traineeId===trainee?.id&&a.scenarioId===s.id);const best=attempts.length?Math.max(...attempts.map(a=>a.score)):null;return <article className="scenario-card" key={s.id}><div className="scenario-top"><Badge tone={s.difficulty==="Advanced"?"red":"blue"}>{s.difficulty}</Badge>{best!==null&&<Badge tone={best>=s.passingPercentage?"green":"amber"}>Best {best}%</Badge>}</div><span className="eyebrow">{s.subject} · {s.steps.length} decisions</span><h3>{s.title}</h3><p>{s.context}</p><div className="scenario-footer"><span>Pass threshold {s.passingPercentage}%</span><button className="btn btn-primary" onClick={()=>{setActive(s);setAnswers([])}}>{attempts.length?"Run again":"Start simulation"}</button></div></article>})}</div>
-    {active&&<div className="modal-backdrop"><form className="modal-card scenario-modal" onSubmit={submit}><div className="panel-head"><div><Badge tone="blue">Operational simulation</Badge><h3>{active.title}</h3><p>{active.context}</p></div></div>{active.steps.map((q,i)=><fieldset className="question-card compact-q" key={q.id}><legend>{i+1}. {q.prompt}</legend>{q.options.map((o,j)=><label className={answers[i]===j?"selected":""} key={o}><input type="radio" name={q.id} checked={answers[i]===j} onChange={()=>{const a=[...answers];a[i]=j;setAnswers(a)}} required/>{o}</label>)}</fieldset>)}<div className="modal-actions"><button type="button" className="btn btn-secondary" onClick={()=>setActive(null)}>Exit</button><button className="btn btn-primary">Submit operational decisions</button></div></form></div>}
-  </>
+type AnswerState = {
+  selected: number | null;
+  submitted: boolean;
+};
+
+export default function ScenarioLab() {
+  const { db, submitScenario } = useApp();
+  const availableScenarios = db.scenarios.length > 0 ? db.scenarios : [PRACTICAL_LAB_SCENARIO];
+  const scenarios = availableScenarios.filter(scenario => scenario.steps.length > 0);
+  const [scenarioId, setScenarioId] = useState<string | null>(null);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [answers, setAnswers] = useState<number[]>([]);
+  const [answerState, setAnswerState] = useState<AnswerState>({ selected: null, submitted: false });
+  const [result, setResult] = useState<{ score: number; passed: boolean } | null>(null);
+  const scenario = scenarios.find(item => item.id === scenarioId);
+
+  const beginScenario = (item: OperationalScenario) => {
+    setScenarioId(item.id);
+    setStepIndex(0);
+    setAnswers([]);
+    setAnswerState({ selected: null, submitted: false });
+    setResult(null);
+  };
+
+  const submitAnswer = () => {
+    if (!scenario || answerState.selected === null || answerState.submitted) return;
+    const nextAnswers = [...answers];
+    nextAnswers[stepIndex] = answerState.selected;
+    setAnswers(nextAnswers);
+    setAnswerState(current => ({ ...current, submitted: true }));
+  };
+
+  const finishScenario = () => {
+    if (!scenario) return;
+    const correct = scenario.steps.reduce(
+      (count, currentStep, index) => count + (answers[index] === currentStep.answer ? 1 : 0),
+      0,
+    );
+    const score = Math.round((correct / scenario.steps.length) * 100);
+    setResult({ score, passed: score >= scenario.passingPercentage });
+    submitScenario(scenario.id, answers);
+  };
+
+  const advance = () => {
+    if (!scenario) return;
+    setStepIndex(index => index + 1);
+    setAnswerState({ selected: null, submitted: false });
+  };
+
+  const exitScenario = () => {
+    setScenarioId(null);
+    setResult(null);
+  };
+
+  if (!scenario) {
+    return (
+      <div className="scenario-lab">
+        <header className="scenario-lab__header">
+          <div>
+            <span className="scenario-lab__eyebrow">TRAINING SIMULATOR</span>
+            <h1>Practical Assessment Lab</h1>
+            <p>Practice operational decisions in realistic weather scenarios.</p>
+          </div>
+          <div className="scenario-lab__header-icon"><CloudLightning size={28} /></div>
+        </header>
+        <div className="scenario-lab__grid">
+          {scenarios.map(item => (
+            <article className="scenario-lab__card" key={item.id}>
+              <div className="scenario-lab__card-icon"><Activity size={22} /></div>
+              <div className="scenario-lab__tags">
+                <span>{item.subject}</span><span>{item.difficulty}</span>
+              </div>
+              <h2>{item.title}</h2>
+              <p>{item.context}</p>
+              <div className="scenario-lab__meta">
+                <span><Target size={15} /> {item.steps.length} decision points</span>
+                <span><Clock3 size={15} /> {item.durationMin ?? 10} min</span>
+              </div>
+              <button className="scenario-lab__primary" onClick={() => beginScenario(item)}>
+                Start Simulation <ArrowRight size={17} />
+              </button>
+            </article>
+          ))}
+          {scenarios.length === 0 && (
+            <div className="scenario-lab__empty">No practical simulations are available right now.</div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  const step = scenario.steps[stepIndex];
+  const selectedCorrectly = answerState.selected === step.answer;
+
+  return (
+    <div className="scenario-lab">
+      <button className="scenario-lab__back" onClick={exitScenario}><ArrowLeft size={16} /> All simulations</button>
+      <header className="scenario-lab__header scenario-lab__header--compact">
+        <div>
+          <span className="scenario-lab__eyebrow">PRACTICAL ASSESSMENT</span>
+          <h1>{scenario.title}</h1>
+          <p>{scenario.context}</p>
+        </div>
+        <div className="scenario-lab__header-icon"><CloudLightning size={28} /></div>
+      </header>
+
+      {!result ? (
+        <>
+          <section className="scenario-lab__observations">
+            <div className="scenario-lab__section-heading">
+              <div><span className="scenario-lab__eyebrow">LIVE SCENARIO DATA</span><h2>Radar Observations</h2></div>
+              <span className="scenario-lab__live"><i /> SIMULATION LIVE</span>
+            </div>
+            {scenario.observations?.length ? (
+              <div className="scenario-lab__table-wrap">
+                <table>
+                  <thead><tr><th>Observation Time</th><th>Max Reflectivity</th><th>Storm Movement</th><th>Echo Top</th></tr></thead>
+                  <tbody>{scenario.observations.map((observation, index) => (
+                    <tr key={`${observation.time}-${index}`}>
+                      <td>{observation.time}</td><td>{observation.reflectivity}</td>
+                      <td>{observation.movement}</td><td>{observation.echoTop ?? "—"}</td>
+                    </tr>
+                  ))}</tbody>
+                </table>
+              </div>
+            ) : <p className="scenario-lab__context">{scenario.context}</p>}
+          </section>
+
+          <section className="scenario-lab__question">
+            <div className="scenario-lab__progress">
+              <span>Decision point {stepIndex + 1} of {scenario.steps.length}</span>
+              <span>{Math.round(((stepIndex + 1) / scenario.steps.length) * 100)}%</span>
+            </div>
+            <div className="scenario-lab__progress-track"><span style={{ width: `${((stepIndex + 1) / scenario.steps.length) * 100}%` }} /></div>
+            <span className="scenario-lab__eyebrow">{step.competency}</span>
+            <h2>{step.title ?? `Decision ${stepIndex + 1}`}</h2>
+            <p className="scenario-lab__prompt">{step.prompt}</p>
+            <div className="scenario-lab__options">
+              {step.options.map((option, index) => {
+                const correct = answerState.submitted && index === step.answer;
+                const incorrect = answerState.submitted && answerState.selected === index && !correct;
+                return (
+                  <button
+                    key={option}
+                    className={`scenario-lab__option${answerState.selected === index ? " is-selected" : ""}${correct ? " is-correct" : ""}${incorrect ? " is-incorrect" : ""}`}
+                    onClick={() => !answerState.submitted && setAnswerState(current => ({ ...current, selected: index }))}
+                    disabled={answerState.submitted}
+                  >
+                    <span className="scenario-lab__option-letter">{String.fromCharCode(65 + index)}</span>
+                    <span>{option}</span>
+                    {correct && <CheckCircle2 size={19} />}
+                    {incorrect && <XCircle size={19} />}
+                  </button>
+                );
+              })}
+            </div>
+            {answerState.submitted && (
+              <div className={`scenario-lab__feedback${selectedCorrectly ? " is-correct" : " is-incorrect"}`}>
+                <strong>{selectedCorrectly ? "Correct decision" : "Not quite"}</strong>
+                <p>{step.explanation ?? `The recommended response is: ${step.options[step.answer]}`}</p>
+              </div>
+            )}
+            <div className="scenario-lab__actions">
+              <span>Passing score: {scenario.passingPercentage}%</span>
+              {!answerState.submitted ? (
+                <button className="scenario-lab__primary" onClick={submitAnswer} disabled={answerState.selected === null}>
+                  Submit Decision <ArrowRight size={17} />
+                </button>
+              ) : stepIndex < scenario.steps.length - 1 ? (
+                <button className="scenario-lab__primary" onClick={advance}>Next Decision <ArrowRight size={17} /></button>
+              ) : (
+                <button className="scenario-lab__primary" onClick={finishScenario}>View Results <ArrowRight size={17} /></button>
+              )}
+            </div>
+          </section>
+        </>
+      ) : (
+        <section className="scenario-lab__result">
+          <div className={`scenario-lab__result-icon${result.passed ? " is-passed" : ""}`}>
+            {result.passed ? <CheckCircle2 size={34} /> : <Target size={34} />}
+          </div>
+          <span className="scenario-lab__eyebrow">SIMULATION COMPLETE</span>
+          <h2>{result.passed ? "Well done!" : "Keep practicing"}</h2>
+          <p>{result.passed ? "You met the passing score for this practical assessment." : "Review the decision feedback and try the simulation again."}</p>
+          <div className="scenario-lab__score"><strong>{result.score}%</strong><span>Your score</span></div>
+          <div className="scenario-lab__result-actions">
+            <button className="scenario-lab__secondary" onClick={() => beginScenario(scenario)}><RotateCcw size={16} /> Retry Simulation</button>
+            <button className="scenario-lab__primary" onClick={exitScenario}>All Simulations <ArrowRight size={17} /></button>
+          </div>
+        </section>
+      )}
+    </div>
+  );
 }

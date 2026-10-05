@@ -20,6 +20,70 @@ const modules = (prefix: string) => [
   }
 ];
 
+export const PRACTICAL_LAB_SCENARIO: DB["scenarios"][number] = {
+  id: "scenario-thunderstorm-nowcasting",
+  title: "Thunderstorm Nowcasting Simulation",
+  subject: "Doppler Radar Meteorology",
+  role: "Radar Operator",
+  context:
+    "A convective thunderstorm cell is developing rapidly near a high-density urban sector. Review the radar trends and choose the appropriate operational response at each stage.",
+  difficulty: "Advanced",
+  passingPercentage: 70,
+  durationMin: 10,
+  observations: [
+    { time: "14:00 IST", reflectivity: "32 dBZ", movement: "North-East (24 km/h)", echoTop: "7.2 km" },
+    { time: "14:10 IST", reflectivity: "41 dBZ", movement: "North-East (28 km/h)", echoTop: "9.8 km" },
+    { time: "14:20 IST", reflectivity: "48 dBZ", movement: "North-East (32 km/h)", echoTop: "12.4 km" },
+  ],
+  steps: [
+    {
+      id: "thunderstorm-reflectivity",
+      title: "Analyze Doppler Radar Reflectivity",
+      prompt:
+        "Reflectivity rises from 32 dBZ to 48 dBZ over 20 minutes while echo tops surge. What should you do first?",
+      options: [
+        "Disregard the increase as anomalous propagation clutter",
+        "Monitor storm intensification, VIL trends, and projected track",
+        "Declare the storm harmless and archive the radar sweep",
+      ],
+      answer: 1,
+      competency: "Radar Data Interpretation",
+      explanation:
+        "Rapidly rising reflectivity and echo tops can indicate a strengthening convective updraft. Track the trends and projected path before deciding on a warning.",
+    },
+    {
+      id: "thunderstorm-movement",
+      title: "Assess Movement and Exposure",
+      prompt:
+        "The storm is tracking toward a populated metropolitan zone. Which information should you review before issuing an alert?",
+      options: [
+        "Only the current surface temperature",
+        "Radar velocity, storm vectors, lightning density, and surface gust observations",
+        "Only yesterday's synoptic summary",
+      ],
+      answer: 1,
+      competency: "Severe Weather Detection",
+      explanation:
+        "Cross-check radar velocity and storm motion with lightning and surface observations to assess the hazard and potential impacts.",
+    },
+    {
+      id: "thunderstorm-warning",
+      title: "Choose the Operational Alert",
+      prompt:
+        "The cell continues to intensify and is within 15 minutes of urban landfall. What is the appropriate next action?",
+      options: [
+        "Stop the radar scan and wait for post-event rain gauge data",
+        "Follow the severe-weather nowcast bulletin procedure and notify the relevant authorities",
+        "Wait until the convective core has passed before logging observations",
+      ],
+      answer: 1,
+      competency: "Warning Communication",
+      explanation:
+        "Follow the applicable nowcast warning procedure promptly and communicate through the designated operational channels.",
+    },
+  ],
+};
+
 export const seedDB: DB = {
   users: [
     { id: "u-admin", name: "Dr. Meera Nair", email: "admin@capacityconnect.in", password: "Demo@123", role: "admin", status: "active", department: "Capacity Building Cell", designation: "Programme Administrator", createdAt: "2026-08-01", profileComplete: true },
@@ -574,7 +638,7 @@ export const seedDB: DB = {
     { id: "r2", trainerId: "tr1", title: "IMD Standard Warning Code Tables", subject: "Warning Communication", type: "PDF", level: "Beginner", addedAt: "2026-09-15" }
   ],
   evidence: [],
-  scenarios: [],
+  scenarios: [PRACTICAL_LAB_SCENARIO],
   scenarioAttempts: [],
   knowledgeAssets: [],
   feedback: [],

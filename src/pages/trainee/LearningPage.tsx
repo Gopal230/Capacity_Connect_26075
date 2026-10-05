@@ -40,6 +40,8 @@ export default function LearningPage() {
   const mappedResources = course
     ? db.resources.filter((r) => r.courseId === course.id && (r.status || "published") === "published")
     : [];
+  const lessonIds = new Set(course?.modules.flatMap((module) => module.lessons.map((lesson) => lesson.id)) || []);
+  const unassignedMappedResources = mappedResources.filter((resource) => !resource.lessonId || !lessonIds.has(resource.lessonId));
 
   // Data for tabs
   const publishedCourses = db.courses.filter((c) => c.status === "published");
@@ -87,25 +89,51 @@ export default function LearningPage() {
                 <h3>Module {mi + 1}: {m.title}</h3>
                 {m.lessons.map((l) => {
                   const done = enrollment.completedLessonIds.includes(l.id);
+                  const lessonResource =
+                    db.resources.find(
+                      (resource) =>
+                        resource.id === l.resourceId &&
+                        (resource.status || "published") === "published",
+                    ) ||
+                    mappedResources.find(
+                      (resource) => resource.lessonId === l.id,
+                    );
+                  const resourceUrl = lessonResource?.dataUrl || lessonResource?.externalUrl;
                   return (
                     <div className={`lesson-row ${done ? "done" : ""}`} key={l.id}>
                       <div className="lesson-type">{l.type === "video" ? <PlayCircle /> : <FileText />}</div>
                       <div>
                         <strong>{l.title}</strong>
-                        <span>{l.type} · {l.durationMin} min · {l.resource}</span>
+                        <span>
+                          {l.type} · {l.durationMin} min
+                          {lessonResource ? ` · ${lessonResource.title}` : l.resource ? ` · ${l.resource}` : ""}
+                        </span>
                       </div>
-                      <button className={done ? "btn btn-success-soft" : "btn btn-secondary"} onClick={() => toggleLesson(course.id, l.id)}>
-                        {done ? <><CheckCircle2 size={16} /> Completed</> : "Mark complete"}
-                      </button>
+                      <div className="lesson-row-actions">
+                        {lessonResource && resourceUrl && (
+                          <a
+                            className="btn btn-secondary"
+                            href={resourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            download={lessonResource.downloadable ? lessonResource.fileName : undefined}
+                          >
+                            Open media
+                          </a>
+                        )}
+                        <button className={done ? "btn btn-success-soft" : "btn btn-secondary"} onClick={() => toggleLesson(course.id, l.id)}>
+                          {done ? <><CheckCircle2 size={16} /> Completed</> : "Mark complete"}
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
               </article>
             ))}
-            {mappedResources.length > 0 && (
+            {unassignedMappedResources.length > 0 && (
               <article className="module-card">
                 <h3>Mapped IMD Learning Resources</h3>
-                {mappedResources.map((r) => (
+                {unassignedMappedResources.map((r) => (
                   <div className="lesson-row" key={r.id}>
                     <div className="lesson-type"><FileText /></div>
                     <div>

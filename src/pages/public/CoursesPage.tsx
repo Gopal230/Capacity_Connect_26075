@@ -112,9 +112,9 @@ export default function CoursesPage() {
                   borderRadius: "9999px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  border: selectedDept === dept ? "1.5px solid #1D4ED8" : "1px solid #CBD5E1",
-                  background: selectedDept === dept ? "#1D4ED8" : "#F8FAFC",
-                  color: selectedDept === dept ? "#FFFFFF" : "#1E293B",
+                  border: selectedDept === dept ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-clean)",
+                  background: selectedDept === dept ? "var(--brand-primary)" : "var(--surface-card)",
+                  color: selectedDept === dept ? "#FFFFFF" : "var(--text-body)",
                   cursor: "pointer",
                 }}
               >

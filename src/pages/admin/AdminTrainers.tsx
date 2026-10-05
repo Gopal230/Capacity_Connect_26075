@@ -47,7 +47,7 @@ export default function AdminTrainers() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Compass size={20} color="#DC2626" />
+              <Compass size={20} color="var(--brand-primary)" />
               <h3 style={{ margin: 0, fontSize: "17.5px", color: "#0F172A" }}>
                 Level-Based Trainer Competency Matcher
               </h3>
@@ -68,7 +68,7 @@ export default function AdminTrainers() {
                 border: "1.5px solid #CBD5E1",
                 fontSize: "13px",
                 fontWeight: 600,
-                color: "#DC2626",
+                color: "var(--brand-primary)",
                 background: "#FEF2F2",
               }}
             >
@@ -87,11 +87,11 @@ export default function AdminTrainers() {
               <div
                 key={m.trainer.id}
                 style={{
-                  border: rank === 0 ? "2px solid #DC2626" : "1.5px solid #E2E8F0",
+                  border: rank === 0 ? "2px solid var(--brand-primary)" : "1.5px solid #E2E8F0",
                   borderRadius: "10px",
                   padding: "16px",
                   background: rank === 0 ? "linear-gradient(135deg, #FEF2F2 0%, #FFFFFF 100%)" : "#FFFFFF",
-                  boxShadow: rank === 0 ? "0 4px 12px rgba(0, 86, 210, 0.1)" : "0 1px 4px rgba(0,0,0,0.03)",
+                  boxShadow: rank === 0 ? "0 4px 12px rgba(193, 18, 31, 0.1)" : "0 1px 4px rgba(0,0,0,0.03)",
                 }}
               >
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
@@ -101,7 +101,7 @@ export default function AdminTrainers() {
                         width: "32px",
                         height: "32px",
                         borderRadius: "50%",
-                        background: rank === 0 ? "#DC2626" : "#475569",
+                        background: rank === 0 ? "var(--brand-primary)" : "#475569",
                         color: "#FFFFFF",
                         display: "grid",
                         placeItems: "center",
@@ -118,7 +118,7 @@ export default function AdminTrainers() {
                   </div>
 
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontSize: "16px", fontWeight: 800, color: "#DC2626" }}>
+                    <div style={{ fontSize: "16px", fontWeight: 800, color: "var(--brand-primary)" }}>
                       {m.matchScore}%
                     </div>
                     <span style={{ fontSize: "10.5px", color: "#64748B" }}>Match Score</span>

@@ -104,7 +104,7 @@ export default function TrainerTrainees() {
         <div className="stat-card" style={{ background: "#FFFFFF", border: "1.5px solid #CBD5E1", borderRadius: "10px", padding: "18px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
             <span style={{ fontSize: "12px", fontWeight: 700, color: "#64748B", textTransform: "uppercase" }}>Total Enrollments</span>
-            <Users size={20} color="#DC2626" />
+            <Users size={20} color="var(--brand-primary)" />
           </div>
           <strong style={{ fontSize: "28px", color: "#0F172A", display: "block" }}>{overallStats.total}</strong>
           <small style={{ color: "#64748B", fontSize: "12px" }}>Across {myCourses.length} authored courses</small>
@@ -130,10 +130,10 @@ export default function TrainerTrainees() {
 
         <div className="stat-card" style={{ background: "#FFFFFF", border: "1.5px solid #CBD5E1", borderRadius: "10px", padding: "18px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-            <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", textTransform: "uppercase" }}>Completed / Verified</span>
-            <ShieldCheck size={20} color="#DC2626" />
+            <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--brand-primary)", textTransform: "uppercase" }}>Completed / Verified</span>
+            <ShieldCheck size={20} color="var(--brand-primary)" />
           </div>
-          <strong style={{ fontSize: "28px", color: "#DC2626", display: "block" }}>{overallStats.completedCount}</strong>
+          <strong style={{ fontSize: "28px", color: "var(--brand-primary)", display: "block" }}>{overallStats.completedCount}</strong>
           <small style={{ color: "#64748B", fontSize: "12px" }}>100% lessons completed</small>
         </div>
       </div>

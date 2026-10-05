@@ -155,6 +155,7 @@ export interface Lesson {
   type: "video" | "pdf" | "presentation" | "note";
   durationMin: number;
   resource: string;
+  resourceId?: string;
 }
 
 export interface Enrollment {
@@ -292,10 +293,19 @@ export interface EvidenceItem {
 
 export interface ScenarioStep {
   id: string;
+  title?: string;
   prompt: string;
   options: string[];
   answer: number;
   competency: string;
+  explanation?: string;
+}
+
+export interface ScenarioObservation {
+  time: string;
+  reflectivity: string;
+  movement: string;
+  echoTop?: string;
 }
 
 export interface OperationalScenario {
@@ -307,6 +317,8 @@ export interface OperationalScenario {
   difficulty: Level;
   passingPercentage: number;
   steps: ScenarioStep[];
+  durationMin?: number;
+  observations?: ScenarioObservation[];
 }
 
 export interface ScenarioAttempt {

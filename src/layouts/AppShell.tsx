@@ -36,7 +36,6 @@ const nav: Record<Role, { to: string; label: string; icon: ReactNode }[]> = {
     { to: "/admin/competencies", label: "Competencies", icon: <BrainCircuit size={15} /> },
     { to: "/admin/reports", label: "Reports", icon: <BarChart3 size={15} /> },
     { to: "/admin/readiness", label: "Readiness Command", icon: <Gauge size={15} /> },
-    { to: "/admin/content", label: "Notifications", icon: <Bell size={15} /> },
   ],
   trainer: [
     { to: "/trainer", label: "Dashboard", icon: <Home size={15} /> },
@@ -109,6 +108,17 @@ export default function AppShell({ children, role }: { children: ReactNode; role
               <span>Portal Online</span>
             </div>
 
+            {role === "admin" && (
+              <Link
+                to="/admin/content"
+                className="header-notifications-link"
+                title="Notifications"
+                aria-label="Notifications"
+              >
+                <Bell size={18} />
+              </Link>
+            )}
+
             {/* Circular Profile Avatar Button with Dropdown */}
             <div className="profile-menu-container" ref={profileMenuRef}>
               <button
@@ -133,7 +143,7 @@ export default function AppShell({ children, role }: { children: ReactNode; role
                       <button
                         type="button"
                         className={`persona-btn ${role === "trainee" ? "active" : ""}`}
-                        style={{ color: role === "trainee" ? "#fff" : "var(--text-body)", background: role === "trainee" ? "#C1121F" : "#f1f5f9" }}
+                        style={{ color: role === "trainee" ? "#fff" : "var(--text-body)", background: role === "trainee" ? "var(--brand-primary)" : "var(--surface-alt)" }}
                         onClick={() => handlePersonaSwitch("trainee")}
                       >
                         Trainee
@@ -141,7 +151,7 @@ export default function AppShell({ children, role }: { children: ReactNode; role
                       <button
                         type="button"
                         className={`persona-btn ${role === "trainer" ? "active" : ""}`}
-                        style={{ color: role === "trainer" ? "#fff" : "var(--text-body)", background: role === "trainer" ? "#C1121F" : "#f1f5f9" }}
+                        style={{ color: role === "trainer" ? "#fff" : "var(--text-body)", background: role === "trainer" ? "var(--brand-primary)" : "var(--surface-alt)" }}
                         onClick={() => handlePersonaSwitch("trainer")}
                       >
                         Trainer
@@ -149,7 +159,7 @@ export default function AppShell({ children, role }: { children: ReactNode; role
                       <button
                         type="button"
                         className={`persona-btn ${role === "admin" ? "active" : ""}`}
-                        style={{ color: role === "admin" ? "#fff" : "var(--text-body)", background: role === "admin" ? "#C1121F" : "#f1f5f9" }}
+                        style={{ color: role === "admin" ? "#fff" : "var(--text-body)", background: role === "admin" ? "var(--brand-primary)" : "var(--surface-alt)" }}
                         onClick={() => handlePersonaSwitch("admin")}
                       >
                         Admin

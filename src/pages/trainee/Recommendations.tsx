@@ -67,8 +67,8 @@ export default function Recommendations() {
         <section className="next-step-panel" style={{ marginBottom: "24px" }}>
           <div className="next-step-header">
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <Compass size={20} color="#DC2626" />
-              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#DC2626" }}>
+              <Compass size={20} color="var(--brand-primary)" />
+              <span style={{ fontSize: "12px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--brand-primary)" }}>
                 Priority Recommendation
               </span>
             </div>
@@ -128,7 +128,7 @@ export default function Recommendations() {
                     <tr key={item.competency}>
                       <td><strong>{item.competency}</strong></td>
                       <td>
-                        <span style={{ fontWeight: 600, color: isMet ? "#047857" : "#DC2626" }}>
+                        <span style={{ fontWeight: 600, color: isMet ? "#047857" : "var(--brand-primary)" }}>
                           {item.currentLevel}
                         </span>
                       </td>
@@ -245,7 +245,7 @@ export default function Recommendations() {
                       }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                           <span>Your level now:</span>
-                          <strong style={{ color: isLocked ? "#92400E" : "#DC2626" }}>{currentLvl}</strong>
+                          <strong style={{ color: isLocked ? "#92400E" : "var(--brand-primary)" }}>{currentLvl}</strong>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
                           <span>This course takes you to:</span>

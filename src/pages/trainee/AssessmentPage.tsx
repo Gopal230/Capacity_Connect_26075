@@ -181,7 +181,7 @@ export default function AssessmentPage() {
                   style={{
                     marginTop: "20px",
                     background: "#FFFFFF",
-                    border: "3px double #DC2626",
+                    border: "3px double var(--brand-primary)",
                     borderRadius: "12px",
                     padding: "24px 28px",
                     boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
@@ -190,7 +190,7 @@ export default function AssessmentPage() {
                 >
                   <div style={{ borderBottom: "1.5px solid #E2E8F0", paddingBottom: "14px", marginBottom: "16px" }}>
                     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                      <Award size={26} color="#DC2626" />
+                      <Award size={26} color="var(--brand-primary)" />
                       <strong style={{ fontSize: "16px", letterSpacing: "1.5px", color: "#0F172A" }}>
                         INDIA METEOROLOGICAL DEPARTMENT
                       </strong>
@@ -199,7 +199,7 @@ export default function AssessmentPage() {
                       Ministry of Earth Sciences · Government of India
                     </small>
                     <div style={{ marginTop: "8px" }}>
-                      <span style={{ background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA", padding: "3px 12px", borderRadius: "9999px", fontSize: "11.5px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                      <span style={{ background: "#FEF2F2", color: "var(--brand-primary)", border: "1px solid #FECACA", padding: "3px 12px", borderRadius: "9999px", fontSize: "11.5px", fontWeight: 700, letterSpacing: "0.5px" }}>
                         OFFICIAL CERTIFICATE OF OPERATIONAL COMPETENCY
                       </span>
                     </div>
@@ -214,7 +214,7 @@ export default function AssessmentPage() {
                   </p>
 
                   <div style={{ margin: "12px 0" }}>
-                    <h4 style={{ margin: "0 0 6px", fontSize: "18px", color: "#DC2626", fontWeight: 700 }}>
+                    <h4 style={{ margin: "0 0 6px", fontSize: "18px", color: "var(--brand-primary)", fontWeight: 700 }}>
                       {last.levelUpInfo.competency}
                     </h4>
                     <LevelBadge level={last.levelUpInfo.newLevel} />
@@ -377,8 +377,8 @@ export default function AssessmentPage() {
           const compName = course?.competency || a.subject;
 
           return (
-            <article key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px" }}>
-              <div>
+            <article key={a.id} className="assessment-card">
+              <div className="assessment-card-content">
                 {/* 1. Show level jump at the top ("Passing this moves you from L1 to L2") */}
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "8px" }}>
                   <Badge tone={a.type === "post" ? "blue" : "gray"}>
@@ -396,7 +396,7 @@ export default function AssessmentPage() {
                         borderRadius: "6px",
                       }}
                     >
-                      <span style={{ fontSize: "11.5px", color: "#1E40AF", fontWeight: 600 }}>
+                      <span style={{ fontSize: "11.5px", color: "var(--brand-dark)", fontWeight: 600 }}>
                         Passing this moves you:
                       </span>
                       <LevelJumpBadge from={course.entryLevel} to={course.targetLevel} size="sm" />
@@ -412,7 +412,7 @@ export default function AssessmentPage() {
                 </p>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div className="assessment-card-actions">
                 {best !== null && (
                   <Badge tone={best >= a.passingPercentage ? "green" : "red"}>
                     Best: {best}% {best >= a.passingPercentage ? "(Passed)" : ""}
@@ -474,7 +474,7 @@ export default function AssessmentPage() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Compass size={18} color="#DC2626" />
+                  <Compass size={18} color="var(--brand-primary)" />
                   <span style={{ fontSize: "13px", color: "#991B1B", fontWeight: 600 }}>
                     Passing this moves you from <strong>{activeCourse.entryLevel}</strong> to <strong>{activeCourse.targetLevel}</strong> in {activeCourse.competency}
                   </span>
@@ -484,118 +484,39 @@ export default function AssessmentPage() {
             )}
 
             {/* Assessment Questions (IMD-style Modern MCQs) */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div className="mcq-list">
               {active.questions.map((q, i) => (
-                <div
-                  key={q.id}
-                  style={{
-                    background: "#FFFFFF",
-                    border: "1.5px solid #CBD5E1",
-                    borderRadius: "10px",
-                    padding: "18px 20px",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
-                  }}
-                >
-                  <div style={{ display: "flex", gap: "10px", alignItems: "flex-start", marginBottom: "14px" }}>
-                    <div
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "6px",
-                        background: "#081A2E",
-                        color: "#FFFFFF",
-                        display: "grid",
-                        placeItems: "center",
-                        fontWeight: 800,
-                        fontSize: "12px",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {i + 1}
-                    </div>
-                    <h4 style={{ margin: 0, fontSize: "15px", color: "#0F172A", fontWeight: 700, lineHeight: 1.45 }}>
-                      {q.text}
-                    </h4>
+                <div key={q.id} className="mcq-question">
+                  <div className="mcq-question-title">
+                    <span className="mcq-question-number">{i + 1}</span>
+                    <h4>{q.text}</h4>
                   </div>
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                  <div className="mcq-options">
                     {q.options.map((o, j) => {
                       const isSelected = answers[i] === j;
                       const letter = String.fromCharCode(65 + j);
 
                       return (
-                        <div
+                        <label
                           key={o}
-                          onClick={() => {
-                            const a = [...answers];
-                            a[i] = j;
-                            setAnswers(a);
-                          }}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: "10px 14px",
-                            borderRadius: "8px",
-                            border: `2px solid ${isSelected ? "#DC2626" : "#E2E8F0"}`,
-                            background: isSelected ? "#FEF2F2" : "#F8FAFC",
-                            cursor: "pointer",
-                            transition: "all 0.15s ease",
-                          }}
+                          className={`mcq-option ${isSelected ? "selected" : ""}`}
                         >
-                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                            <div
-                              style={{
-                                width: "26px",
-                                height: "26px",
-                                borderRadius: "50%",
-                                background: isSelected ? "#DC2626" : "#FFFFFF",
-                                color: isSelected ? "#FFFFFF" : "#64748B",
-                                border: `1.5px solid ${isSelected ? "#DC2626" : "#CBD5E1"}`,
-                                display: "grid",
-                                placeItems: "center",
-                                fontWeight: 800,
-                                fontSize: "11.5px",
-                                flexShrink: 0,
-                              }}
-                            >
-                              {letter}
-                            </div>
-                            <span
-                              style={{
-                                fontSize: "13.5px",
-                                color: isSelected ? "#991B1B" : "#1E293B",
-                                fontWeight: isSelected ? 700 : 500,
-                              }}
-                            >
-                              {o}
-                            </span>
-                          </div>
-
-                          <div
-                            style={{
-                              width: "18px",
-                              height: "18px",
-                              borderRadius: "50%",
-                              border: `2px solid ${isSelected ? "#DC2626" : "#CBD5E1"}`,
-                              display: "grid",
-                              placeItems: "center",
-                              flexShrink: 0,
-                              background: "#FFFFFF",
+                          <input
+                            type="radio"
+                            name={`${active.id}-${q.id}`}
+                            checked={isSelected}
+                            onChange={() => {
+                              const a = [...answers];
+                              a[i] = j;
+                              setAnswers(a);
                             }}
-                          >
-                            {isSelected && (
-                              <div
-                                style={{
-                                  width: "8px",
-                                  height: "8px",
-                                  borderRadius: "50%",
-                                  background: "#DC2626",
-                                }}
-                              />
-                            )}
-                          </div>
-                        </div>
+                            required
+                          />
+                          <span className="mcq-option-letter">{letter}</span>
+                          <span className="mcq-option-text">{o}</span>
+                          <span className="mcq-option-indicator" aria-hidden="true" />
+                        </label>
                       );
                     })}
                   </div>
@@ -603,12 +524,12 @@ export default function AssessmentPage() {
               ))}
             </div>
 
-            <div className="modal-actions" style={{ marginTop: "24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div className="modal-actions assessment-modal-actions">
               <span style={{ fontSize: "12.5px", color: "#64748B", fontWeight: 600 }}>
                 Answered: {answers.filter((x) => x !== undefined).length} / {active.questions.length}
               </span>
 
-              <div style={{ display: "flex", gap: "10px" }}>
+              <div className="assessment-modal-buttons">
                 <button type="button" className="btn btn-secondary" onClick={() => setActive(null)}>
                   Cancel
                 </button>

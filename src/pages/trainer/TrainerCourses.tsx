@@ -49,6 +49,7 @@ export default function TrainerCourses() {
   const [selectedJumpKey, setSelectedJumpKey] = useState<string>("L1->L2");
 
   // Form states
+  const [isProposalOpen, setIsProposalOpen] = useState(false);
   const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
@@ -180,6 +181,7 @@ export default function TrainerCourses() {
 
   // Helper to open edit mode for an existing course
   const handleEditCourse = (course: Course) => {
+    setIsProposalOpen(true);
     setEditingCourseId(course.id);
     setTitle(course.title);
     setCode(course.code);
@@ -227,6 +229,7 @@ export default function TrainerCourses() {
   };
 
   const handleCancelEdit = () => {
+    setIsProposalOpen(false);
     setEditingCourseId(null);
     setTitle("");
     setCode("");
@@ -409,13 +412,25 @@ export default function TrainerCourses() {
       <PageHeader
         title="Course & Content Management Studio"
         subtitle="Author standardized competency ladder courses (L1 to L5) with practical lessons and assessment suites."
+        actions={!isProposalOpen ? (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              setEditingCourseId(null);
+              setIsProposalOpen(true);
+            }}
+          >
+            <Plus size={16} /> Create Competency Course Proposal
+          </button>
+        ) : undefined}
       />
 
-      <div className="dashboard-grid content-layout">
+      <div className={`dashboard-grid content-layout ${isProposalOpen ? "course-proposal-open" : ""}`}>
         {/* =========================================================
             LEFT COLUMN: COURSE CREATION & EDITING FORM
             ========================================================= */}
-        <section className="panel" style={{ background: "#FFFFFF", borderRadius: "12px", border: "1.5px solid #CBD5E1", padding: "24px" }}>
+        {isProposalOpen && <section className="panel" style={{ background: "#FFFFFF", borderRadius: "12px", border: "1.5px solid #CBD5E1", padding: "24px" }}>
           <div className="panel-head" style={{ borderBottom: "1.5px solid #E2E8F0", paddingBottom: "14px", marginBottom: "20px" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
@@ -425,7 +440,7 @@ export default function TrainerCourses() {
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
-                    color: "#DC2626",
+                    color: "var(--brand-primary)",
                     background: "#FEF2F2",
                     padding: "3px 8px",
                     borderRadius: "4px",
@@ -433,16 +448,15 @@ export default function TrainerCourses() {
                 >
                   {editingCourseId ? "Edit Mode" : "New Proposal"}
                 </span>
-                {editingCourseId && (
-                  <button
-                    type="button"
-                    onClick={handleCancelEdit}
-                    className="btn btn-ghost btn-sm"
-                    style={{ fontSize: "11px", padding: "2px 8px" }}
-                  >
-                    Cancel Editing
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={handleCancelEdit}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: "11px", padding: "2px 8px" }}
+                  aria-label="Close course proposal form"
+                >
+                  <X size={13} /> Close
+                </button>
               </div>
               <h3 style={{ margin: 0, fontSize: "20px", color: "var(--text-heading)" }}>
                 {editingCourseId ? "Edit Course Proposal" : "Create Competency Course Proposal"}
@@ -469,7 +483,7 @@ export default function TrainerCourses() {
               }}
             >
               <div>
-                <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "#1E40AF", display: "block", marginBottom: "4px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", color: "var(--brand-dark)", display: "block", marginBottom: "4px" }}>
                   Live Level Jump Preview
                 </span>
                 <strong style={{ fontSize: "15px", color: "#0F172A" }}>
@@ -634,7 +648,7 @@ export default function TrainerCourses() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
-                <Target size={18} color="#DC2626" />
+                <Target size={18} color="var(--brand-primary)" />
                 <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>
                   Learning Outcomes (3 Target Bullets)
                 </strong>
@@ -645,7 +659,7 @@ export default function TrainerCourses() {
 
               <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", width: "20px" }}>1.</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--brand-primary)", width: "20px" }}>1.</span>
                   <input
                     value={outcomes[0]}
                     onChange={(e) => setOutcomes([e.target.value, outcomes[1], outcomes[2]])}
@@ -654,7 +668,7 @@ export default function TrainerCourses() {
                   />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", width: "20px" }}>2.</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--brand-primary)", width: "20px" }}>2.</span>
                   <input
                     value={outcomes[1]}
                     onChange={(e) => setOutcomes([outcomes[0], e.target.value, outcomes[2]])}
@@ -663,7 +677,7 @@ export default function TrainerCourses() {
                   />
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626", width: "20px" }}>3.</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--brand-primary)", width: "20px" }}>3.</span>
                   <input
                     value={outcomes[2]}
                     onChange={(e) => setOutcomes([outcomes[0], outcomes[1], e.target.value])}
@@ -685,7 +699,7 @@ export default function TrainerCourses() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Layers size={18} color="#DC2626" />
+                  <Layers size={18} color="var(--brand-primary)" />
                   <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>
                     Course Lessons ({lessons.length} Modules)
                   </strong>
@@ -751,13 +765,40 @@ export default function TrainerCourses() {
                       />
                     </div>
 
+                    <label style={{ gridColumn: "1 / -1" }}>
+                      <span style={{ fontSize: "11px", color: "#64748B", display: "block" }}>Trainer Library Media</span>
+                      <select
+                        value={lesson.resourceId || ""}
+                        onChange={(e) => {
+                          const resource = db.resources.find((item) => item.id === e.target.value);
+                          handleUpdateLesson(lesson.id, {
+                            resourceId: resource?.id,
+                            resource: resource?.title || "",
+                          });
+                        }}
+                        style={{ padding: "6px 8px", fontSize: "13px" }}
+                      >
+                        <option value="">No library media attached</option>
+                        {db.resources
+                          .filter((resource) => resource.status !== "rejected")
+                          .map((resource) => (
+                            <option key={resource.id} value={resource.id}>
+                              {resource.title} · {resource.type}
+                              {resource.status && resource.status !== "published"
+                                ? ` · ${resource.status}`
+                                : ""}
+                            </option>
+                          ))}
+                      </select>
+                    </label>
+
                     <button
                       type="button"
                       onClick={() => handleRemoveLesson(lesson.id)}
                       disabled={lessons.length <= 1}
                       title="Remove lesson"
                       className="btn btn-ghost"
-                      style={{ padding: "8px", color: "#DC2626" }}
+                      style={{ gridColumn: "4", gridRow: "1", alignSelf: "end", padding: "8px", color: "var(--brand-primary)" }}
                     >
                       <Trash2 size={15} />
                     </button>
@@ -777,7 +818,7 @@ export default function TrainerCourses() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <HelpCircle size={18} color="#DC2626" />
+                  <HelpCircle size={18} color="var(--brand-primary)" />
                   <strong style={{ fontSize: "14px", color: "var(--text-heading)" }}>
                     Post-Training Assessment Questions ({questions.length} MCQs)
                   </strong>
@@ -804,7 +845,7 @@ export default function TrainerCourses() {
                     }}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                      <span style={{ fontSize: "12px", fontWeight: 700, color: "#DC2626" }}>
+                      <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--brand-primary)" }}>
                         Question {qIdx + 1}
                       </span>
                       <button
@@ -812,7 +853,7 @@ export default function TrainerCourses() {
                         onClick={() => handleRemoveQuestion(q.id)}
                         disabled={questions.length <= 1}
                         className="btn btn-ghost"
-                        style={{ padding: "4px", color: "#DC2626" }}
+                        style={{ padding: "4px", color: "var(--brand-primary)" }}
                       >
                         <Trash2 size={14} />
                       </button>
@@ -877,12 +918,12 @@ export default function TrainerCourses() {
               </button>
             </div>
           </form>
-        </section>
+        </section>}
 
         {/* =========================================================
             RIGHT COLUMN: MY COURSES LIST WITH LEVEL JUMPS & STATUS
             ========================================================= */}
-        <section className="panel" style={{ background: "#FFFFFF", borderRadius: "12px", border: "1.5px solid #CBD5E1", padding: "24px" }}>
+        {!isProposalOpen && <section className="panel" style={{ background: "#FFFFFF", borderRadius: "12px", border: "1.5px solid #CBD5E1", padding: "24px" }}>
           <div className="panel-head" style={{ borderBottom: "1.5px solid #E2E8F0", paddingBottom: "14px", marginBottom: "16px" }}>
             <div>
               <h3 style={{ margin: 0, fontSize: "19px", color: "var(--text-heading)" }}>My Authored Courses</h3>
@@ -1024,11 +1065,11 @@ export default function TrainerCourses() {
 
             {myCourses.length === 0 && (
               <div style={{ padding: "30px", textAlign: "center", color: "#64748B" }}>
-                No courses created yet. Use the authoring form to submit your first course proposal.
+                No courses created yet. Create a proposal to submit your first course for review.
               </div>
             )}
           </div>
-        </section>
+        </section>}
       </div>
     </>
   );

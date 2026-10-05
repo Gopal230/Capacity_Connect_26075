@@ -148,7 +148,7 @@ export default function HomePage() {
         </button>
 
         <nav className={menu ? "show" : ""}>
-          <Link to="/courses" onClick={() => setMenu(false)} style={{ color: "#DC2626", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "4px" }}>Course Catalog</Link>
+          <Link to="/courses" onClick={() => setMenu(false)} style={{ color: "var(--brand-primary)", fontWeight: 600, textDecoration: "underline", textUnderlineOffset: "4px" }}>Course Catalog</Link>
         </nav>
       </header>
 
@@ -156,7 +156,7 @@ export default function HomePage() {
       <main className="portal-gateway" style={{ maxWidth: "1280px", margin: "0 auto", padding: "36px 24px 60px" }}>
         {/* Gateway Hero */}
         <section className="gateway-hero" style={{ textAlign: "center", marginBottom: "36px" }}>
-          <div className="gateway-kicker" style={{ letterSpacing: "1px", fontWeight: 700, color: "#DC2626", fontSize: "12px" }}>
+          <div className="gateway-kicker" style={{ letterSpacing: "1px", fontWeight: 700, color: "var(--brand-primary)", fontSize: "12px" }}>
             MINISTRY OF EARTH SCIENCES · GOVERNMENT OF INDIA
           </div>
           <h1 className="gateway-title" style={{ fontSize: "32px", fontWeight: 800, color: "var(--text-heading)", margin: "12px 0 14px", lineHeight: "1.25" }}>
@@ -180,8 +180,8 @@ export default function HomePage() {
                   type="button"
                   onClick={() => switchRole(r)}
                   style={{
-                    background: isSelected ? "#142034" : "#0E1726",
-                    border: isSelected ? "2.5px solid #991B1B" : "1.5px solid #1B2A44",
+                    background: "var(--brand-dark)",
+                    border: isSelected ? "2.5px solid var(--brand-primary)" : "1.5px solid rgba(253, 240, 213, 0.18)",
                     borderRadius: "12px",
                     padding: "18px 20px",
                     textAlign: "left",
@@ -198,8 +198,8 @@ export default function HomePage() {
                       width: "42px",
                       height: "42px",
                       borderRadius: "10px",
-                      background: isSelected ? "#991B1B" : "#1B2A44",
-                      color: isSelected ? "#FFFFFF" : "#8899B0",
+                      background: isSelected ? "var(--brand-primary)" : "var(--brand-accent)",
+                      color: "#FFFFFF",
                       display: "grid",
                       placeItems: "center",
                       flexShrink: 0,
@@ -208,13 +208,13 @@ export default function HomePage() {
                     <RIcon size={22} />
                   </div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "#F87171" : "#8899B0", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+                    <span style={{ fontSize: "10.5px", fontWeight: 700, color: isSelected ? "var(--brand-accent)" : "#CBD5E1", letterSpacing: "0.5px", textTransform: "uppercase" }}>
                       {r === "trainee" ? "LEARN" : r === "trainer" ? "TEACH" : "GOVERN"}
                     </span>
                     <h3 style={{ margin: "2px 0 4px", fontSize: "16px", color: isSelected ? "#F8FAFC" : "#CBD5E1" }}>
                       {r === "trainee" ? "Operational Trainee" : r === "trainer" ? "Trainer" : "Portal Administrator"}
                     </h3>
-                    <p style={{ margin: 0, fontSize: "12px", color: "#8899B0", lineHeight: "1.4" }}>
+                    <p style={{ margin: 0, fontSize: "12px", color: "#CBD5E1", lineHeight: "1.4" }}>
                       {r === "trainee" ? "Competency progression & certification" : r === "trainer" ? "Curriculum authoring & operational evaluation" : "Clearance, ORI & system command"}
                     </p>
                   </div>
@@ -227,8 +227,8 @@ export default function HomePage() {
         {/* Grand Unified Workspace & Sign-In Card */}
         <section
           style={{
-            background: "#0E1726",
-            border: "1.5px solid #1B2A44",
+            background: "var(--brand-dark)",
+            border: "1.5px solid rgba(253, 240, 213, 0.18)",
             borderRadius: "16px",
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
             overflow: "hidden",
@@ -240,8 +240,8 @@ export default function HomePage() {
           <div
             style={{
               padding: "36px 32px",
-              background: "#0A1220",
-              borderRight: "1px solid #1B2A44",
+              background: "var(--brand-dark)",
+              borderRight: "1px solid rgba(253, 240, 213, 0.18)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -254,7 +254,7 @@ export default function HomePage() {
                     width: "36px",
                     height: "36px",
                     borderRadius: "8px",
-                    background: "#991B1B",
+                    background: "var(--brand-primary)",
                     color: "#FFFFFF",
                     display: "grid",
                     placeItems: "center",
@@ -263,7 +263,7 @@ export default function HomePage() {
                   <Icon size={20} />
                 </div>
                 <div>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#F87171", letterSpacing: "0.5px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--brand-accent)", letterSpacing: "0.5px" }}>
                     {current.category}
                   </span>
                   <h2 style={{ margin: 0, fontSize: "20px", color: "#F8FAFC" }}>
@@ -272,7 +272,7 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <p style={{ fontSize: "13.5px", color: "#8899B0", margin: "0 0 20px", lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13.5px", color: "#CBD5E1", margin: "0 0 20px", lineHeight: "1.5" }}>
                 {current.subtitle}
               </p>
 
@@ -283,7 +283,7 @@ export default function HomePage() {
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
                   {current.features.map((feat, idx) => (
                     <li key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "13px", color: "#CBD5E1" }}>
-                      <CheckCircle2 size={16} color="#F87171" style={{ marginTop: "2px", flexShrink: 0 }} />
+                      <CheckCircle2 size={16} color="var(--brand-accent)" style={{ marginTop: "2px", flexShrink: 0 }} />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -294,8 +294,8 @@ export default function HomePage() {
             {/* Instant Demo Accounts Box */}
             <div
               style={{
-                background: "#142034",
-                border: "1.5px solid #4C1D24",
+                background: "var(--brand-dark)",
+                border: "1.5px solid rgba(193, 18, 31, 0.35)",
                 borderRadius: "10px",
                 padding: "16px",
                 marginTop: "16px",
@@ -303,10 +303,10 @@ export default function HomePage() {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Sparkles size={16} color="#F87171" />
-                  <strong style={{ fontSize: "13px", color: "#F87171" }}>Instant 1-Click Demo Evaluation</strong>
+                  <Sparkles size={16} color="var(--brand-accent)" />
+                  <strong style={{ fontSize: "13px", color: "var(--brand-accent)" }}>Instant 1-Click Demo Evaluation</strong>
                 </div>
-                <span style={{ fontSize: "11px", color: "#F87171", background: "#241114", border: "1px solid #4C1D24", padding: "2px 8px", borderRadius: "4px" }}>
+                <span style={{ fontSize: "11px", color: "var(--brand-accent)", background: "rgba(193, 18, 31, 0.14)", border: "1px solid rgba(193, 18, 31, 0.35)", padding: "2px 8px", borderRadius: "4px" }}>
                   Pre-seeded
                 </span>
               </div>
@@ -316,15 +316,15 @@ export default function HomePage() {
                 className="btn btn-primary btn-block"
                 onClick={() => quickDemoLogin(current.demoEmail)}
                 disabled={loading}
-                style={{ padding: "10px 16px", fontSize: "13.5px", fontWeight: 600, background: "#991B1B", borderColor: "#991B1B" }}
+                style={{ padding: "10px 16px", fontSize: "13.5px", fontWeight: 600, background: "var(--brand-primary)", borderColor: "var(--brand-primary)" }}
               >
                 <Sparkles size={16} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px" }} />
                 Launch Demo: {current.demoName}
               </button>
 
               {current.extraDemoAccounts && (
-                <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid #1B2A44" }}>
-                  <small style={{ fontSize: "11px", color: "#8899B0", display: "block", marginBottom: "6px" }}>
+                <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid rgba(253, 240, 213, 0.18)" }}>
+                  <small style={{ fontSize: "11px", color: "#CBD5E1", display: "block", marginBottom: "6px" }}>
                     Alternate Trainee Profiles:
                   </small>
                   <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -336,10 +336,10 @@ export default function HomePage() {
                         style={{
                           fontSize: "11.5px",
                           padding: "5px 10px",
-                          background: "#0E1726",
-                          border: "1px solid #1B2A44",
+                          background: "var(--brand-dark)",
+                          border: "1px solid rgba(253, 240, 213, 0.18)",
                           borderRadius: "6px",
-                          color: "#CBD5E1",
+                          color: "var(--brand-soft)",
                           cursor: "pointer",
                           fontWeight: 500,
                         }}
@@ -355,16 +355,16 @@ export default function HomePage() {
           </div>
 
           {/* Right Column: Direct Sign-In Form */}
-          <div style={{ padding: "36px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#0E1726" }}>
+          <div style={{ padding: "36px 36px", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "var(--brand-dark)" }}>
             <div>
-              <div style={{ borderBottom: "1px solid #1B2A44", paddingBottom: "14px", marginBottom: "22px" }}>
-                <span style={{ fontSize: "11px", fontWeight: 700, color: "#8899B0", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+              <div style={{ borderBottom: "1px solid rgba(253, 240, 213, 0.18)", paddingBottom: "14px", marginBottom: "22px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: "#CBD5E1", letterSpacing: "0.5px", textTransform: "uppercase" }}>
                   AUTHENTICATED ACCESS
                 </span>
                 <h3 style={{ margin: "4px 0 0", fontSize: "20px", color: "#F8FAFC" }}>
                   Sign In to Your Account
                 </h3>
-                <small style={{ color: "#8899B0", fontSize: "12.5px" }}>
+                <small style={{ color: "#CBD5E1", fontSize: "12.5px" }}>
                   Enter your credentials for official clearance access.
                 </small>
               </div>
@@ -384,8 +384,8 @@ export default function HomePage() {
                       width: "100%",
                       padding: "10px 12px",
                       borderRadius: "6px",
-                      border: "1.5px solid #1B2A44",
-                      background: "#080E18",
+                      border: "1.5px solid rgba(253, 240, 213, 0.18)",
+                      background: "var(--brand-dark)",
                       fontSize: "13.5px",
                       outline: "none",
                       color: "#F8FAFC",
@@ -408,8 +408,8 @@ export default function HomePage() {
                         width: "100%",
                         padding: "10px 40px 10px 12px",
                         borderRadius: "6px",
-                        border: "1.5px solid #1B2A44",
-                        background: "#080E18",
+                        border: "1.5px solid rgba(253, 240, 213, 0.18)",
+                        background: "var(--brand-dark)",
                         fontSize: "13.5px",
                         outline: "none",
                         color: "#F8FAFC",
@@ -425,7 +425,7 @@ export default function HomePage() {
                         transform: "translateY(-50%)",
                         background: "none",
                         border: "none",
-                        color: "#8899B0",
+                        color: "#CBD5E1",
                         cursor: "pointer",
                       }}
                       aria-label="Toggle password visibility"
@@ -438,9 +438,9 @@ export default function HomePage() {
                 {error && (
                   <div
                     style={{
-                      background: "#241114",
-                      border: "1px solid #4C1D24",
-                      color: "#F87171",
+                      background: "rgba(193, 18, 31, 0.14)",
+                      border: "1px solid rgba(193, 18, 31, 0.35)",
+                      color: "var(--brand-accent)",
                       padding: "10px 12px",
                       borderRadius: "6px",
                       fontSize: "12.5px",
@@ -455,21 +455,21 @@ export default function HomePage() {
                   type="submit"
                   className="btn btn-primary btn-block"
                   disabled={loading}
-                  style={{ padding: "11px 16px", fontSize: "14px", fontWeight: 600, marginTop: "6px", background: "#991B1B", borderColor: "#991B1B" }}
+                  style={{ padding: "11px 16px", fontSize: "14px", fontWeight: 600, marginTop: "6px", background: "var(--brand-primary)", borderColor: "var(--brand-primary)" }}
                 >
                   {loading ? "Authenticating..." : `Sign In as ${activeRole.charAt(0).toUpperCase() + activeRole.slice(1)}`}
                 </button>
               </form>
             </div>
 
-            <div style={{ marginTop: "28px", paddingTop: "18px", borderTop: "1px solid #1B2A44", textAlign: "center" }}>
-              <p style={{ margin: "0 0 10px", fontSize: "13px", color: "#8899B0" }}>
+            <div style={{ marginTop: "28px", paddingTop: "18px", borderTop: "1px solid rgba(253, 240, 213, 0.18)", textAlign: "center" }}>
+              <p style={{ margin: "0 0 10px", fontSize: "13px", color: "#CBD5E1" }}>
                 Need portal clearance?
               </p>
               <Link
                 to={`/register?role=${activeRole}`}
                 className="btn btn-secondary btn-block"
-                style={{ fontSize: "13px", padding: "9px 14px", display: "inline-block", textAlign: "center", background: "#142034", color: "#F8FAFC", borderColor: "#1B2A44" }}
+                style={{ fontSize: "13px", padding: "9px 14px", display: "inline-block", textAlign: "center", background: "var(--brand-dark)", color: "var(--brand-soft)", borderColor: "var(--brand-accent)" }}
               >
                 Register for {activeRole.charAt(0).toUpperCase() + activeRole.slice(1)} Clearance →
               </Link>

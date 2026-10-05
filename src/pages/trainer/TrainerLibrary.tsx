@@ -70,13 +70,13 @@ function getMediaTypeColor(type: Resource["type"]) {
   switch (type) {
     case "Video":
     case "Recorded Lecture":
-      return { bg: "#FEF2F2", text: "#DC2626", border: "#FECACA", grad: "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)" };
+      return { bg: "#FEF2F2", text: "var(--brand-primary)", border: "#FECACA", grad: "linear-gradient(135deg, #1E293B 0%, #0F172A 100%)" };
     case "Image":
       return { bg: "#F0FDF4", text: "#16A34A", border: "#BBF7D0", grad: "linear-gradient(135deg, #064E3B 0%, #022C22 100%)" };
     case "PDF":
     case "Document":
     case "Presentation":
-      return { bg: "#FEF2F2", text: "#DC2626", border: "#FECACA", grad: "linear-gradient(135deg, #081A2E 0%, #0F172A 100%)" };
+      return { bg: "#FEF2F2", text: "var(--brand-primary)", border: "#FECACA", grad: "linear-gradient(135deg, #081A2E 0%, #0F172A 100%)" };
     case "Audio":
       return { bg: "#FAF5FF", text: "#9333EA", border: "#E9D5FF", grad: "linear-gradient(135deg, #581C87 0%, #1E1B4B 100%)" };
     case "Dataset":
@@ -266,7 +266,7 @@ export default function TrainerLibrary() {
               height: "44px",
               borderRadius: "8px",
               background: "#FEF2F2",
-              color: "#DC2626",
+              color: "var(--brand-primary)",
               border: "1px solid #FECACA",
               display: "grid",
               placeItems: "center",
@@ -279,7 +279,7 @@ export default function TrainerLibrary() {
             <span style={{ fontSize: "11.5px", color: "#64748B", fontWeight: 600, textTransform: "uppercase" }}>
               Video & Lectures
             </span>
-            <h3 style={{ margin: 0, fontSize: "20px", color: "#DC2626", fontWeight: 700 }}>
+            <h3 style={{ margin: 0, fontSize: "20px", color: "var(--brand-primary)", fontWeight: 700 }}>
               {videoCount}
             </h3>
           </div>
@@ -302,7 +302,7 @@ export default function TrainerLibrary() {
               height: "44px",
               borderRadius: "8px",
               background: "#FEF2F2",
-              color: "#DC2626",
+              color: "var(--brand-primary)",
               border: "1px solid #FECACA",
               display: "grid",
               placeItems: "center",
@@ -315,7 +315,7 @@ export default function TrainerLibrary() {
             <span style={{ fontSize: "11.5px", color: "#64748B", fontWeight: 600, textTransform: "uppercase" }}>
               Technical Docs & PDFs
             </span>
-            <h3 style={{ margin: 0, fontSize: "20px", color: "#DC2626", fontWeight: 700 }}>
+            <h3 style={{ margin: 0, fontSize: "20px", color: "var(--brand-primary)", fontWeight: 700 }}>
               {docCount}
             </h3>
           </div>
@@ -391,7 +391,7 @@ export default function TrainerLibrary() {
                 fontSize: "11px",
                 fontWeight: 700,
                 textTransform: "uppercase",
-                color: "#DC2626",
+                color: "var(--brand-primary)",
                 background: "#FEF2F2",
                 border: "1px solid #FECACA",
                 padding: "3px 8px",
@@ -455,7 +455,7 @@ export default function TrainerLibrary() {
                     width: "52px",
                     height: "52px",
                     borderRadius: "50%",
-                    background: file ? "#DC2626" : "#081A2E",
+                    background: file ? "var(--brand-primary)" : "#081A2E",
                     color: "#FFFFFF",
                     display: "grid",
                     placeItems: "center",
@@ -475,7 +475,7 @@ export default function TrainerLibrary() {
                     style={{
                       marginTop: "8px",
                       fontSize: "12px",
-                      color: "#DC2626",
+                      color: "var(--brand-primary)",
                       fontWeight: 700,
                       background: "#FFFFFF",
                       border: "1px solid #FECACA",
@@ -701,7 +701,7 @@ export default function TrainerLibrary() {
                     type="checkbox"
                     checked={form.downloadable}
                     onChange={(e) => setForm({ ...form, downloadable: e.target.checked })}
-                    style={{ width: "16px", height: "16px", accentColor: "#DC2626" }}
+                    style={{ width: "16px", height: "16px", accentColor: "var(--brand-primary)" }}
                   />
                   Allow offline download by authorized trainees
                 </label>
@@ -959,7 +959,7 @@ export default function TrainerLibrary() {
                     style={{
                       fontSize: "11.5px",
                       fontWeight: 700,
-                      color: "#DC2626",
+                      color: "var(--brand-primary)",
                       textTransform: "uppercase",
                       letterSpacing: "0.4px",
                     }}
